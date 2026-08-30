@@ -1,15 +1,19 @@
 <script setup>
 import { RouterLink } from 'vue-router'
 import { Github, Linkedin, Mail, Heart } from 'lucide-vue-next'
-import { portfolioInfo } from '@/data/portfolioData'
+import { usePortfolioStore } from '@/composables/usePortfolioStore'
+import FooterMatrixBanner from '@/components/effects/FooterMatrixBanner.vue'
 
+const { portfolioInfo } = usePortfolioStore()
 const currentYear = new Date().getFullYear()
 </script>
 
 <template>
-  <footer class="mt-14 sm:mt-20 border-t border-[#EEDCDC] dark:border-white/10 bg-white dark:bg-[#0E0F12] transition-colors duration-300">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-12">
-      <div class="grid grid-cols-1 md:grid-cols-12 gap-8 lg:gap-12 mb-10">
+  <footer class="mt-14 sm:mt-20 border-t border-[#EEDCDC] dark:border-white/10 bg-white dark:bg-[#0A0B0E] transition-colors duration-300">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-12 space-y-10 sm:space-y-12">
+      
+      <!-- Top Links & Info Grid -->
+      <div class="grid grid-cols-1 md:grid-cols-12 gap-8 lg:gap-12">
         
         <!-- Brand / About col -->
         <div class="md:col-span-6 lg:col-span-5 space-y-3.5">
@@ -27,7 +31,7 @@ const currentYear = new Date().getFullYear()
           </p>
           <div class="flex items-center gap-2.5 pt-1">
             <a 
-              :href="portfolioInfo.socials.linkedin" 
+              :href="portfolioInfo.socials?.linkedin || 'https://www.linkedin.com/in/nadyanjln/'" 
               target="_blank" 
               rel="noopener noreferrer"
               class="w-9 h-9 rounded-xl bg-[#FFF9F9] dark:bg-[#15161B] border border-[#EEDCDC] dark:border-white/10 flex items-center justify-center text-[#5C4848] dark:text-zinc-300 hover:text-[#9E0402] dark:hover:text-[#9FC2EA] hover:border-[#9E0402]/40 transition-all shadow-xs"
@@ -36,7 +40,7 @@ const currentYear = new Date().getFullYear()
               <Linkedin class="w-4 h-4" />
             </a>
             <a 
-              :href="portfolioInfo.socials.github" 
+              :href="portfolioInfo.socials?.github || 'https://github.com/nadyanjln'" 
               target="_blank" 
               rel="noopener noreferrer"
               class="w-9 h-9 rounded-xl bg-[#FFF9F9] dark:bg-[#15161B] border border-[#EEDCDC] dark:border-white/10 flex items-center justify-center text-[#5C4848] dark:text-zinc-300 hover:text-[#9E0402] dark:hover:text-[#9FC2EA] hover:border-[#9E0402]/40 transition-all shadow-xs"
@@ -45,7 +49,7 @@ const currentYear = new Date().getFullYear()
               <Github class="w-4 h-4" />
             </a>
             <a 
-              :href="'mailto:' + portfolioInfo.email" 
+              :href="'mailto:' + (portfolioInfo.email || 'nadyanjln@gmail.com')" 
               class="w-9 h-9 rounded-xl bg-[#FFF9F9] dark:bg-[#15161B] border border-[#EEDCDC] dark:border-white/10 flex items-center justify-center text-[#5C4848] dark:text-zinc-300 hover:text-[#9E0402] dark:hover:text-[#9FC2EA] hover:border-[#9E0402]/40 transition-all shadow-xs"
               aria-label="Email"
             >
@@ -79,13 +83,19 @@ const currentYear = new Date().getFullYear()
         </div>
       </div>
 
-      <!-- Bottom Bar -->
-      <div class="pt-6 border-t border-[#EEDCDC] dark:border-white/10 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs font-mono-tag text-[#5C4848] dark:text-zinc-400">
+      <!-- ═══════════════════════════════════════════ -->
+      <!-- CINEMATIC INTERACTIVE MATRIX FOOTER BANNER  -->
+      <!-- ═══════════════════════════════════════════ -->
+      <FooterMatrixBanner />
+
+      <!-- Minimalist Bottom Copyright Row -->
+      <div class="pt-4 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs font-mono-tag text-[#5C4848] dark:text-zinc-400">
         <p>© {{ currentYear }} {{ portfolioInfo.name }}. All rights reserved.</p>
         <p class="flex items-center gap-1.5">
           Built with <Heart class="w-3.5 h-3.5 text-[#9E0402] fill-[#9E0402]" /> using Vue 3, Tailwind & Supabase
         </p>
       </div>
+
     </div>
   </footer>
 </template>
