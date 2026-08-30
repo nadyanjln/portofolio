@@ -1,35 +1,11 @@
 <script setup>
-import { ref, computed, onMounted } from 'vue'
+import { ref, onMounted } from 'vue'
 import { Sparkles, Plus, Minus, HelpCircle } from 'lucide-vue-next'
-import { faqs as defaultNadyaFaqs } from '@/data/portfolioData'
 import { usePortfolioStore } from '@/composables/usePortfolioStore'
 import { useScrollReveal } from '@/composables/useAnimations'
 
-const { currentProfile } = usePortfolioStore()
+const { currentProfile, faqs } = usePortfolioStore()
 const activeIndex = ref(0)
-
-const raqwanFaqs = [
-  {
-    question: "Apakah Anda terbuka untuk full-time role atau remote contract sebagai AI Engineer?",
-    answer: "Ya, saya sangat terbuka untuk posisi Full-Time AI Engineer, Machine Learning Specialist, maupun remote research contract untuk perancangan Computer Vision, NLP, dan Autonomous Agentic AI."
-  },
-  {
-    question: "Framework & teknologi apa yang menjadi spesialisasi utama Anda?",
-    answer: "Saya berspesialisasi pada ekosistem PyTorch, CUDA, TensorRT, OpenCV (Computer Vision), Hugging Face & LangGraph (NLP/Agentic AI), serta FastAPI & Docker untuk MLOps model serving di cloud maupun edge device."
-  },
-  {
-    question: "Bagaimana pendekatan Anda dalam mengoptimasi model deep learning untuk edge device?",
-    answer: "Saya mengombinasikan FP16/INT8 quantization via TensorRT/ONNX Runtime, network pruning, dan lightweight architecture tuning untuk mencapai latency ultra-rendah (<15ms) dengan throughput real-time 80+ FPS."
-  },
-  {
-    question: "Berapa lama waktu yang dibutuhkan untuk membangun proof-of-concept (PoC) model AI?",
-    answer: "Tergantung kompleksitas data dan domain task, fase discovery, data curation, dan prototype model awal umumnya dapat diselesaikan dalam rentang 2 hingga 4 minggu."
-  }
-]
-
-const faqs = computed(() => {
-  return currentProfile.value === 'raqwan' ? raqwanFaqs : defaultNadyaFaqs
-})
 
 const toggleFaq = (idx) => {
   activeIndex.value = activeIndex.value === idx ? null : idx

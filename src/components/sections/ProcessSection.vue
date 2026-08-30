@@ -29,10 +29,10 @@ onMounted(() => observeAll(sectionRef.value))
             Bagaimana Saya <span :class="currentProfile === 'raqwan' ? 'text-[#047857] dark:text-emerald-400' : 'text-[#9E0402] dark:text-[#ff3b38]'">Bekerja</span>
           </h2>
           <p class="text-sm sm:text-base text-[#5C4848] dark:text-zinc-300 leading-relaxed" v-if="currentProfile === 'raqwan'">
-            Siklus pengembangan AI end-to-end terstruktur — dari perumusan matematis & kurasi dataset hingga arsitektur neural networks, optimasi inference, dan MLOps deployment.
+            Siklus pengembangan AI & Data end-to-end yang terstruktur — dari perumusan masalah & data engineering hingga pemodelan deep learning, optimasi performa, dan deployment production.
           </p>
           <p class="text-sm sm:text-base text-[#5C4848] dark:text-zinc-300 leading-relaxed" v-else>
-            Metodologi end-to-end terstruktur yang menghubungkan riset pengguna, strategi bisnis, dan eksekusi desain berkualitas tinggi.
+            Metodologi produk & desain end-to-end yang terstruktur — dari riset pengguna & strategi produk hingga perancangan UI/UX presisi tinggi dan usability testing teruji.
           </p>
         </div>
       </div>

@@ -1,7 +1,7 @@
-// ================================================================
-// NADYA NAJELINA SALSABILLAH - PRODUCT MANAGER & UI/UX PORTFOLIO DATA
-// Sourced directly from CV & LinkedIn Profile
-// ================================================================
+/**
+ * Portfolio Data Model for Nadya Najelina Salsabillah
+ * Connected with Supabase Cloud Database.
+ */
 
 export const portfolioInfo = {
   name: "Nadya Najelina Salsabillah",
@@ -11,7 +11,6 @@ export const portfolioInfo = {
   bio: "Computer Science Graduate (S1 Informatika, GPA: 3.97 / 4.00) from Gunadarma University with a multidisciplinary background in UI/UX design, software engineering, business, and AI, focused on Product Management. By combining user empathy, technical expertise, business thinking, and data-driven decision making, I strive to build products that simplify complex workflows, empower better decisions, and create meaningful value for both users and businesses.",
   status: "Open for Product Management & UI/UX Roles",
   location: "Depok, Jawa Barat, Indonesia",
-  phone: "+62 821 1146 4583",
   email: "nadyanjln@gmail.com",
   socials: {
     github: "https://github.com/nadyanjln",
@@ -20,114 +19,14 @@ export const portfolioInfo = {
   }
 }
 
-export const educations = [
-  {
-    degree: "Bachelor’s Degree in Computer Science (GPA: 3.97 / 4.00)",
-    school: "Gunadarma University",
-    year: "September 2022 – Agustus 2026 (Lulus / Graduated)",
-    honors: "Graduated with Honors (IPK 3.97/4.00) & received 7 honors and awards across academic excellence, UI/UX, entrepreneurship, and national/international competitions."
-  }
-]
-
-export const certifications = [
-  "Team and Employee Management — Hacktiv8 Indonesia (2026)",
-  "Data Science Associate — National Professional Certification Agency (BNSP) (2026)",
-  "Flutter Developer Bootcamp (Score: 90/100) — Dicoding Indonesia (2025)",
-  "Go Language Programming — Gunadarma University (2024 - 2025)",
-  "Basic Data Science Specialization — Dicoding Indonesia (2024)",
-  "Fundamental Web Development — Gunadarma University (2023)"
-]
-
-export const experiences = [
-  {
-    role: "Freelance UI/UX Designer",
-    company: "PT. Mitra Teknologi Gemilang",
-    period: "March 2026",
-    description: "Led a comprehensive UX audit and redesigned 3 core safety flows for SaveMe across 20+ screens, improving navigation clarity and aligning design decisions with product goals. Created 8+ custom icons and UI assets using Figma and Canva to strengthen visual consistency and usability."
-  },
-  {
-    role: "Course Tutor, Assistant & Administrative Support",
-    company: "Gunadarma University Computerization Development Institute",
-    period: "January 2023 – August 2026",
-    description: "Analyzed recurring onboarding pain points from 100+ student inquiries and proposed process improvements to streamline student support, while assisting technical courses."
-  },
-  {
-    role: "New Assistant Recruitment Interviewer & Gathering Committee",
-    company: "Gunadarma University Computerization Development Institute",
-    period: "September 2024 – November 2025",
-    description: "Conducted structured interviews with 50+ candidates, evaluating technical and communication skills to support recruitment decisions for the new assistant cohort. Coordinated logistics operations for an event with 60+ participants."
-  },
-  {
-    role: "UI/UX Designer & Researcher",
-    company: "Student Executive Board (BEM) Gunadarma University",
-    period: "September 2023",
-    description: "Coordinated onboarding for 40 freshmen, identified engagement needs, and improved the first-year support experience."
-  }
-]
-
-export const milestones = [
-  {
-    title: "Best AI Integration — International Business Pitch Fest 2025",
-    issuer: "International Business Pitch Fest",
-    year: "November 2025",
-    badge: "Champion",
-    description: "Led product strategy and aligned a four-person team to deliver an AI-powered IoT monitoring MVP (MeatSure), earning Best AI Integration at an international business pitch competition."
-  },
-  {
-    title: "Finalist of ACTION (Academic Competition of Data Science)",
-    issuer: "ACTION Data Science Competition",
-    year: "December 2025",
-    badge: "Top 7 Finalist",
-    description: "Selected as one of the Top 7 teams in the UI/UX category, demonstrating strong user-centered design, research, and problem-solving skills."
-  },
-  {
-    title: "Top 10 Best Team — Hackvidia, Arkavidia ITB",
-    issuer: "Informatics Student Association ITB",
-    year: "May 2025",
-    badge: "Top 10 Finalist",
-    description: "Selected as one of the finalists in a prestigious national-scale hackathon organized by Institut Teknologi Bandung (ITB)."
-  },
-  {
-    title: "Awardee of P2MW 2024 – Digital Business Category",
-    issuer: "Kemendikbudristek (P2MW)",
-    year: "November 2024",
-    badge: "Grant Winner",
-    description: "Selected as recipient in national Program Pembinaan Mahasiswa Wirausaha 2024 for Recad platform, securing IDR 12 million in government funding."
-  },
-  {
-    title: "Top 10 Outstanding Students for Academic Excellence",
-    issuer: "Gunadarma University",
-    year: "2025",
-    badge: "Academic Honors",
-    description: "Awarded for outstanding academic performance (GPA 3.97 / 4.00) in the 2023/2024 academic year at Gunadarma University."
-  }
-]
-
 export const skills = [
-  // Product Strategy & Discovery
-  { name: "Product Strategy", category: "Product", level: "Expert", color: "indigo" },
-  { name: "Product Discovery", category: "Product", level: "Expert", color: "blue" },
-  { name: "PRD & User Stories", category: "Product", level: "Expert", color: "blue" },
-  { name: "Stakeholder Management", category: "Product", level: "Advanced", color: "orange" },
-  { name: "Agile / Scrum", category: "Product", level: "Expert", color: "yellow" },
-  { name: "Problem Analysis", category: "Product", level: "Expert", color: "cyan" },
-  
-  // UI/UX & Design Systems
-  { name: "UI/UX Design", category: "UI/UX", level: "Expert", color: "rose" },
-  { name: "Wireframing & Prototyping", category: "UI/UX", level: "Expert", color: "purple" },
-  { name: "Design System", category: "UI/UX", level: "Advanced", color: "violet" },
-  { name: "Information Architecture", category: "UI/UX", level: "Expert", color: "indigo" },
-  { name: "Interaction Design", category: "UI/UX", level: "Expert", color: "pink" },
-  { name: "Figma & FigJam", category: "Design Tool", level: "Expert", color: "rose" },
-  { name: "Adobe Illustrator / PS", category: "Design Tool", level: "Advanced", color: "amber" },
-  { name: "Canva & Visual Assets", category: "Design Tool", level: "Expert", color: "teal" },
-  { name: "Flutter", category: "UI/UX", level: "Advanced", color: "cyan" },
-
-  // UX Research & Testing
-  { name: "User Research", category: "UX Research", level: "Expert", color: "cyan" },
-  { name: "Usability Testing", category: "UX Research", level: "Expert", color: "green" },
-  { name: "Design Thinking", category: "UX Research", level: "Expert", color: "emerald" },
-  { name: "Data-Driven Decision", category: "UX Research", level: "Advanced", color: "amber" }
+  { name: "Product Strategy & Discovery", category: "Product", level: "Expert", color: "indigo" },
+  { name: "Product Requirement Doc (PRD)", category: "Product", level: "Expert", color: "indigo" },
+  { name: "Feature Prioritization (RICE/MoSCoW)", category: "Product", level: "Expert", color: "indigo" },
+  { name: "UI/UX Design & Prototyping", category: "UI/UX", level: "Expert", color: "purple" },
+  { name: "Design System Architecture", category: "UI/UX", level: "Advanced", color: "purple" },
+  { name: "User Research & Usability Testing", category: "UX Research", level: "Advanced", color: "amber" },
+  { name: "Figma & FigJam", category: "Design Tool", level: "Expert", color: "pink" }
 ]
 
 export const projects = [
@@ -150,21 +49,32 @@ export const projects = [
     detail: {
       duration: "November 2025",
       role: "Product Lead, Researcher, Product Developer",
-      team: ["1 Product Lead (Nadya)", "1 AI/IoT Engineer", "1 Hardware Specialist", "1 Business Strategist"],
+      technology: "Product Strategy & IoT",
       tools: ["Figma", "FigJam", "Notion", "Product Discovery", "Market Research", "Pitch Deck"],
       overview: "MeatSure dirancang untuk menyelesaikan masalah pembusukan dan penurunan kualitas produk laut selama proses distribusi. Dengan integrasi sensor IoT dan algoritma AI deteksi kesegaran, MeatSure menyediakan dashboard terpusat bagi distributor untuk memantau kondisi produk secara langsung.",
       problem: {
-        title: "Tantangan Kualitas & Rantai Pasok",
+        title: "The Core Challenge — Tantangan Kualitas Rantai Pasok Dingin & Risiko Pembusukan",
+        description: "Mencegah pembusukan komoditas produk laut bernilai tinggi selama distribusi antar-pulau dengan visibilitas telemetri suhu dan gas secara instan.",
         points: [
-          "Tingginya angka kerugian finansial akibat pembusukan produk laut selama pengiriman rantai dingin.",
-          "Kurangnya transparansi data real-time mengenai suhu, kelembaban, dan gas amonia pada kontainer logistik.",
-          "Ketiadaan sistem peringatan dini (early warning system) yang mudah diakses oleh operator gudang dan manajer logistik."
+          "Tingginya angka kerugian finansial distributor hingga 18-25% akibat pembusukan produk laut selama proses pengiriman rantai pasok dingin (cold chain).",
+          "Kurangnya transparansi data real-time mengenai parameter kritis seperti suhu, kelembaban, dan emisi gas amonia di dalam kontainer logistik.",
+          "Ketiadaan sistem peringatan dini (early warning system) dengan antarmuka prediktif yang mudah diakses dan dipahami oleh operator gudang dan manajer logistik."
         ]
       },
       results: [
         { metric: "Award Recognition", before: "Competitor", after: "Best AI Integration 2025", change: "International Winner" },
         { metric: "Monitoring Precision", before: "Manual Check (Hours)", after: "Real-Time (<5s)", change: "Instant Telemetry" },
         { metric: "Spoilage Risk Reduction", before: "High (18-25%)", after: "Predicted <4%", change: "80% Risk Mitigated" }
+      ],
+      gallery: [
+        {
+          url: "https://images.unsplash.com/photo-1534482421-64566f976cfa?auto=format&fit=crop&w=1200&q=80",
+          caption: "IoT Telemetry Dashboard — Real-time Cold Chain Spoilage Detection & Ammonia Sensor Monitoring"
+        },
+        {
+          url: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=1200&q=80",
+          caption: "High-Fidelity Mobile App Prototype — Push Alert Notification System for Logistics Operators"
+        }
       ]
     }
   },
@@ -187,21 +97,32 @@ export const projects = [
     detail: {
       duration: "Desember 2025",
       role: "UI/UX Designer & Researcher",
-      team: ["1 UI/UX Designer & Researcher (Nadya)", "1 Product Manager", "2 Developers"],
+      technology: "UI/UX & AI Product",
       tools: ["Figma", "FigJam", "User Interview", "Wireframing", "Usability Testing"],
       overview: "AiSee mengatasi kesulitan pelaku UMKM dalam memilih influencer dan merancang strategi pemasaran digital yang efisien. Dengan kecerdasan buatan, platform ini mencocokkan profil bisnis dengan kreator yang memiliki audiens paling relevan.",
       problem: {
-        title: "Tantangan Pemasaran UMKM",
+        title: "The Core Challenge — Tantangan Strategi Pemasaran Digital & Analitik UMKM",
+        description: "Menjembatani keterbatasan literasi analitik digital pemilik usaha kecil dengan antarmuka rekomendasi pemasaran berbasis kecerdasan buatan.",
         points: [
-          "Pelaku UMKM kesulitan memilih konten kreator yang tepat dengan return on investment (ROI) terukur.",
-          "Dashboard analitik periklanan yang ada di pasar terlalu rumit untuk pengguna pemula.",
-          "Minimnya panduan otomatis mengenai tren konten yang sedang diminati audiens lokal."
+          "Pelaku UMKM sering mengalami kerugian biaya iklan karena kesulitan memilih konten kreator/influencer yang memiliki profil audiens relevan dengan produk mereka.",
+          "Platform analitik periklanan yang ada di pasar terlalu rumit dan dipenuhi istilah teknis sehingga menghambat UMKM dalam membaca performa kampanye.",
+          "Minimnya panduan otomatis mengenai tren konten lokal dan kalkulasi estimasi Return on Investment (ROI) sebelum meluncurkan kampanye pemasaran."
         ]
       },
       results: [
         { metric: "Task Completion Rate", before: "52%", after: "91%", change: "+39% Task Success" },
         { metric: "Time on Campaign Setup", before: "45 menit", after: "8 menit", change: "5.6x Lebih Cepat" },
         { metric: "SUS Usability Score", before: "62 (Marginal)", after: "86.5 (Excellent)", change: "+24.5 Poin" }
+      ],
+      gallery: [
+        {
+          url: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=1200&q=80",
+          caption: "Campaign Performance Analytics & Influencer Matchmaking Scoring Interface"
+        },
+        {
+          url: "https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?auto=format&fit=crop&w=1200&q=80",
+          caption: "Modular Wireframe System & Step-by-Step Campaign Creation Wizard"
+        }
       ]
     }
   },
@@ -224,21 +145,32 @@ export const projects = [
     detail: {
       duration: "September 2025",
       role: "UI/UX Designer & Researcher",
-      team: ["1 UI/UX Designer (Nadya)", "1 EdTech Researcher", "1 AI Developer"],
+      technology: "EdTech UX",
       tools: ["Figma", "FigJam", "Child-Centered Design", "Prototyping", "Gamification"],
       overview: "EduFatahillah-AI merevolusi cara anak-anak mempelajari sejarah museum dan peninggalan budaya. Dengan memindai gambar artefak, aplikasi menceritakan kisah bersejarah secara interaktif dengan suara naratif yang menarik dan kuis berhadiah poin.",
       problem: {
-        title: "Tantangan Pembelajaran Sejarah Konvensional",
+        title: "The Core Challenge — Tantangan Minat Belajar Sejarah & Interaktivitas Siswa SD",
+        description: "Mengubah materi pembelajaran sejarah yang statis dan tekstual menjadi pengalaman interaktif visual berbasis gamifikasi untuk anak sekolah dasar.",
         points: [
-          "Materi pelajaran sejarah di buku teks dirasa membosankan dan kurang visual bagi siswa SD.",
-          "Anak-anak cepat kehilangan fokus jika aplikasi edukasi dipenuhi banyak teks panjang.",
-          "Kurangnya elemen interaktivitas nyata saat anak-anak berkunjung ke museum atau belajar di rumah."
+          "Materi sejarah di buku teks konvensional dirasa kaku, membosankan, dan kurang visual sehingga siswa sekolah dasar cepat kehilangan fokus dalam belajar.",
+          "Antarmuka aplikasi edukasi umum sering kali terlalu padat teks dan tidak ramah bagi pola interaksi serta perkembangan motorik visual anak-anak.",
+          "Kurangnya elemen gamifikasi interaktif dan narasi suara yang imersif saat siswa mempelajari artefak budaya di museum maupun di rumah."
         ]
       },
       results: [
         { metric: "Student Engagement Duration", before: "6 menit", after: "28 menit", change: "4.6x Lebih Lama" },
         { metric: "Quiz Completion Rate", before: "44%", after: "93%", change: "+49% Penyelesaian" },
         { metric: "Child Navigation Ease", before: "3.2 / 5", after: "4.8 / 5", change: "+50% Kemudahan" }
+      ],
+      gallery: [
+        {
+          url: "https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&w=1200&q=80",
+          caption: "Child-Friendly Interactive History Quiz & Artifact Scanner UI"
+        },
+        {
+          url: "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=1200&q=80",
+          caption: "Gamification Leaderboard & Audio Storytelling Narration Flow"
+        }
       ]
     }
   },
@@ -261,21 +193,32 @@ export const projects = [
     detail: {
       duration: "Februari 2024 — November 2024",
       role: "Chief Financial Officer (CFO), UI/UX Designer & Social Media Manager",
-      team: ["1 CFO & UI/UX Designer (Nadya)", "1 CEO / Operations", "1 Medical Device Specialist"],
+      technology: "HealthTech UI/UX",
       tools: ["Figma", "Financial Modeling", "Canva", "P2MW Framework", "User Testing"],
       overview: "Recad menjembatani kesenjangan akses alat-alat kesehatan esensial seperti konsentrator oksigen dan tempat tidur medis bagi pasien rawat jalan dengan sistem sewa fleksibel yang terjangkau.",
       problem: {
-        title: "Tantangan Aksesibilitas Alat Medis",
+        title: "The Core Challenge — Tantangan Aksesibilitas & Skema Sewa Alat Medis Pasien",
+        description: "Menghadirkan layanan sewa peralatan medis darurat yang transparan, mudah diverifikasi secara daring, dan aksesibel bagi keluarga pasien lansia.",
         points: [
-          "Membeli alat kesehatan baru memerlukan biaya tinggi yang memberatkan keluarga pasien.",
-          "Proses sewa konvensional tidak memiliki jaminan kebersihan, kalibrasi, dan pengantaran tepat waktu.",
-          "Antarmuka pemesanan alat kesehatan sering kali membingungkan pengguna lanjut usia."
+          "Tingginya harga pembelian alat-alat kesehatan esensial (seperti konsentrator oksigen dan tempat tidur medis) sangat memberatkan keluarga pasien rawat jalan.",
+          "Proses penyewaan alat kesehatan konvensional tidak memiliki standardisasi kebersihan, kepastian jadwal pengantaran, dan transparansi biaya deposit.",
+          "Desain antarmuka pemesanan alat kesehatan sering kali membingungkan keluarga pasien lansia yang membutuhkan alur registrasi cepat dan sederhana."
         ]
       },
       results: [
         { metric: "Grant Funding Secured", before: "IDR 0", after: "IDR 12,000,000", change: "P2MW 2024 Winner" },
         { metric: "Social Content Reach", before: "0", after: "43+ Publications", change: "Broad Awareness" },
         { metric: "Rental Booking Ease", before: "Offline Phone Call", after: "1-Click Online Booking", change: "100% Digitalized" }
+      ],
+      gallery: [
+        {
+          url: "https://images.unsplash.com/photo-1584515979956-d9f6e5d09982?auto=format&fit=crop&w=1200&q=80",
+          caption: "Medical Equipment Catalog & Transparent Deposit Checkout Flow"
+        },
+        {
+          url: "https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?auto=format&fit=crop&w=1200&q=80",
+          caption: "Elderly-Accessible UI Design System & Delivery Schedule Tracking"
+        }
       ]
     }
   },
@@ -298,54 +241,34 @@ export const projects = [
     detail: {
       duration: "Maret 2026",
       role: "Freelance UI/UX Designer at PT. MTG",
-      team: ["1 UI/UX Designer (Nadya)", "1 Product Lead", "2 Mobile Developers"],
+      technology: "UX Audit & Design System",
       tools: ["Figma", "Canva", "UX Audit", "Iconography", "Design Tokens"],
       overview: "SaveMe adalah aplikasi keamanan personal dan respons darurat. Redesign difokuskan pada penyederhanaan alur navigasi saat situasi kritis agar pengguna dapat mengaktifkan alarm dan mengirim lokasi dalam hitungan detik.",
       problem: {
-        title: "Tantangan Alur Keselamatan Kritis",
+        title: "The Core Challenge — Tantangan Alur Respons Darurat & Ergonomi Navigasi Kritis",
+        description: "Menyederhanakan alur antarmuka darurat (SOS) agar dapat diakses seketika di bawah 2 detik saat pengguna menghadapi situasi panik.",
         points: [
-          "Navigasi aplikasi sebelumnya memiliki tombol yang terlalu padat sehingga rawan salah pencet saat panik.",
-          "Ikonografi standar tidak memiliki hierarki visual yang jelas untuk tindakan darurat.",
-          "Dibutuhkan peremajaan visual tanpa mengorbankan performa kecepatan load aplikasi."
+          "Alur navigasi aplikasi keselamatan sebelumnya memiliki tombol yang terlalu padat dan letak aksi darurat yang tidak ergonomis saat pengguna berada dalam kondisi panik.",
+          "Ikonografi visual standar aplikasi tidak memiliki hierarki pembeda yang jelas antara fitur pelaporan rutin dan pemicu sirene darurat (SOS action).",
+          "Fragmentasi gaya visual di lebih dari 20 layar aplikasi menurunkan kredibilitas kepercayaan pengguna terhadap keandalan sistem respons keselamatan."
         ]
       },
       results: [
         { metric: "Emergency Trigger Speed", before: "6.4 detik", after: "1.8 detik", change: "3.5x Lebih Cepat" },
         { metric: "Screen Consistency", before: "Fragmented", after: "20+ Redesigned Screens", change: "Unified System" },
         { metric: "Custom Icons Delivered", before: "Generic Stock", after: "8+ Custom Vectors", change: "100% Custom Assets" }
+      ],
+      gallery: [
+        {
+          url: "https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?auto=format&fit=crop&w=1200&q=80",
+          caption: "Sub-2s Emergency SOS Trigger & Live GPS Location Broadcast Flow"
+        },
+        {
+          url: "https://images.unsplash.com/photo-1555774698-0b77e0d5fac6?auto=format&fit=crop&w=1200&q=80",
+          caption: "Custom 8+ Iconography Design System & Safety Check-in Dashboard"
+        }
       ]
     }
-  }
-]
-
-export const workflows = [
-  {
-    step: "01",
-    phase: "Product Discovery & Market Research",
-    tagline: "Uncovering Deep User Insights",
-    description: "Menganalisis kebutuhan pengguna, membedah landscape kompetitor, dan memetakan problem-solution fit menggunakan riset kualitatif & kuantitatif.",
-    deliverables: ["User Interview Synthesis", "Competitive Analysis Matrix", "User Personas & Empathy Maps", "Problem Statement & HMW"]
-  },
-  {
-    step: "02",
-    phase: "Product Strategy & Feature Prioritization",
-    tagline: "Defining Value & Direction",
-    description: "Menyusun Product Requirement Document (PRD), menyelaraskan ekspektasi stakeholder, dan memprioritaskan backlog MVP menggunakan framework RICE/MoSCoW.",
-    deliverables: ["Comprehensive PRD & User Stories", "Information Architecture & User Flows", "Feature Roadmap & Release Plan", "Success Metrics (KPI/OKR) Definition"]
-  },
-  {
-    step: "03",
-    phase: "UI/UX Design & Interactive Prototyping",
-    tagline: "Crafting Intuitive Interfaces",
-    description: "Merancang wireframe, interactive high-fidelity prototype di Figma, membangun design system yang konsisten, dan micro-interaction yang engaging.",
-    deliverables: ["Low & High-Fidelity Wireframes", "Interactive Figma Prototype", "Design System & Token Library", "Accessibility (WCAG) Compliance"]
-  },
-  {
-    step: "04",
-    phase: "Usability Testing & Iterative Delivery",
-    tagline: "Validating Impact & Continuous Growth",
-    description: "Melakukan usability testing terpimpin, menganalisis data funnel analitik, mengiterasi desain berdasarkan masukan, dan berkolaborasi erat dengan developer.",
-    deliverables: ["Usability Testing Findings Report", "Design QA & Handover Specs", "A/B Testing & Funnel Analysis", "Post-Launch Feedback Backlog"]
   }
 ]
 
@@ -379,21 +302,96 @@ export const testimonials = [
   }
 ]
 
+export const workflows = [
+  {
+    step: "01",
+    phase: "Product Discovery & User Research",
+    tagline: "Uncovering Deep User Insights",
+    description: "Menganalisis kebutuhan pengguna, membedah lanskap pasar & kompetitor, serta memetakan problem-solution fit menggunakan riset kualitatif (wawancara) dan analitik kuantitatif.",
+    deliverables: ["User Research & Interview Synthesis", "Competitive Landscape Analysis", "User Personas & Empathy Maps", "Problem Framing & HMW Statements"]
+  },
+  {
+    step: "02",
+    phase: "Product Strategy & Roadmap Definition",
+    tagline: "Defining Value & Direction",
+    description: "Menyusun Product Requirement Document (PRD), menyelaraskan ekspektasi stakeholder bisnis & teknis, serta memprioritaskan fitur MVP menggunakan framework teruji (RICE / MoSCoW).",
+    deliverables: ["Comprehensive PRD & User Stories", "Information Architecture & User Flows", "MVP Scoping & Feature Roadmap", "Success Metrics (KPI/OKR) Framework"]
+  },
+  {
+    step: "03",
+    phase: "UI/UX Design & High-Fidelity Prototyping",
+    tagline: "Crafting Intuitive Interfaces",
+    description: "Merancang wireframe, antarmuka visual fidelity tinggi (UI), membangun design system & token library yang konsisten, serta interaksi mikro yang intuitif dan aksesibel (WCAG).",
+    deliverables: ["Wireframes & User Journeys", "High-Fidelity UI Screen Designs", "Design System & Component Tokens", "Interactive Prototype for Validation"]
+  },
+  {
+    step: "04",
+    phase: "Usability Testing & Iterative Delivery",
+    tagline: "Validating Impact & Continuous Growth",
+    description: "Melakukan usability testing terpimpin kepada target pengguna, evaluasi metrik kegunaan (SUS/CSAT), kolaborasi handover dengan tim engineering, serta iterasi berkelanjutan pasca rilis.",
+    deliverables: ["Usability Testing Findings & Report", "Design QA & Engineering Handover", "User Feedback Analysis & Iteration", "Post-Launch Growth Backlog"]
+  }
+]
+
+export const experiences = [
+  {
+    role: "Freelance UI/UX Designer",
+    company: "PT Mitra Teknologi Gemilang",
+    period: "Maret 2026",
+    description: "Memimpin UX audit mendalam dan redesign 3 core safety flows untuk 20+ layar di aplikasi SaveMe serta pembuatan 8+ custom icon assets di PT Mitra Teknologi Gemilang.",
+    tags: ["UX Audit", "Design System", "Custom Icons", "Figma", "Safety App"]
+  },
+  {
+    role: "CFO & UI/UX Designer",
+    company: "Recad (P2MW Kemendikbudristek)",
+    period: "Feb 2024 — Nov 2024",
+    description: "Memvalidasi kelayakan bisnis Recad, memenangkan pendanaan hibah P2MW Rp 12.000.000, merancang 6+ layar UI aksesibel, dan menyusun proyeksi keuangan.",
+    tags: ["P2MW Awardee", "HealthTech", "Financial Modeling", "UI Design"]
+  }
+]
+
+export const milestones = [
+  {
+    title: "Best AI Integration Award 2025",
+    organization: "International Business Pitch Fest",
+    description: "Memimpin tim produk MeatSure meraih juara Best AI Integration atas inovasi monitoring IoT kesegaran rantai pasok produk laut."
+  },
+  {
+    title: "P2MW Kemendikbudristek 2024 Grantee",
+    organization: "Kementerian Pendidikan, Kebudayaan, Riset, dan Teknologi RI",
+    description: "Meraih hibah pendanaan pengembangan usaha Rp 12.000.000 untuk platform Recad Medical Device Rental."
+  },
+  {
+    title: "Top Graduate GPA 3.97 / 4.00",
+    organization: "Universitas Gunadarma — S1 Informatika",
+    description: "Lulus dengan predikat Cum Laude dan IPK 3.97 pada program studi Sarjana Informatika."
+  }
+]
+
+export const certifications = [
+  { name: "Product Management Professional", issuer: "Google / Coursera", year: "2025" },
+  { name: "UI/UX Design Masterclass & Systems", issuer: "Interaction Design Foundation", year: "2024" }
+]
+
+export const educations = [
+  {
+    degree: "Sarjana Komputer (S1 Informatika) — IPK 3.97 / 4.00",
+    school: "Universitas Gunadarma",
+    year: "2022 — 2026"
+  }
+]
+
 export const faqs = [
   {
-    question: "Apakah Anda terbuka untuk full-time role atau peluang kerja sama sebagai Product Manager / UI/UX Designer?",
-    answer: "Ya, saya sangat terbuka untuk peluang Full-Time, Remote, maupun Hybrid sebagai Product Manager, Associate Product Manager, atau UI/UX Designer untuk menciptakan produk digital yang berdampak nyata."
+    question: "Apakah Anda terbuka untuk kesempatan kerja Full-Time atau Kontrak?",
+    answer: "Ya, saya sangat terbuka untuk posisi Full-Time Product Manager, Associate Product Manager, maupun UI/UX Designer di perusahaan teknologi dan startup."
   },
   {
-    question: "Bagaimana pendekatan Anda dalam menerjemahkan kebutuhan pengguna dan bisnis menjadi fitur produk?",
-    answer: "Saya menggunakan pendekatan Product Discovery terstruktur: riset pengguna (kualitatif/kuantitatif), pemetaan problem statement (HMW), penyusunan PRD & user stories, hingga validasi prototipe interaktif di Figma melalui usability testing sebelum diserahkan ke tim engineering."
+    question: "Bagaimana pendekatan Anda dalam memimpin perancangan produk dari nol?",
+    answer: "Saya mengadopsi kerangka kerja Discovery-to-Delivery yang mengintegrasikan user research mendalam, perumusan PRD terstruktur, pembuatan prototype fidelity tinggi di Figma, hingga validasi metrik usability testing."
   },
   {
-    question: "Tool apa saja yang biasa Anda gunakan dalam manajemen produk dan perancangan desain?",
-    answer: "Untuk perancangan desain dan prototyping interaktif saya mengandalkan Figma, FigJam, Canva, dan Adobe Illustrator/Photoshop. Untuk manajemen roadmap produk, PRD, dan backlog, saya aktif menggunakan Notion dan framework Agile/Scrum."
-  },
-  {
-    question: "Apakah Anda memiliki pemahaman teknis dalam berkolaborasi dengan developer dan tim AI?",
-    answer: "Ya! Dengan latar belakang Computer Science (S1 Ilmu Komputer Gunadarma dengan IPK 3.97) serta pengalaman di proyek berbasis AI (MeatSure, AiSee, EduFatahillah), saya mampu menjembatani kebutuhan bisnis dengan batasan teknis arsitektur software dan AI."
+    question: "Tools apa saja yang menjadi keahlian utama Anda dalam merancang produk?",
+    answer: "Figma, FigJam, Notion, Miro, Canva, Framework PRD & RICE Scoring, serta pemodelan keuangan dan strategi bisnis."
   }
 ]

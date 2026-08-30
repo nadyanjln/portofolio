@@ -8,7 +8,9 @@ import {
   LayoutGrid, 
   ArrowUpRight, 
   ArrowRight, 
-  TrendingUp 
+  TrendingUp,
+  ChevronDown,
+  Filter
 } from 'lucide-vue-next'
 import { usePortfolioStore } from '@/composables/usePortfolioStore'
 import ProjectCard from '@/components/ui/ProjectCard.vue'
@@ -25,6 +27,11 @@ const categories = computed(() => {
   const cats = Array.from(new Set((projects.value || []).map(p => p.category).filter(Boolean)))
   return ['All', ...cats]
 })
+
+const getCategoryCount = (cat) => {
+  if (cat === 'All') return (projects.value || []).length
+  return (projects.value || []).filter(p => p.category === cat).length
+}
 
 const filteredProjects = computed(() => {
   const list = projects.value || []
@@ -142,9 +149,9 @@ watch(currentProfile, () => {
     </div>
 
     <!-- Search & Filter Controls Container -->
-    <div data-reveal="fade-up" data-reveal-delay="1" class="p-4 sm:p-5 rounded-2xl bg-white dark:bg-[#14161D] border border-[#EEDCDC] dark:border-white/10 flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4 shadow-xs">
+    <div data-reveal="fade-up" data-reveal-delay="1" class="p-4 sm:p-5 rounded-2xl bg-white dark:bg-[#14161D] border border-[#EEDCDC] dark:border-white/10 flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-4 shadow-xs">
       <!-- Search Input -->
-      <div class="relative w-full md:w-80 lg:w-96">
+      <div class="relative w-full lg:w-80 shrink-0">
         <Search class="w-4 h-4 text-[#5C4848] dark:text-zinc-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
         <input
           v-model="searchQuery"
@@ -155,23 +162,29 @@ watch(currentProfile, () => {
         />
       </div>
 
-      <!-- Categories Filter Tabs -->
-      <div class="flex flex-wrap items-center gap-1.5 overflow-x-auto pb-1 md:pb-0">
-        <button
-          v-for="cat in categories"
-          :key="cat"
-          @click="selectedCategory = cat; activeIndex = 0"
-          class="px-3.5 py-1.5 rounded-full text-xs font-mono-tag font-bold uppercase tracking-wider transition-all duration-200 cursor-pointer whitespace-nowrap"
-          :class="[
-            selectedCategory === cat 
-              ? (currentProfile === 'raqwan' ? 'bg-[#047857] text-white shadow-md shadow-[#047857]/30' : 'bg-[#9E0402] text-white shadow-md shadow-[#9E0402]/25')
-              : (currentProfile === 'raqwan'
-                  ? 'bg-white dark:bg-[#1A1C24] text-[#1C1313] dark:text-zinc-300 hover:bg-emerald-50 dark:hover:bg-white/10 hover:border-[#047857]/40 hover:text-[#047857] border border-[#EEDCDC] dark:border-white/10'
-                  : 'bg-white dark:bg-[#1A1C24] text-[#1C1313] dark:text-zinc-300 hover:bg-[#FDF6F6] dark:hover:bg-white/10 hover:border-[#9E0402]/40 hover:text-[#9E0402] border border-[#EEDCDC] dark:border-white/10')
-          ]"
+      <!-- Categories Filter Select Input -->
+      <div class="relative w-full lg:w-72 shrink-0">
+        <div class="absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none text-zinc-400">
+          <Filter class="w-4 h-4" :class="currentProfile === 'raqwan' ? 'text-emerald-500' : 'text-[#9E0402]'" />
+        </div>
+        <select
+          v-model="selectedCategory"
+          @change="activeIndex = 0"
+          class="w-full appearance-none pl-10 pr-10 py-2.5 rounded-xl bg-[#FFF9F9] dark:bg-[#0B0C0E] border text-xs sm:text-sm font-mono-tag font-bold tracking-wide outline-none cursor-pointer transition-all shadow-xs"
+          :class="currentProfile === 'raqwan' 
+            ? 'border-emerald-300/60 dark:border-white/10 text-zinc-900 dark:text-white focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 hover:border-emerald-400' 
+            : 'border-red-300/60 dark:border-white/10 text-zinc-900 dark:text-white focus:border-[#9E0402] focus:ring-1 focus:ring-[#9E0402] hover:border-red-400'"
         >
-          {{ cat }}
-        </button>
+          <option 
+            v-for="cat in categories" 
+            :key="cat" 
+            :value="cat" 
+            class="bg-white dark:bg-[#14161D] text-zinc-900 dark:text-white py-2"
+          >
+            {{ cat === 'All' ? 'Semua Kategori (All Works)' : cat }} ({{ getCategoryCount(cat) }})
+          </option>
+        </select>
+        <ChevronDown class="w-4 h-4 text-zinc-400 absolute right-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
       </div>
     </div>
 
@@ -189,10 +202,10 @@ watch(currentProfile, () => {
           <!-- LEFT: Project Index List -->
           <div class="lg:col-span-5 flex flex-col justify-between h-full space-y-2 order-2 lg:order-1">
             <div 
-              class="h-full flex flex-col gap-2.5"
+              class="h-full flex flex-col gap-3 p-2 sm:p-2.5"
               :class="[
                 filteredProjects.length > 4 
-                  ? 'max-h-[500px] lg:max-h-[540px] overflow-y-auto custom-scroll pr-1.5 justify-start' 
+                  ? 'max-h-[520px] lg:max-h-[560px] overflow-y-auto custom-scroll justify-start' 
                   : 'justify-between'
               ]"
             >
@@ -201,46 +214,46 @@ watch(currentProfile, () => {
                 :key="p.id"
                 @mouseenter="selectProject(idx)"
                 @click="selectProject(idx)"
-                class="p-4 sm:p-5 rounded-3xl border transition-all duration-300 cursor-pointer flex flex-col justify-between group relative overflow-hidden shrink-0"
+                class="p-5 sm:p-6 rounded-3xl border-2 transition-all duration-300 cursor-pointer flex flex-col justify-between group relative shrink-0"
                 :class="[
                   activeIndex === idx
                     ? (currentProfile === 'raqwan'
-                        ? 'bg-white dark:bg-[#14161D] border-[#047857] dark:border-[#047857]/90 shadow-lg shadow-[#047857]/15 -translate-y-0.5'
-                        : 'bg-white dark:bg-[#14161D] border-[#9E0402] dark:border-[#ff4d4d]/60 shadow-lg shadow-[#9E0402]/5 -translate-y-0.5')
-                    : 'bg-white/70 dark:bg-[#14161D]/50 border-[#EEDCDC] dark:border-white/10 hover:bg-white dark:hover:bg-[#14161D]'
+                        ? 'bg-white dark:bg-[#14161D] border-[#047857] dark:border-emerald-500 shadow-xl shadow-[#047857]/15'
+                        : 'bg-white dark:bg-[#14161D] border-[#9E0402] dark:border-[#ff4d4d] shadow-xl shadow-[#9E0402]/15')
+                    : 'bg-white/70 dark:bg-[#14161D]/50 border-[#EEDCDC] dark:border-white/10 hover:bg-white dark:hover:bg-[#14161D] hover:border-zinc-300 dark:hover:border-white/20'
                 ]"
               >
-                <div 
-                  v-if="activeIndex === idx"
-                  class="absolute left-0 top-3 bottom-3 w-1.5 rounded-r-full"
-                  :class="currentProfile === 'raqwan' ? 'bg-[#047857]' : 'bg-[#9E0402] dark:bg-[#ff4d4d]'"
-                ></div>
-
-                <div class="flex items-center justify-between gap-2 pb-1">
-                  <div class="flex items-center gap-2">
+                <!-- Top Row: Index & Category & Duration -->
+                <div class="flex items-center justify-between gap-3 pb-2">
+                  <div class="flex items-center gap-2 flex-wrap">
                     <span 
-                      class="text-xs font-mono-tag font-bold"
-                      :class="activeIndex === idx ? (currentProfile === 'raqwan' ? 'text-emerald-400' : 'text-[#9E0402] dark:text-[#ff4d4d]') : 'text-[#5C4848] dark:text-zinc-400'"
+                      v-if="activeIndex === idx"
+                      class="w-2 h-2 rounded-full shrink-0 animate-pulse"
+                      :class="currentProfile === 'raqwan' ? 'bg-emerald-500' : 'bg-[#9E0402] dark:bg-[#ff4d4d]'"
+                    ></span>
+                    <span 
+                      class="text-xs font-mono-tag font-bold tracking-tight"
+                      :class="activeIndex === idx ? (currentProfile === 'raqwan' ? 'text-[#047857] dark:text-emerald-400' : 'text-[#9E0402] dark:text-[#ff4d4d]') : 'text-[#5C4848] dark:text-zinc-400'"
                     >
                       ({{ String(idx + 1).padStart(2, '0') }})
                     </span>
-                    <span class="text-xs font-mono-tag text-[#5C4848] dark:text-zinc-400 uppercase font-semibold">
+                    <span class="text-xs font-mono-tag text-[#5C4848] dark:text-zinc-300 uppercase font-bold tracking-wider">
                       {{ p.category }}
                     </span>
                   </div>
 
                   <span 
-                    v-if="p.detail"
-                    class="text-[11px] font-mono-tag text-[#5C4848] dark:text-zinc-400 hidden sm:inline-block"
+                    v-if="p.detail?.duration"
+                    class="text-[11px] font-mono-tag text-[#5C4848] dark:text-zinc-400 shrink-0 font-medium"
                   >
                     {{ p.detail.duration }}
                   </span>
                 </div>
 
                 <!-- Project Title -->
-                <div class="space-y-1">
+                <div class="space-y-2">
                   <h3 
-                    class="text-base sm:text-lg font-bold leading-snug transition-colors"
+                    class="text-base sm:text-lg font-bold leading-snug tracking-tight transition-colors"
                     :class="[
                       activeIndex === idx 
                         ? (currentProfile === 'raqwan' ? 'text-[#047857] dark:text-emerald-400' : 'text-[#9E0402] dark:text-[#ff4d4d]') 
@@ -250,16 +263,18 @@ watch(currentProfile, () => {
                     {{ p.title }}
                   </h3>
 
-                  <div v-if="activeIndex === idx" class="space-y-2.5 pt-1.5">
+                  <!-- Expandable Summary & Tags for Active Item -->
+                  <div v-if="activeIndex === idx" class="space-y-3 pt-2">
                     <p class="text-xs sm:text-sm text-[#5C4848] dark:text-zinc-300 leading-relaxed line-clamp-2">
                       {{ p.description }}
                     </p>
 
+                    <!-- Tags -->
                     <div class="flex flex-wrap gap-1.5">
                       <span 
                         v-for="tag in p.tags" 
                         :key="tag"
-                        class="px-2 py-0.5 text-[10px] font-bold font-mono-tag rounded-md"
+                        class="px-2.5 py-1 text-[10px] font-bold font-mono-tag rounded-lg"
                         :class="currentProfile === 'raqwan' ? 'bg-emerald-50 dark:bg-[#047857]/20 text-emerald-800 dark:text-emerald-300 border border-emerald-200 dark:border-[#047857]/40' : 'bg-rose-50 dark:bg-[#9FC2EA]/15 text-rose-900 dark:text-[#9FC2EA] border border-rose-200 dark:border-[#9FC2EA]/40'"
                       >
                         {{ tag }}
@@ -268,7 +283,8 @@ watch(currentProfile, () => {
                   </div>
                 </div>
 
-                <div v-if="activeIndex === idx" class="pt-2.5 mt-1.5 border-t border-[#EEDCDC] dark:border-white/10 flex items-center justify-between">
+                <!-- Bottom CTA Link for Active Item -->
+                <div v-if="activeIndex === idx" class="pt-3 mt-3 border-t border-[#EEDCDC] dark:border-white/10 flex items-center justify-between">
                   <RouterLink
                     :to="'/' + currentProfile + '/projects/' + p.id"
                     class="text-xs font-bold font-mono-tag uppercase flex items-center gap-1.5 hover:underline"

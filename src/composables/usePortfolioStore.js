@@ -8,7 +8,8 @@ import {
   workflows as defaultNadyaWorkflows,
   experiences as defaultNadyaExperiences,
   milestones as defaultNadyaMilestones,
-  certifications as defaultNadyaCertifications
+  certifications as defaultNadyaCertifications,
+  faqs as defaultNadyaFaqs
 } from '@/data/portfolioData'
 import {
   raqwanInfo as defaultRaqwanInfo,
@@ -43,6 +44,11 @@ const nadyaSkillsState = ref(JSON.parse(JSON.stringify(defaultNadyaSkills)))
 const nadyaProjectsState = ref(JSON.parse(JSON.stringify(defaultNadyaProjects)))
 const nadyaTestimonialsState = ref(JSON.parse(JSON.stringify(defaultNadyaTestimonials)))
 const nadyaEducationsState = ref(JSON.parse(JSON.stringify(defaultNadyaEducations)))
+const nadyaWorkflowsState = ref(JSON.parse(JSON.stringify(defaultNadyaWorkflows)))
+const nadyaExperiencesState = ref(JSON.parse(JSON.stringify(defaultNadyaExperiences)))
+const nadyaMilestonesState = ref(JSON.parse(JSON.stringify(defaultNadyaMilestones)))
+const nadyaCertificationsState = ref(JSON.parse(JSON.stringify(defaultNadyaCertifications)))
+const nadyaFaqsState = ref(JSON.parse(JSON.stringify(defaultNadyaFaqs)))
 const nadyaMessagesState = ref([])
 
 // Reactive states for RAQWAN
@@ -51,6 +57,24 @@ const raqwanSkillsState = ref(JSON.parse(JSON.stringify(defaultRaqwanSkills)))
 const raqwanProjectsState = ref(JSON.parse(JSON.stringify(defaultRaqwanProjects)))
 const raqwanTestimonialsState = ref(JSON.parse(JSON.stringify(defaultRaqwanTestimonials)))
 const raqwanEducationsState = ref(JSON.parse(JSON.stringify(defaultRaqwanEducations)))
+const raqwanWorkflowsState = ref(JSON.parse(JSON.stringify(defaultRaqwanWorkflows)))
+const raqwanExperiencesState = ref(JSON.parse(JSON.stringify(defaultRaqwanExperiences)))
+const raqwanMilestonesState = ref(JSON.parse(JSON.stringify(defaultRaqwanMilestones)))
+const raqwanCertificationsState = ref(JSON.parse(JSON.stringify(defaultRaqwanCertifications)))
+const raqwanFaqsState = ref([
+  {
+    question: "Apakah Anda terbuka untuk full-time role atau remote contract sebagai AI Engineer?",
+    answer: "Ya, saya sangat terbuka untuk posisi Head of AI, Lead AI Architect, Full-Time AI Engineer, maupun remote contract untuk perancangan Agentic AI, Computer Vision, dan Distributed ML."
+  },
+  {
+    question: "Framework & teknologi apa yang menjadi spesialisasi utama Anda?",
+    answer: "Saya berspesialisasi pada ekosistem PyTorch, CUDA, Ray (Distributed ML), LangGraph & FalkorDB (Agentic AI & GraphRAG), FastAPI, WebSockets, Docker, serta PostgreSQL & Grafana."
+  },
+  {
+    question: "Bagaimana pendekatan Anda dalam mengoptimasi sistem AI agar berlatensi rendah?",
+    answer: "Saya menerapkan kuantisasi model (INT8/FP16/TFLite), asynchronous concurrency streaming via WebSockets, in-memory vectorized indexing, serta orkestrasi worker GPU terdistribusi menggunakan Ray."
+  }
+])
 const raqwanMessagesState = ref([])
 
 // Status
@@ -64,58 +88,48 @@ const cacheExpiryTime = ref(null)
 // -------------------------------------------------------------
 const getStorageKey = (profile, suffix) => `portfolio_${profile}_${suffix}`
 
+const mergeProjectsWithDefaults = (savedProjects, defaultProjects) => {
+  if (!savedProjects || !savedProjects.length) {
+    return JSON.parse(JSON.stringify(defaultProjects))
+  }
+  
+  const mergedDefaults = defaultProjects.map(defProj => {
+    const saved = savedProjects.find(p => p.id === defProj.id)
+    if (!saved) return JSON.parse(JSON.stringify(defProj))
+
+    return {
+      ...defProj,
+      ...saved,
+      detail: {
+        ...defProj.detail,
+        ...(saved.detail || {})
+      }
+    }
+  })
+
+  const customProjects = savedProjects.filter(sp => !defaultProjects.some(dp => dp.id === sp.id))
+  return [...mergedDefaults, ...customProjects]
+}
+
 const initProfileFromLocal = (profileKey) => {
   try {
     const saved = localStorage.getItem(getStorageKey(profileKey, 'data'))
     if (saved) {
       const parsed = JSON.parse(saved)
       if (profileKey === 'nadya') {
-        nadyaInfoState.value = { ...defaultNadyaInfo, ...parsed.portfolioInfo }
-        if (parsed.projects && parsed.projects.length > 0) {
-          const existingIds = new Set(parsed.projects.map(p => p.id))
-          const missingProjects = defaultNadyaProjects.filter(p => !existingIds.has(p.id))
-          nadyaProjectsState.value = [...missingProjects, ...parsed.projects]
-        } else {
-          nadyaProjectsState.value = JSON.parse(JSON.stringify(defaultNadyaProjects))
-        }
-        if (parsed.skills && parsed.skills.length > 0) {
-          const existingSkillNames = new Set(parsed.skills.map(s => s.name))
-          const missingSkills = defaultNadyaSkills.filter(s => !existingSkillNames.has(s.name))
-          nadyaSkillsState.value = [...missingSkills, ...parsed.skills]
-        } else {
-          nadyaSkillsState.value = JSON.parse(JSON.stringify(defaultNadyaSkills))
-        }
+        if (parsed.portfolioInfo) nadyaInfoState.value = { ...defaultNadyaInfo, ...parsed.portfolioInfo }
+        nadyaProjectsState.value = mergeProjectsWithDefaults(parsed.projects, defaultNadyaProjects)
+        if (parsed.skills && parsed.skills.length > 0) nadyaSkillsState.value = parsed.skills
         if (parsed.testimonials && parsed.testimonials.length > 0) nadyaTestimonialsState.value = parsed.testimonials
         if (parsed.educations && parsed.educations.length > 0) nadyaEducationsState.value = parsed.educations
+        if (parsed.workflows && parsed.workflows.length > 0) nadyaWorkflowsState.value = parsed.workflows
       } else {
-        // Always ensure updated default data and projects if newly added
-        raqwanInfoState.value = { 
-          ...parsed.portfolioInfo,
-          ...defaultRaqwanInfo
-        }
-        
-        if (parsed.projects && parsed.projects.length > 0) {
-          const existingIds = new Set(parsed.projects.map(p => p.id))
-          const missingProjects = defaultRaqwanProjects.filter(p => !existingIds.has(p.id))
-          raqwanProjectsState.value = [...missingProjects, ...parsed.projects]
-        } else {
-          raqwanProjectsState.value = JSON.parse(JSON.stringify(defaultRaqwanProjects))
-        }
-
-        if (parsed.skills && parsed.skills.length > 0) {
-          const existingSkillNames = new Set(parsed.skills.map(s => s.name))
-          const missingSkills = defaultRaqwanSkills.filter(s => !existingSkillNames.has(s.name))
-          raqwanSkillsState.value = [...missingSkills, ...parsed.skills]
-        } else {
-          raqwanSkillsState.value = JSON.parse(JSON.stringify(defaultRaqwanSkills))
-        }
-
-        if (parsed.testimonials && parsed.testimonials.length > 0) {
-          raqwanTestimonialsState.value = parsed.testimonials
-        }
-        if (parsed.educations && parsed.educations.length > 0) {
-          raqwanEducationsState.value = parsed.educations
-        }
+        if (parsed.portfolioInfo) raqwanInfoState.value = { ...defaultRaqwanInfo, ...parsed.portfolioInfo }
+        raqwanProjectsState.value = mergeProjectsWithDefaults(parsed.projects, defaultRaqwanProjects)
+        if (parsed.skills && parsed.skills.length > 0) raqwanSkillsState.value = parsed.skills
+        if (parsed.testimonials && parsed.testimonials.length > 0) raqwanTestimonialsState.value = parsed.testimonials
+        if (parsed.educations && parsed.educations.length > 0) raqwanEducationsState.value = parsed.educations
+        if (parsed.workflows && parsed.workflows.length > 0) raqwanWorkflowsState.value = parsed.workflows
       }
     }
   } catch (e) {
@@ -163,14 +177,16 @@ const persistProfile = (profileKey) => {
           skills: nadyaSkillsState.value,
           projects: nadyaProjectsState.value,
           testimonials: nadyaTestimonialsState.value,
-          educations: nadyaEducationsState.value
+          educations: nadyaEducationsState.value,
+          workflows: nadyaWorkflowsState.value
         }
       : {
           portfolioInfo: raqwanInfoState.value,
           skills: raqwanSkillsState.value,
           projects: raqwanProjectsState.value,
           testimonials: raqwanTestimonialsState.value,
-          educations: raqwanEducationsState.value
+          educations: raqwanEducationsState.value,
+          workflows: raqwanWorkflowsState.value
         }
 
     localStorage.setItem(getStorageKey(profileKey, 'data'), JSON.stringify(payload))
@@ -196,12 +212,13 @@ const loadFromSupabase = async (forceRefresh = false) => {
 
   isLoadingSupabase.value = true
   try {
-    const [pRes, sRes, tRes, eduRes, profRes] = await Promise.all([
+    const [pRes, sRes, tRes, eduRes, nadyaProfRes, raqwanProfRes] = await Promise.all([
       fetchProjectsFromSupabase(),
       fetchSkillsFromSupabase(),
       fetchTestimonialsFromSupabase(),
       fetchEducationsFromSupabase(),
-      fetchProfileFromSupabase()
+      fetchProfileFromSupabase('nadya_profile'),
+      fetchProfileFromSupabase('raqwan_profile')
     ])
 
     if (pRes.data && pRes.data.length > 0) {
@@ -216,18 +233,25 @@ const loadFromSupabase = async (forceRefresh = false) => {
         'slogmate-national-police-agentic'
       ])
 
-      nadyaProjectsState.value = pRes.data.filter(p => !raqwanProjectIds.has(p.id))
-      raqwanProjectsState.value = pRes.data.filter(p => raqwanProjectIds.has(p.id))
+      const nadyaList = pRes.data.filter(p => !raqwanProjectIds.has(p.id))
+      const raqwanList = pRes.data.filter(p => raqwanProjectIds.has(p.id))
+      if (nadyaList.length) nadyaProjectsState.value = nadyaList
+      if (raqwanList.length) raqwanProjectsState.value = raqwanList
     }
 
     if (sRes.data && sRes.data.length > 0) {
       const nadyaCategories = new Set(['Product', 'UI/UX', 'Design Tool', 'UX Research'])
-      nadyaSkillsState.value = sRes.data.filter(s => nadyaCategories.has(s.category))
-      raqwanSkillsState.value = sRes.data.filter(s => !nadyaCategories.has(s.category))
+      const nadyaSkills = sRes.data.filter(s => nadyaCategories.has(s.category))
+      const raqwanSkills = sRes.data.filter(s => !nadyaCategories.has(s.category))
+      if (nadyaSkills.length) nadyaSkillsState.value = nadyaSkills
+      if (raqwanSkills.length) raqwanSkillsState.value = raqwanSkills
     }
 
     if (tRes.data && tRes.data.length > 0) {
-      nadyaTestimonialsState.value = tRes.data
+      const nadyaTests = tRes.data.filter(t => t.id < 100)
+      const raqwanTests = tRes.data.filter(t => t.id >= 100)
+      if (nadyaTests.length) nadyaTestimonialsState.value = nadyaTests
+      if (raqwanTests.length) raqwanTestimonialsState.value = raqwanTests
     }
 
     if (eduRes.data && eduRes.data.length > 0) {
@@ -237,9 +261,25 @@ const loadFromSupabase = async (forceRefresh = false) => {
       if (raqwanEdu.length) raqwanEducationsState.value = raqwanEdu
     }
 
-    if (profRes.data) {
-      nadyaInfoState.value = { ...nadyaInfoState.value, ...profRes.data }
+    if (nadyaProfRes.data) {
+      nadyaInfoState.value = { ...nadyaInfoState.value, ...nadyaProfRes.data }
+      if (nadyaProfRes.data.socials?.workflows?.length) nadyaWorkflowsState.value = nadyaProfRes.data.socials.workflows
+      if (nadyaProfRes.data.socials?.experiences?.length) nadyaExperiencesState.value = nadyaProfRes.data.socials.experiences
+      if (nadyaProfRes.data.socials?.milestones?.length) nadyaMilestonesState.value = nadyaProfRes.data.socials.milestones
+      if (nadyaProfRes.data.socials?.certifications?.length) nadyaCertificationsState.value = nadyaProfRes.data.socials.certifications
+      if (nadyaProfRes.data.socials?.faqs?.length) nadyaFaqsState.value = nadyaProfRes.data.socials.faqs
     }
+    if (raqwanProfRes.data) {
+      raqwanInfoState.value = { ...raqwanInfoState.value, ...raqwanProfRes.data }
+      if (raqwanProfRes.data.socials?.workflows?.length) raqwanWorkflowsState.value = raqwanProfRes.data.socials.workflows
+      if (raqwanProfRes.data.socials?.experiences?.length) raqwanExperiencesState.value = raqwanProfRes.data.socials.experiences
+      if (raqwanProfRes.data.socials?.milestones?.length) raqwanMilestonesState.value = raqwanProfRes.data.socials.milestones
+      if (raqwanProfRes.data.socials?.certifications?.length) raqwanCertificationsState.value = raqwanProfRes.data.socials.certifications
+      if (raqwanProfRes.data.socials?.faqs?.length) raqwanFaqsState.value = raqwanProfRes.data.socials.faqs
+    }
+
+    persistProfile('nadya')
+    persistProfile('raqwan')
 
     isSupabaseLoaded.value = true
     console.log('⚡ [Supabase] Data successfully synchronized from Supabase cloud database!')
@@ -285,19 +325,23 @@ export function usePortfolioStore(profileExplicit = null) {
   })
 
   const experiences = computed(() => {
-    return currentProfile.value === 'nadya' ? defaultNadyaExperiences : defaultRaqwanExperiences
+    return currentProfile.value === 'nadya' ? nadyaExperiencesState.value : raqwanExperiencesState.value
   })
 
   const milestones = computed(() => {
-    return currentProfile.value === 'nadya' ? defaultNadyaMilestones : defaultRaqwanMilestones
+    return currentProfile.value === 'nadya' ? nadyaMilestonesState.value : raqwanMilestonesState.value
   })
 
   const workflows = computed(() => {
-    return currentProfile.value === 'nadya' ? defaultNadyaWorkflows : defaultRaqwanWorkflows
+    return currentProfile.value === 'nadya' ? nadyaWorkflowsState.value : raqwanWorkflowsState.value
   })
 
   const certifications = computed(() => {
-    return currentProfile.value === 'nadya' ? defaultNadyaCertifications : defaultRaqwanCertifications
+    return currentProfile.value === 'nadya' ? nadyaCertificationsState.value : raqwanCertificationsState.value
+  })
+
+  const faqs = computed(() => {
+    return currentProfile.value === 'nadya' ? nadyaFaqsState.value : raqwanFaqsState.value
   })
 
   const messages = computed(() => {
@@ -387,6 +431,49 @@ export function usePortfolioStore(profileExplicit = null) {
     persistProfile(targetProfile)
   }
 
+  // Workflows ("Bagaimana Saya Bekerja") CRUD
+  const updateWorkflows = (newWorkflows, targetProfile = currentProfile.value) => {
+    if (targetProfile === 'nadya') {
+      nadyaWorkflowsState.value = newWorkflows
+    } else {
+      raqwanWorkflowsState.value = newWorkflows
+    }
+    persistProfile(targetProfile)
+  }
+
+  // Testimonials ("Apa Kata Rekan & Stakeholder") CRUD
+  const updateTestimonials = (newTestimonials, targetProfile = currentProfile.value) => {
+    if (targetProfile === 'nadya') {
+      nadyaTestimonialsState.value = newTestimonials
+    } else {
+      raqwanTestimonialsState.value = newTestimonials
+    }
+    persistProfile(targetProfile)
+  }
+
+  const addTestimonial = (testi, targetProfile = currentProfile.value) => {
+    const newTesti = {
+      id: Date.now(),
+      ...testi
+    }
+    if (targetProfile === 'nadya') {
+      nadyaTestimonialsState.value.push(newTesti)
+    } else {
+      raqwanTestimonialsState.value.push(newTesti)
+    }
+    persistProfile(targetProfile)
+    return newTesti
+  }
+
+  const deleteTestimonial = (id, targetProfile = currentProfile.value) => {
+    if (targetProfile === 'nadya') {
+      nadyaTestimonialsState.value = nadyaTestimonialsState.value.filter(t => t.id !== id)
+    } else {
+      raqwanTestimonialsState.value = raqwanTestimonialsState.value.filter(t => t.id !== id)
+    }
+    persistProfile(targetProfile)
+  }
+
   // Messages CRUD
   const addMessage = (msgData, targetProfile = currentProfile.value) => {
     const newMsg = {
@@ -430,12 +517,14 @@ export function usePortfolioStore(profileExplicit = null) {
       nadyaProjectsState.value = JSON.parse(JSON.stringify(defaultNadyaProjects))
       nadyaTestimonialsState.value = JSON.parse(JSON.stringify(defaultNadyaTestimonials))
       nadyaEducationsState.value = JSON.parse(JSON.stringify(defaultNadyaEducations))
+      nadyaWorkflowsState.value = JSON.parse(JSON.stringify(defaultNadyaWorkflows))
     } else {
       raqwanInfoState.value = JSON.parse(JSON.stringify(defaultRaqwanInfo))
       raqwanSkillsState.value = JSON.parse(JSON.stringify(defaultRaqwanSkills))
       raqwanProjectsState.value = JSON.parse(JSON.stringify(defaultRaqwanProjects))
       raqwanTestimonialsState.value = JSON.parse(JSON.stringify(defaultRaqwanTestimonials))
       raqwanEducationsState.value = JSON.parse(JSON.stringify(defaultRaqwanEducations))
+      raqwanWorkflowsState.value = JSON.parse(JSON.stringify(defaultRaqwanWorkflows))
     }
     localStorage.removeItem(getStorageKey(targetProfile, 'data'))
   }
@@ -453,6 +542,7 @@ export function usePortfolioStore(profileExplicit = null) {
     milestones,
     workflows,
     certifications,
+    faqs,
     messages,
     // Raw profile states for admin
     nadyaState: {
@@ -461,6 +551,7 @@ export function usePortfolioStore(profileExplicit = null) {
       projects: nadyaProjectsState,
       testimonials: nadyaTestimonialsState,
       educations: nadyaEducationsState,
+      workflows: nadyaWorkflowsState,
       messages: nadyaMessagesState
     },
     raqwanState: {
@@ -469,6 +560,7 @@ export function usePortfolioStore(profileExplicit = null) {
       projects: raqwanProjectsState,
       testimonials: raqwanTestimonialsState,
       educations: raqwanEducationsState,
+      workflows: raqwanWorkflowsState,
       messages: raqwanMessagesState
     },
     isSupabaseLoaded,
@@ -483,6 +575,10 @@ export function usePortfolioStore(profileExplicit = null) {
     addSkill,
     deleteSkill,
     updateEducations,
+    updateWorkflows,
+    updateTestimonials,
+    addTestimonial,
+    deleteTestimonial,
     addMessage,
     markMessageRead,
     deleteMessage,

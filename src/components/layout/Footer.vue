@@ -1,7 +1,7 @@
 <script setup>
 import { computed } from 'vue'
 import { RouterLink } from 'vue-router'
-import { Github, Linkedin, Mail, Heart } from 'lucide-vue-next'
+import { Github, Linkedin, Mail, Heart, Sparkles } from 'lucide-vue-next'
 import { usePortfolioStore } from '@/composables/usePortfolioStore'
 import FooterMatrixBanner from '@/components/effects/FooterMatrixBanner.vue'
 
@@ -69,19 +69,64 @@ const topSkills = computed(() => {
         </div>
 
         <!-- Quick Links -->
-        <div class="md:col-span-3 lg:col-span-3 space-y-2.5">
+        <div class="md:col-span-3 lg:col-span-3 space-y-3">
           <h4 
-            class="text-xs font-bold uppercase font-mono-tag tracking-wider"
+            class="text-xs font-bold uppercase font-mono-tag tracking-wider flex items-center gap-1.5"
             :class="currentProfile === 'raqwan' ? 'text-emerald-400' : 'text-[#9E0402] dark:text-[#ff4d4d]'"
           >
+            <span class="w-1.5 h-1.5 rounded-full bg-current"></span>
             Navigasi
           </h4>
-          <ul class="space-y-2 text-xs sm:text-sm font-semibold text-[#5C4848] dark:text-zinc-400">
-            <li><RouterLink :to="'/' + currentProfile" class="hover:text-[#047857] dark:hover:text-emerald-400 transition-colors">Beranda</RouterLink></li>
-            <li><RouterLink :to="'/' + currentProfile + '/projects'" class="hover:text-[#047857] dark:hover:text-emerald-400 transition-colors">Case Studies ↗</RouterLink></li>
-            <li><RouterLink :to="'/' + currentProfile + '/about'" class="hover:text-[#047857] dark:hover:text-emerald-400 transition-colors">Tentang Saya *</RouterLink></li>
-            <li><RouterLink :to="'/' + currentProfile + '/contact'" class="hover:text-[#047857] dark:hover:text-emerald-400 transition-colors">Hubungi Saya #</RouterLink></li>
-            <li><RouterLink to="/" class="text-zinc-400 hover:text-white transition-colors flex items-center gap-1 font-mono-tag text-xs"><span>Nadya & Raqwan ⎋</span></RouterLink></li>
+          <ul class="grid grid-cols-2 sm:grid-cols-1 gap-2 text-xs sm:text-sm font-medium text-zinc-600 dark:text-zinc-400">
+            <li>
+              <RouterLink 
+                :to="'/' + currentProfile" 
+                class="inline-flex items-center gap-1.5 transition-colors group"
+                :class="currentProfile === 'raqwan' ? 'hover:text-emerald-400' : 'hover:text-[#9E0402] dark:hover:text-[#ff4d4d]'"
+              >
+                <span class="text-zinc-400 dark:text-zinc-600 group-hover:text-current transition-colors">/</span>
+                <span>Beranda</span>
+              </RouterLink>
+            </li>
+            <li>
+              <RouterLink 
+                :to="'/' + currentProfile + '/projects'" 
+                class="inline-flex items-center gap-1.5 transition-colors group"
+                :class="currentProfile === 'raqwan' ? 'hover:text-emerald-400' : 'hover:text-[#9E0402] dark:hover:text-[#ff4d4d]'"
+              >
+                <span class="text-zinc-400 dark:text-zinc-600 group-hover:text-current transition-colors">/</span>
+                <span>Case Studies</span>
+              </RouterLink>
+            </li>
+            <li>
+              <RouterLink 
+                :to="'/' + currentProfile + '/about'" 
+                class="inline-flex items-center gap-1.5 transition-colors group"
+                :class="currentProfile === 'raqwan' ? 'hover:text-emerald-400' : 'hover:text-[#9E0402] dark:hover:text-[#ff4d4d]'"
+              >
+                <span class="text-zinc-400 dark:text-zinc-600 group-hover:text-current transition-colors">/</span>
+                <span>Tentang Saya</span>
+              </RouterLink>
+            </li>
+            <li>
+              <RouterLink 
+                :to="'/' + currentProfile + '/contact'" 
+                class="inline-flex items-center gap-1.5 transition-colors group"
+                :class="currentProfile === 'raqwan' ? 'hover:text-emerald-400' : 'hover:text-[#9E0402] dark:hover:text-[#ff4d4d]'"
+              >
+                <span class="text-zinc-400 dark:text-zinc-600 group-hover:text-current transition-colors">/</span>
+                <span>Hubungi Saya</span>
+              </RouterLink>
+            </li>
+            <li class="col-span-2 sm:col-span-1 pt-1 border-t border-zinc-200/50 dark:border-white/5">
+              <RouterLink 
+                to="/" 
+                class="inline-flex items-center gap-1.5 text-xs font-mono-tag text-zinc-500 hover:text-zinc-900 dark:hover:text-white transition-colors"
+              >
+                <Sparkles class="w-3 h-3" />
+                <span>Duo Space (Nadya & Raqwan)</span>
+              </RouterLink>
+            </li>
           </ul>
         </div>
 

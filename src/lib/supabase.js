@@ -119,40 +119,40 @@ export async function fetchTestimonialsFromSupabase() {
 // -------------------------------------------------------------
 // 4. FETCH PROFILE INFO
 // -------------------------------------------------------------
-export async function fetchProfileFromSupabase() {
+export async function fetchProfileFromSupabase(profileId = 'nadya_profile') {
   if (!isSupabaseConfigured() || !supabase) {
-    return { data: defaultInfo, error: null }
+    return { data: null, error: null }
   }
 
   try {
     const { data, error } = await supabase
       .from('profile_info')
       .select('*')
-      .limit(1)
-      .single()
+      .eq('id', profileId)
+      .maybeSingle()
 
-    if (error && error.code !== 'PGRST116') throw error
+    if (error) throw error
     if (data) {
       return {
         data: {
-          name: data.name || defaultInfo.name,
-          shortName: data.short_name || defaultInfo.shortName,
-          title: data.title || defaultInfo.title,
-          tagline: data.tagline || defaultInfo.tagline,
-          bio: data.bio || defaultInfo.bio,
-          status: data.status || defaultInfo.status,
-          location: data.location || defaultInfo.location,
-          email: data.email || defaultInfo.email,
-          socials: data.socials || defaultInfo.socials
+          name: data.name,
+          shortName: data.short_name,
+          title: data.title,
+          tagline: data.tagline,
+          bio: data.bio,
+          status: data.status,
+          location: data.location,
+          email: data.email,
+          socials: data.socials
         },
         error: null
       }
     }
 
-    return { data: defaultInfo, error: null }
+    return { data: null, error: null }
   } catch (err) {
-    console.warn('[Supabase] Gagal mengambil profile_info, menggunakan data default:', err.message)
-    return { data: defaultInfo, error: err }
+    console.warn(`[Supabase] Gagal mengambil profile_info untuk ${profileId}:`, err.message)
+    return { data: null, error: err }
   }
 }
 

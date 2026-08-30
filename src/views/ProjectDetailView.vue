@@ -60,18 +60,17 @@ const tocSections = computed(() => {
       { id: 'problem', label: '02. Challenge' },
       { id: 'process', label: '03. Architecture & Solution' },
       { id: 'impact', label: '04. Impact & Results' },
-      { id: 'gallery', label: '05. Artifacts' },
-      { id: 'learnings', label: '06. Takeaways' }
+      { id: 'learnings', label: '05. Key Takeaways' }
     ]
   }
+
   return [
     { id: 'overview', label: '01. Overview' },
     { id: 'problem', label: '02. Challenge' },
     { id: 'process', label: '03. Process' },
     { id: 'system', label: '04. Design System' },
-    { id: 'impact', label: '05. Impact' },
-    { id: 'gallery', label: '06. Gallery' },
-    { id: 'learnings', label: '07. Takeaways' }
+    { id: 'impact', label: '05. Impact & Results' },
+    { id: 'learnings', label: '06. Key Takeaways' }
   ]
 })
 
@@ -82,6 +81,14 @@ const scrollTo = (id) => {
     const y = el.getBoundingClientRect().top + window.pageYOffset + yOffset
     window.scrollTo({ top: y, behavior: 'smooth' })
   }
+}
+
+const getSectionNumber = (id) => {
+  const idx = tocSections.value.findIndex(s => s.id === id)
+  if (idx !== -1) {
+    return String(idx + 1).padStart(2, '0')
+  }
+  return '01'
 }
 
 // Lightbox Modal State
@@ -152,19 +159,6 @@ onUnmounted(() => {
           <ArrowLeft class="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
           <span>Kembali ke Semua Case Studies</span>
         </RouterLink>
-
-        <!-- Live Prototype Link if available -->
-        <a 
-          v-if="project.liveUrl" 
-          :href="project.liveUrl" 
-          target="_blank" 
-          rel="noopener noreferrer"
-          class="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-mono-tag font-bold uppercase transition-all shadow-xs"
-          :class="currentProfile === 'raqwan' ? 'bg-[#047857] hover:bg-[#065F46] text-white shadow-[#047857]/30' : 'bg-[#9E0402] hover:bg-[#B80604] text-white shadow-[#9E0402]/20'"
-        >
-          <span>Live Prototype ↗</span>
-          <ExternalLink class="w-3.5 h-3.5" />
-        </a>
       </div>
 
       <!-- ═══════════════════════════════════════════ -->
@@ -202,15 +196,15 @@ onUnmounted(() => {
             <p class="text-xs sm:text-sm font-bold text-[#1C1313] dark:text-white">{{ detail.duration }}</p>
           </div>
           <div class="p-4 sm:p-5 rounded-2xl bg-white dark:bg-[#14161D] border border-[#EEDCDC] dark:border-white/10 space-y-1">
-            <span class="text-[10px] font-bold font-mono-tag uppercase tracking-wider block" :class="currentProfile === 'raqwan' ? 'text-emerald-400' : 'text-[#9E0402] dark:text-[#ff4d4d]'">Team</span>
+            <span class="text-[10px] font-bold font-mono-tag uppercase tracking-wider block" :class="currentProfile === 'raqwan' ? 'text-emerald-400' : 'text-[#9E0402] dark:text-[#ff4d4d]'">Teknologi</span>
             <p class="text-xs sm:text-sm font-bold text-[#1C1313] dark:text-white">
-              {{ Array.isArray(detail.team) ? detail.team.join(', ') : detail.team }}
+              {{ detail.technology || (Array.isArray(detail.tools) ? detail.tools.slice(0, 2).join(', ') : (detail.tools || 'Core Architecture')) }}
             </p>
           </div>
           <div class="p-4 sm:p-5 rounded-2xl bg-white dark:bg-[#14161D] border border-[#EEDCDC] dark:border-white/10 space-y-1">
-            <span class="text-[10px] font-bold font-mono-tag uppercase tracking-wider block" :class="currentProfile === 'raqwan' ? 'text-emerald-400' : 'text-[#9E0402] dark:text-[#ff4d4d]'">Deliverables / Tech</span>
+            <span class="text-[10px] font-bold font-mono-tag uppercase tracking-wider block" :class="currentProfile === 'raqwan' ? 'text-emerald-400' : 'text-[#9E0402] dark:text-[#ff4d4d]'">Deliverables / Tools</span>
             <p class="text-xs sm:text-sm font-bold text-[#1C1313] dark:text-white truncate">
-              {{ Array.isArray(detail.tools) ? detail.tools.join(', ') : (Array.isArray(detail.deliverables) ? detail.deliverables.join(', ') : (detail.tools || detail.deliverables || 'Production Architecture')) }}
+              {{ Array.isArray(detail.deliverables) ? detail.deliverables.slice(0, 2).join(', ') : (Array.isArray(detail.tools) ? detail.tools.slice(0, 3).join(', ') : (detail.deliverables || detail.tools || 'Production Architecture')) }}
             </p>
           </div>
         </div>
@@ -263,7 +257,7 @@ onUnmounted(() => {
         <!-- 01. OVERVIEW & BACKGROUND -->
         <section id="overview" data-reveal="fade-up" class="space-y-5 scroll-mt-28">
           <div class="flex items-center gap-3">
-            <span class="w-8 h-8 rounded-xl flex items-center justify-center font-mono-tag font-bold text-xs" :class="currentProfile === 'raqwan' ? 'bg-emerald-100 dark:bg-[#047857]/20 text-[#047857] dark:text-emerald-400' : 'bg-[#9E0402]/15 text-[#9E0402] dark:text-[#ff4d4d]'">01</span>
+            <span class="w-8 h-8 rounded-xl flex items-center justify-center font-mono-tag font-bold text-xs" :class="currentProfile === 'raqwan' ? 'bg-emerald-100 dark:bg-[#047857]/20 text-[#047857] dark:text-emerald-400' : 'bg-[#9E0402]/15 text-[#9E0402] dark:text-[#ff4d4d]'">{{ getSectionNumber('overview') }}</span>
             <h2 class="text-2xl sm:text-3xl font-extrabold text-[#1C1313] dark:text-white">Project Overview & Background</h2>
           </div>
           <p class="text-sm sm:text-base text-[#5C4848] dark:text-zinc-300 leading-relaxed max-w-4xl">
@@ -287,7 +281,7 @@ onUnmounted(() => {
         <!-- 02. THE CHALLENGE & PROBLEM STATEMENT -->
         <section id="problem" data-reveal="fade-up" class="space-y-6 scroll-mt-28">
           <div class="flex items-center gap-3">
-            <span class="w-8 h-8 rounded-xl flex items-center justify-center font-mono-tag font-bold text-xs" :class="currentProfile === 'raqwan' ? 'bg-emerald-100 dark:bg-[#047857]/20 text-[#047857] dark:text-emerald-400' : 'bg-[#9E0402]/15 text-[#9E0402] dark:text-[#ff4d4d]'">02</span>
+            <span class="w-8 h-8 rounded-xl flex items-center justify-center font-mono-tag font-bold text-xs" :class="currentProfile === 'raqwan' ? 'bg-emerald-100 dark:bg-[#047857]/20 text-[#047857] dark:text-emerald-400' : 'bg-[#9E0402]/15 text-[#9E0402] dark:text-[#ff4d4d]'">{{ getSectionNumber('problem') }}</span>
             <h2 class="text-2xl sm:text-3xl font-extrabold text-[#1C1313] dark:text-white">
               {{ (typeof detail.problem === 'object' && detail.problem?.title) ? detail.problem.title : 'The Core Challenge' }}
             </h2>
@@ -343,7 +337,7 @@ onUnmounted(() => {
         <!-- 03. SOLUTION & WORKFLOW PROCESS -->
         <section id="process" data-reveal="fade-up" class="space-y-6 scroll-mt-28">
           <div class="flex items-center gap-3">
-            <span class="w-8 h-8 rounded-xl flex items-center justify-center font-mono-tag font-bold text-xs" :class="currentProfile === 'raqwan' ? 'bg-emerald-100 dark:bg-[#047857]/20 text-[#047857] dark:text-emerald-400' : 'bg-[#9E0402]/15 text-[#9E0402] dark:text-[#ff4d4d]'">03</span>
+            <span class="w-8 h-8 rounded-xl flex items-center justify-center font-mono-tag font-bold text-xs" :class="currentProfile === 'raqwan' ? 'bg-emerald-100 dark:bg-[#047857]/20 text-[#047857] dark:text-emerald-400' : 'bg-[#9E0402]/15 text-[#9E0402] dark:text-[#ff4d4d]'">{{ getSectionNumber('process') }}</span>
             <h2 class="text-2xl sm:text-3xl font-extrabold text-[#1C1313] dark:text-white">Process & Engineering Solution</h2>
           </div>
           <p v-if="typeof detail.solution === 'string'" class="text-sm sm:text-base text-[#5C4848] dark:text-zinc-300 leading-relaxed max-w-4xl">
@@ -402,7 +396,7 @@ onUnmounted(() => {
         <section v-if="currentProfile !== 'raqwan'" id="system" data-reveal="fade-up" class="space-y-6 scroll-mt-28">
           <div class="flex items-center justify-between flex-wrap gap-4">
             <div class="flex items-center gap-3">
-              <span class="w-8 h-8 rounded-xl flex items-center justify-center font-mono-tag font-bold text-xs bg-[#9E0402]/15 text-[#9E0402] dark:text-[#ff4d4d]">04</span>
+              <span class="w-8 h-8 rounded-xl flex items-center justify-center font-mono-tag font-bold text-xs bg-[#9E0402]/15 text-[#9E0402] dark:text-[#ff4d4d]">{{ getSectionNumber('system') }}</span>
               <h2 class="text-2xl sm:text-3xl font-extrabold text-[#1C1313] dark:text-white">Design Tokens & Component Architecture</h2>
             </div>
 
@@ -516,11 +510,11 @@ onUnmounted(() => {
           </div>
         </section>
 
-        <!-- 05. RESULTS & QUANTITATIVE IMPACT -->
+        <!-- RESULTS & QUANTITATIVE IMPACT -->
         <section id="impact" data-reveal="fade-up" class="space-y-6 scroll-mt-28">
           <div class="flex items-center gap-3">
             <span class="w-8 h-8 rounded-xl flex items-center justify-center font-mono-tag font-bold text-xs" :class="currentProfile === 'raqwan' ? 'bg-emerald-100 dark:bg-[#047857]/20 text-[#047857] dark:text-emerald-400' : 'bg-[#9E0402]/15 text-[#9E0402] dark:text-[#ff4d4d]'">
-              {{ currentProfile === 'raqwan' ? '04' : '05' }}
+              {{ getSectionNumber('impact') }}
             </span>
             <h2 class="text-2xl sm:text-3xl font-extrabold text-[#1C1313] dark:text-white">Measured Impact & Key Results</h2>
           </div>
@@ -549,48 +543,11 @@ onUnmounted(() => {
           </div>
         </section>
 
-        <!-- 06. GALLERY & SCREENSHOTS -->
-        <section id="gallery" data-reveal="fade-up" class="space-y-6 scroll-mt-28" v-if="detail.gallery && detail.gallery.length">
-          <div class="flex items-center gap-3">
-            <span class="w-8 h-8 rounded-xl flex items-center justify-center font-mono-tag font-bold text-xs" :class="currentProfile === 'raqwan' ? 'bg-emerald-100 dark:bg-[#047857]/20 text-[#047857] dark:text-emerald-400' : 'bg-[#9E0402]/15 text-[#9E0402] dark:text-[#ff4d4d]'">
-              {{ currentProfile === 'raqwan' ? '05' : '06' }}
-            </span>
-            <h2 class="text-2xl sm:text-3xl font-extrabold text-[#1C1313] dark:text-white">Artifact Gallery & Architecture</h2>
-          </div>
-
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div
-              v-for="(img, idx) in detail.gallery"
-              :key="idx"
-              @click="openLightbox(img.url || img)"
-              class="group p-3 rounded-3xl bg-white dark:bg-[#14161D] border border-[#EEDCDC] dark:border-white/10 overflow-hidden transition-all duration-300 flex flex-col justify-between shadow-xs cursor-pointer"
-              :class="currentProfile === 'raqwan' ? 'hover:border-[#047857]/60' : 'hover:border-[#9E0402]/40'"
-            >
-              <div class="relative overflow-hidden rounded-2xl aspect-video bg-[#0B0C0E]">
-                <img 
-                  :src="img.url || img" 
-                  :alt="img.caption || 'Project visual'"
-                  class="w-full h-full object-cover group-hover:scale-104 transition-transform duration-500"
-                  loading="lazy"
-                />
-                <div class="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                  <span class="p-2.5 rounded-full bg-white shadow-lg" :class="currentProfile === 'raqwan' ? 'text-[#047857]' : 'text-[#9E0402]'">
-                    <Maximize2 class="w-4 h-4" />
-                  </span>
-                </div>
-              </div>
-              <p v-if="img.caption" class="pt-3 px-1 text-xs font-mono-tag text-[#5C4848] dark:text-zinc-400">
-                {{ img.caption }}
-              </p>
-            </div>
-          </div>
-        </section>
-
-        <!-- 07. KEY LEARNINGS & RETROSPECTIVE -->
+        <!-- KEY LEARNINGS & RETROSPECTIVE -->
         <section id="learnings" data-reveal="fade-up" class="space-y-6 scroll-mt-28">
           <div class="flex items-center gap-3">
             <span class="w-8 h-8 rounded-xl flex items-center justify-center font-mono-tag font-bold text-xs" :class="currentProfile === 'raqwan' ? 'bg-emerald-100 dark:bg-[#047857]/20 text-[#047857] dark:text-emerald-400' : 'bg-[#9E0402]/15 text-[#9E0402] dark:text-[#ff4d4d]'">
-              {{ currentProfile === 'raqwan' ? '06' : '07' }}
+              {{ getSectionNumber('learnings') }}
             </span>
             <h2 class="text-2xl sm:text-3xl font-extrabold text-[#1C1313] dark:text-white">Key Learnings & Takeaways</h2>
           </div>

@@ -26,7 +26,13 @@ import {
   Database,
   RefreshCw,
   Zap,
-  Clock
+  Clock,
+  Image as ImageIcon,
+  Workflow,
+  MessageSquareQuote,
+  Phone,
+  MapPin,
+  Layers
 } from 'lucide-vue-next'
 import { useAuth } from '@/composables/useAuth'
 import { usePortfolioStore } from '@/composables/usePortfolioStore'
@@ -38,6 +44,8 @@ const {
   skills, 
   projects, 
   educations, 
+  testimonials,
+  workflows,
   messages,
   isSupabaseLoaded,
   isLoadingSupabase,
@@ -53,9 +61,15 @@ const {
   addSkill,
   deleteSkill,
   updateEducations,
+  updateWorkflows,
+  updateTestimonials,
+  addTestimonial,
+  deleteTestimonial,
   markMessageRead,
   deleteMessage,
-  resetToDefault
+  resetToDefault,
+  nadyaState,
+  raqwanState
 } = usePortfolioStore()
 
 // Selected Profile to manage in Admin CMS: 'nadya' | 'raqwan'
@@ -65,8 +79,13 @@ const switchAdminProfile = (profileKey) => {
   selectedAdminProfile.value = profileKey
   setActiveProfile(profileKey)
   profileForm.value = { ...portfolioInfo.value }
-  educationList.value = JSON.parse(JSON.stringify(educations.value))
-  showToast(`Beralih ke pengelolaan portofolio: ${profileKey === 'nadya' ? 'Nadya Najelina' : 'Muhammad Raqwan'}`)
+  if (!profileForm.value.socials) profileForm.value.socials = {}
+  educationList.value = JSON.parse(JSON.stringify(educations.value || []))
+  workflowList.value = JSON.parse(JSON.stringify(workflows.value || [])).map(w => ({
+    ...w,
+    deliverablesString: (w.deliverables || []).join(', ')
+  }))
+  showToast(`Beralih ke pengelolaan portofolio: ${profileKey === 'nadya' ? 'Nadya Najelina' : 'Muhammad Raqwan Kauthar'}`)
 }
 
 // Navigation Tabs: 'overview' | 'projects' | 'profile' | 'skills' | 'education' | 'inbox'
@@ -154,7 +173,7 @@ const openAddProjectModal = () => {
   editingProjectId.value = null
   projectForm.value = {
     title: '',
-    category: selectedAdminProfile.value === 'raqwan' ? 'Computer Vision' : 'Product Design',
+    category: selectedAdminProfile.value === 'raqwan' ? 'Agentic AI' : 'Product Strategy & IoT',
     description: '',
     tagsString: selectedAdminProfile.value === 'raqwan' ? 'PyTorch, Computer Vision, Deep Learning' : 'Figma, UI/UX, Product Strategy',
     image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=1200&q=80',
@@ -176,7 +195,7 @@ const openEditProjectModal = (proj) => {
   editingProjectId.value = proj.id
   projectForm.value = {
     title: proj.title || '',
-    category: proj.category || 'Product Design',
+    category: proj.category || (selectedAdminProfile.value === 'raqwan' ? 'Agentic AI' : 'Product Strategy & IoT'),
     description: proj.description || '',
     tagsString: (proj.tags || []).join(', '),
     image: proj.image || '',
@@ -184,7 +203,7 @@ const openEditProjectModal = (proj) => {
     githubUrl: proj.githubUrl || '',
     featured: proj.featured ?? true,
     duration: proj.detail?.duration || '3 bulan',
-    problem: proj.detail?.problem || '',
+    problem: typeof proj.detail?.problem === 'string' ? proj.detail.problem : (proj.detail?.problem?.description || ''),
     solution: proj.detail?.solution || '',
     resultMetric: proj.detail?.results?.[0]?.metric || '',
     resultBefore: proj.detail?.results?.[0]?.before || '',
@@ -204,6 +223,12 @@ const saveProjectForm = () => {
     .map(t => t.trim())
     .filter(Boolean)
 
+  const existingProject = (isEditingProject.value && editingProjectId.value)
+    ? (selectedAdminProfile.value === 'raqwan' ? raqwanState.projects.value : nadyaState.projects.value).find(p => p.id === editingProjectId.value)
+    : null
+
+  const existingDetail = existingProject?.detail || {}
+
   const payload = {
     title: projectForm.value.title,
     category: projectForm.value.category,
@@ -213,11 +238,17 @@ const saveProjectForm = () => {
     liveUrl: projectForm.value.liveUrl,
     githubUrl: projectForm.value.githubUrl,
     featured: projectForm.value.featured,
+    highlights: existingProject?.highlights || [
+      `Mengembangkan solusi ${projectForm.value.category} dengan pendekatan teruji`,
+      `Meningkatkan metrik performa sistem dan kepuasan pengguna`
+    ],
     detail: {
-      client: 'Internal / Client Project',
+      ...existingDetail,
       duration: projectForm.value.duration,
-      role: selectedAdminProfile.value === 'raqwan' ? 'Lead AI Engineer' : 'Lead PM & UI/UX Designer',
-      team: selectedAdminProfile.value === 'raqwan' ? ['1 AI Engineer', '1 Backend Dev'] : ['1 PM', '2 Designers'],
+      role: existingDetail.role || (selectedAdminProfile.value === 'raqwan' ? 'Lead AI Engineer' : 'Lead PM & UI/UX Designer'),
+      technology: existingDetail.technology || projectForm.value.category,
+      tools: existingDetail.tools || tags,
+      overview: existingDetail.overview || projectForm.value.description,
       problem: projectForm.value.problem,
       solution: projectForm.value.solution,
       results: projectForm.value.resultMetric ? [
@@ -227,16 +258,16 @@ const saveProjectForm = () => {
           after: projectForm.value.resultAfter,
           change: `${projectForm.value.resultAfter} achieved`
         }
-      ] : []
+      ] : (existingDetail.results || [])
     }
   }
 
   if (isEditingProject.value && editingProjectId.value) {
     updateProject(editingProjectId.value, payload, selectedAdminProfile.value)
-    showToast('Proyek berhasil diperbarui!')
+    showToast('Proyek & Artifact Gallery berhasil diperbarui!')
   } else {
     addProject(payload, selectedAdminProfile.value)
-    showToast('Proyek baru berhasil ditambahkan!')
+    showToast('Proyek & Artifact Gallery baru berhasil ditambahkan!')
   }
 
   isProjectModalOpen.value = false
@@ -278,14 +309,119 @@ const handleDeleteSkill = (name) => {
 }
 
 // -------------------------------------------------------------
+// WORKFLOWS ("BAGAIMANA SAYA BEKERJA") STATE
+// -------------------------------------------------------------
+const workflowList = ref(
+  (workflows.value || []).map(w => ({
+    ...w,
+    deliverablesString: (w.deliverables || []).join(', ')
+  }))
+)
+
+const addWorkflowStep = () => {
+  const nextNum = String(workflowList.value.length + 1).padStart(2, '0')
+  workflowList.value.push({
+    step: nextNum,
+    phase: 'Nama Fase Alur Kerja Baru',
+    tagline: 'Tagline Singkat Metodologi',
+    description: 'Penjelasan pendekatan teknis dan eksekusi pada fase ini.',
+    deliverablesString: 'Deliverable 1, Deliverable 2',
+    deliverables: ['Deliverable 1', 'Deliverable 2']
+  })
+}
+
+const removeWorkflowStep = (idx) => {
+  workflowList.value.splice(idx, 1)
+}
+
+const saveWorkflows = () => {
+  const sanitized = workflowList.value.map(w => {
+    const dels = typeof w.deliverablesString === 'string'
+      ? w.deliverablesString.split(',').map(s => s.trim()).filter(Boolean)
+      : (w.deliverables || [])
+    return {
+      step: w.step,
+      phase: w.phase,
+      tagline: w.tagline,
+      description: w.description,
+      deliverables: dels
+    }
+  })
+  updateWorkflows(sanitized, selectedAdminProfile.value)
+  showToast('Alur kerja ("Bagaimana Saya Bekerja") berhasil disimpan!')
+}
+
+// -------------------------------------------------------------
+// TESTIMONIALS ("APA KATA REKAN & STAKEHOLDER") STATE
+// -------------------------------------------------------------
+const isTestiModalOpen = ref(false)
+const isEditingTesti = ref(false)
+const testiForm = ref({
+  id: null,
+  name: '',
+  role: '',
+  company: '',
+  content: '',
+  badge: 'Stakeholder Feedback',
+  avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80'
+})
+
+const openAddTestiModal = () => {
+  isEditingTesti.value = false
+  testiForm.value = {
+    id: null,
+    name: '',
+    role: selectedAdminProfile.value === 'raqwan' ? 'Chief Technology Officer' : 'Lead Product Manager',
+    company: 'PT. Mitra Teknologi Gemilang',
+    content: 'Feedback dan apresiasi stakeholder terhadap delivery proyek dan solusi yang dirancang.',
+    badge: selectedAdminProfile.value === 'raqwan' ? 'AI Leadership Feedback' : 'Product & UX Feedback',
+    avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80'
+  }
+  isTestiModalOpen.value = true
+}
+
+const openEditTestiModal = (t) => {
+  isEditingTesti.value = true
+  testiForm.value = { ...t }
+  isTestiModalOpen.value = true
+}
+
+const saveTestiForm = () => {
+  if (!testiForm.value.name.trim() || !testiForm.value.content.trim()) {
+    showToast('Nama dan isi testimoni tidak boleh kosong!', 'error')
+    return
+  }
+  if (isEditingTesti.value && testiForm.value.id) {
+    const list = selectedAdminProfile.value === 'nadya' ? [...nadyaState.testimonials.value] : [...raqwanState.testimonials.value]
+    const idx = list.findIndex(item => item.id === testiForm.value.id)
+    if (idx !== -1) {
+      list[idx] = { ...testiForm.value }
+      updateTestimonials(list, selectedAdminProfile.value)
+      showToast('Testimoni berhasil diperbarui!')
+    }
+  } else {
+    addTestimonial({ ...testiForm.value }, selectedAdminProfile.value)
+    showToast('Testimoni baru berhasil ditambahkan!')
+  }
+  isTestiModalOpen.value = false
+}
+
+const handleDeleteTestimonial = (id, name) => {
+  if (confirm(`Hapus testimoni dari "${name}"?`)) {
+    deleteTestimonial(id, selectedAdminProfile.value)
+    showToast('Testimoni berhasil dihapus.')
+  }
+}
+
+// -------------------------------------------------------------
 // EDUCATION EDITING STATE
 // -------------------------------------------------------------
-const educationList = ref(JSON.parse(JSON.stringify(educations.value)))
+const educationList = ref(JSON.parse(JSON.stringify(educations.value || [])))
 const addEducationRow = () => {
   educationList.value.push({
     degree: 'S1 Teknik Informatika',
     school: 'Universitas Gunadarma',
-    year: '2020 - 2024'
+    year: '2022 - 2026'
   })
 }
 
@@ -321,7 +457,11 @@ const handleReset = () => {
   if (confirm(`Peringatan: Seluruh data lokal ${selectedAdminProfile.value === 'nadya' ? 'Nadya' : 'Raqwan'} akan dikembalikan ke data awal. Lanjutkan?`)) {
     resetToDefault(selectedAdminProfile.value)
     profileForm.value = { ...portfolioInfo.value }
-    educationList.value = JSON.parse(JSON.stringify(educations.value))
+    educationList.value = JSON.parse(JSON.stringify(educations.value || []))
+    workflowList.value = JSON.parse(JSON.stringify(workflows.value || [])).map(w => ({
+      ...w,
+      deliverablesString: (w.deliverables || []).join(', ')
+    }))
     showToast('Seluruh data berhasil direset ke nilai awal!')
   }
 }
@@ -423,21 +563,23 @@ const handleReset = () => {
         >
           <div class="flex items-center gap-3">
             <FolderKanban class="w-4 h-4" />
-            <span>Projects ({{ projects.length }})</span>
+            <span>Featured Works ({{ projects.length }})</span>
           </div>
         </button>
 
         <button 
-          @click="activeTab = 'profile'"
-          class="w-full px-4 py-2.5 rounded-2xl text-xs font-mono-tag font-bold uppercase tracking-wider flex items-center gap-3 transition-all cursor-pointer text-left"
+          @click="activeTab = 'workflows'"
+          class="w-full px-4 py-2.5 rounded-2xl text-xs font-mono-tag font-bold uppercase tracking-wider flex items-center justify-between transition-all cursor-pointer text-left"
           :class="[
-            activeTab === 'profile'
+            activeTab === 'workflows'
               ? 'bg-[#9E0402] text-white shadow-md shadow-[#9E0402]/20'
               : 'text-zinc-400 hover:text-white hover:bg-white/5'
           ]"
         >
-          <UserCog class="w-4 h-4" />
-          <span>Profil & Bio</span>
+          <div class="flex items-center gap-3">
+            <Workflow class="w-4 h-4" />
+            <span>Bagaimana Bekerja ({{ workflows.length }})</span>
+          </div>
         </button>
 
         <button 
@@ -453,6 +595,34 @@ const handleReset = () => {
             <Sparkles class="w-4 h-4" />
             <span>Skills ({{ skills.length }})</span>
           </div>
+        </button>
+
+        <button 
+          @click="activeTab = 'testimonials'"
+          class="w-full px-4 py-2.5 rounded-2xl text-xs font-mono-tag font-bold uppercase tracking-wider flex items-center justify-between transition-all cursor-pointer text-left"
+          :class="[
+            activeTab === 'testimonials'
+              ? 'bg-[#9E0402] text-white shadow-md shadow-[#9E0402]/20'
+              : 'text-zinc-400 hover:text-white hover:bg-white/5'
+          ]"
+        >
+          <div class="flex items-center gap-3">
+            <MessageSquareQuote class="w-4 h-4" />
+            <span>Testimoni ({{ testimonials.length }})</span>
+          </div>
+        </button>
+
+        <button 
+          @click="activeTab = 'profile'"
+          class="w-full px-4 py-2.5 rounded-2xl text-xs font-mono-tag font-bold uppercase tracking-wider flex items-center gap-3 transition-all cursor-pointer text-left"
+          :class="[
+            activeTab === 'profile'
+              ? 'bg-[#9E0402] text-white shadow-md shadow-[#9E0402]/20'
+              : 'text-zinc-400 hover:text-white hover:bg-white/5'
+          ]"
+        >
+          <UserCog class="w-4 h-4" />
+          <span>Profil & Kontak</span>
         </button>
 
         <button 
@@ -708,12 +878,170 @@ const handleReset = () => {
         </div>
 
         <!-- ---------------------------------------------------- -->
-        <!-- TAB 3: PROFILE & BIO                                 -->
+        <!-- TAB 2: BAGAIMANA SAYA BEKERJA (WORKFLOWS)            -->
+        <!-- ---------------------------------------------------- -->
+        <div v-if="activeTab === 'workflows'" class="space-y-6">
+          <div class="flex items-center justify-between pb-2">
+            <div>
+              <h2 class="text-xl font-bold text-white">Bagaimana Saya Bekerja (Workflows)</h2>
+              <p class="text-xs text-zinc-400">Kelola 4 langkah metodologi kerja & deliverables di landing page</p>
+            </div>
+            <button 
+              @click="addWorkflowStep"
+              class="px-4 py-2 rounded-xl bg-[#9E0402] hover:bg-[#B80604] text-white text-xs font-mono-tag font-bold uppercase tracking-wider flex items-center gap-2 shadow-md cursor-pointer"
+            >
+              <Plus class="w-4 h-4" />
+              <span>Tambah Fase</span>
+            </button>
+          </div>
+
+          <div class="space-y-4">
+            <div 
+              v-for="(w, idx) in workflowList" 
+              :key="idx"
+              class="p-5 sm:p-6 rounded-3xl bg-[#111319] border border-white/10 space-y-4 hover:border-white/20 transition-all"
+            >
+              <div class="flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                  <span class="w-8 h-8 rounded-xl bg-[#9E0402]/20 border border-[#9E0402]/40 text-[#ff8080] flex items-center justify-center font-mono-tag font-bold text-xs">
+                    {{ String(idx + 1).padStart(2, '0') }}
+                  </span>
+                  <h3 class="text-sm font-bold text-white">Fase {{ String(idx + 1).padStart(2, '0') }}</h3>
+                </div>
+
+                <button 
+                  @click="removeWorkflowStep(idx)"
+                  class="p-2 rounded-xl bg-red-500/10 hover:bg-red-500/20 text-red-400 hover:text-red-300 transition-colors cursor-pointer"
+                  title="Hapus Fase Ini"
+                >
+                  <Trash2 class="w-4 h-4" />
+                </button>
+              </div>
+
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div class="space-y-1.5">
+                  <label class="block text-xs font-mono-tag font-bold uppercase text-zinc-300">Nama Fase (Phase Name)</label>
+                  <input 
+                    v-model="w.phase"
+                    type="text"
+                    placeholder="Contoh: Product Discovery & User Research"
+                    class="w-full px-4 py-2.5 rounded-xl bg-[#090A0D] border border-white/10 text-xs sm:text-sm text-white outline-none"
+                  />
+                </div>
+
+                <div class="space-y-1.5">
+                  <label class="block text-xs font-mono-tag font-bold uppercase text-zinc-300">Tagline Fase</label>
+                  <input 
+                    v-model="w.tagline"
+                    type="text"
+                    placeholder="Contoh: Uncovering Deep User Insights"
+                    class="w-full px-4 py-2.5 rounded-xl bg-[#090A0D] border border-white/10 text-xs sm:text-sm text-white outline-none"
+                  />
+                </div>
+              </div>
+
+              <div class="space-y-1.5">
+                <label class="block text-xs font-mono-tag font-bold uppercase text-zinc-300">Deskripsi Metodologi</label>
+                <textarea 
+                  v-model="w.description"
+                  rows="2"
+                  placeholder="Jelaskan apa yang dilakukan pada tahap ini..."
+                  class="w-full px-4 py-2.5 rounded-xl bg-[#090A0D] border border-white/10 text-xs sm:text-sm text-white outline-none"
+                ></textarea>
+              </div>
+
+              <div class="space-y-1.5">
+                <label class="block text-xs font-mono-tag font-bold uppercase text-zinc-300">Key Deliverables (Pisahkan dengan koma)</label>
+                <input 
+                  v-model="w.deliverablesString"
+                  type="text"
+                  placeholder="User Research, Wireframes, PRD, Technical Spec"
+                  class="w-full px-4 py-2.5 rounded-xl bg-[#090A0D] border border-white/10 text-xs sm:text-sm text-white outline-none"
+                />
+              </div>
+            </div>
+          </div>
+
+          <div class="pt-2">
+            <button 
+              @click="saveWorkflows"
+              class="px-6 py-3 rounded-2xl bg-[#9E0402] hover:bg-[#B80604] text-white font-mono-tag font-bold text-xs uppercase tracking-wider flex items-center gap-2 shadow-lg shadow-[#9E0402]/20 cursor-pointer"
+            >
+              <Save class="w-4 h-4" />
+              <span>Simpan Seluruh Alur Kerja</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- ---------------------------------------------------- -->
+        <!-- TAB 3: TESTIMONI & REVIEWS                           -->
+        <!-- ---------------------------------------------------- -->
+        <div v-if="activeTab === 'testimonials'" class="space-y-6">
+          <div class="flex items-center justify-between pb-2">
+            <div>
+              <h2 class="text-xl font-bold text-white">Apa Kata Rekan & Stakeholder</h2>
+              <p class="text-xs text-zinc-400">Kelola testimoni dan rekomendasi yang tampil di landing page</p>
+            </div>
+            <button 
+              @click="openAddTestiModal"
+              class="px-4 py-2 rounded-xl bg-[#9E0402] hover:bg-[#B80604] text-white text-xs font-mono-tag font-bold uppercase tracking-wider flex items-center gap-2 shadow-md cursor-pointer"
+            >
+              <Plus class="w-4 h-4" />
+              <span>Tambah Testimoni</span>
+            </button>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div 
+              v-for="t in testimonials" 
+              :key="t.id"
+              class="p-5 rounded-3xl bg-[#111319] border border-white/10 space-y-3 flex flex-col justify-between hover:border-white/20 transition-all"
+            >
+              <div class="space-y-3">
+                <div class="flex items-center justify-between">
+                  <div class="flex items-center gap-3">
+                    <img :src="t.avatar" :alt="t.name" class="w-10 h-10 rounded-full object-cover border border-white/10" />
+                    <div>
+                      <h4 class="text-sm font-bold text-white">{{ t.name }}</h4>
+                      <p class="text-xs text-zinc-400">{{ t.role }} • {{ t.company }}</p>
+                    </div>
+                  </div>
+                  <span class="px-2 py-0.5 rounded-md bg-white/5 border border-white/10 text-[10px] font-mono-tag text-zinc-300">
+                    {{ t.badge }}
+                  </span>
+                </div>
+                <p class="text-xs text-zinc-300 italic leading-relaxed">
+                  "{{ t.content }}"
+                </p>
+              </div>
+
+              <div class="flex items-center justify-end gap-2 pt-2 border-t border-white/5">
+                <button 
+                  @click="openEditTestiModal(t)"
+                  class="p-2 rounded-xl bg-white/5 hover:bg-white/10 text-[#9FC2EA] hover:text-white transition-colors cursor-pointer"
+                  title="Edit Testimoni"
+                >
+                  <Edit3 class="w-4 h-4" />
+                </button>
+                <button 
+                  @click="handleDeleteTestimonial(t.id, t.name)"
+                  class="p-2 rounded-xl bg-red-500/10 hover:bg-red-500/20 text-red-400 hover:text-red-300 transition-colors cursor-pointer"
+                  title="Hapus Testimoni"
+                >
+                  <Trash2 class="w-4 h-4" />
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ---------------------------------------------------- -->
+        <!-- TAB 4: PROFILE & BIO                                 -->
         <!-- ---------------------------------------------------- -->
         <div v-if="activeTab === 'profile'" class="space-y-6">
           <div class="pb-2">
-            <h2 class="text-xl font-bold text-white">Profil & Data Diri</h2>
-            <p class="text-xs text-zinc-400">Informasi utama yang tampil di seluruh section landing page</p>
+            <h2 class="text-xl font-bold text-white">Profil & Kontak</h2>
+            <p class="text-xs text-zinc-400">Informasi data diri dan kontak yang tampil di hero, about, dan footer landing page</p>
           </div>
 
           <div class="p-6 sm:p-7 rounded-3xl bg-[#111319] border border-white/10 space-y-5">
@@ -737,7 +1065,7 @@ const handleReset = () => {
               </div>
             </div>
 
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
               <div class="space-y-1.5">
                 <label class="block text-xs font-mono-tag font-bold uppercase text-zinc-300">Email Kontak</label>
                 <input 
@@ -748,13 +1076,33 @@ const handleReset = () => {
               </div>
 
               <div class="space-y-1.5">
-                <label class="block text-xs font-mono-tag font-bold uppercase text-zinc-300">Status Ketersediaan</label>
+                <label class="block text-xs font-mono-tag font-bold uppercase text-zinc-300">No. Telepon / WhatsApp</label>
                 <input 
-                  v-model="profileForm.status"
+                  v-model="profileForm.phone"
                   type="text"
+                  placeholder="+62 ..."
                   class="w-full px-4 py-2.5 rounded-xl bg-[#090A0D] border border-white/10 focus:border-[#9E0402] text-xs sm:text-sm text-white outline-none"
                 />
               </div>
+
+              <div class="space-y-1.5">
+                <label class="block text-xs font-mono-tag font-bold uppercase text-zinc-300">Lokasi / Domisili</label>
+                <input 
+                  v-model="profileForm.location"
+                  type="text"
+                  placeholder="Depok, Jawa Barat, Indonesia"
+                  class="w-full px-4 py-2.5 rounded-xl bg-[#090A0D] border border-white/10 focus:border-[#9E0402] text-xs sm:text-sm text-white outline-none"
+                />
+              </div>
+            </div>
+
+            <div class="space-y-1.5">
+              <label class="block text-xs font-mono-tag font-bold uppercase text-zinc-300">Status Ketersediaan</label>
+              <input 
+                v-model="profileForm.status"
+                type="text"
+                class="w-full px-4 py-2.5 rounded-xl bg-[#090A0D] border border-white/10 focus:border-[#9E0402] text-xs sm:text-sm text-white outline-none"
+              />
             </div>
 
             <div class="space-y-1.5">
@@ -776,7 +1124,7 @@ const handleReset = () => {
             </div>
 
             <!-- Social Links -->
-            <div class="space-y-3 pt-2 border-t border-white/5">
+            <div class="space-y-3 pt-2 border-t border-white/5" v-if="profileForm.socials">
               <h4 class="text-xs font-mono-tag font-bold uppercase text-[#ff8080]">Tautan Sosial Media & Portfolio</h4>
               <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div class="space-y-1">
@@ -1196,6 +1544,125 @@ const handleReset = () => {
             </button>
           </div>
 
+        </form>
+
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════ -->
+    <!-- TESTIMONIAL CREATE / EDIT MODAL              -->
+    <!-- ═══════════════════════════════════════════ -->
+    <div 
+      v-if="isTestiModalOpen"
+      class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto"
+    >
+      <div class="w-full max-w-xl bg-[#111319] border border-white/10 rounded-3xl p-6 sm:p-8 space-y-6 shadow-2xl my-8">
+        
+        <div class="flex items-center justify-between border-b border-white/10 pb-4">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-2xl bg-[#9E0402]/20 border border-[#9E0402]/40 text-[#ff8080] flex items-center justify-center font-bold">
+              <MessageSquareQuote class="w-5 h-5" />
+            </div>
+            <div>
+              <h3 class="text-base font-bold text-white">
+                {{ isEditingTesti ? 'Edit Testimoni Stakeholder' : 'Tambah Testimoni Baru' }}
+              </h3>
+              <span class="text-xs text-zinc-400 font-mono-tag">Portofolio: {{ selectedAdminProfile === 'nadya' ? 'Nadya Najelina' : 'Muhammad Raqwan Kauthar' }}</span>
+            </div>
+          </div>
+          <button 
+            @click="isTestiModalOpen = false"
+            class="p-2 rounded-xl text-zinc-400 hover:text-white hover:bg-white/10 transition-colors cursor-pointer"
+          >
+            <X class="w-5 h-5" />
+          </button>
+        </div>
+
+        <form @submit.prevent="saveTestiForm" class="space-y-4">
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div class="space-y-1.5">
+              <label class="block text-xs font-mono-tag font-bold uppercase text-zinc-300">Nama Pemberi Testimoni</label>
+              <input 
+                v-model="testiForm.name"
+                type="text"
+                required
+                placeholder="Contoh: Sarah Anderson"
+                class="w-full px-4 py-2.5 rounded-xl bg-[#090A0D] border border-white/10 text-xs sm:text-sm text-white outline-none"
+              />
+            </div>
+
+            <div class="space-y-1.5">
+              <label class="block text-xs font-mono-tag font-bold uppercase text-zinc-300">Role / Jabatan</label>
+              <input 
+                v-model="testiForm.role"
+                type="text"
+                required
+                placeholder="Contoh: VP of Engineering"
+                class="w-full px-4 py-2.5 rounded-xl bg-[#090A0D] border border-white/10 text-xs sm:text-sm text-white outline-none"
+              />
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div class="space-y-1.5">
+              <label class="block text-xs font-mono-tag font-bold uppercase text-zinc-300">Perusahaan / Institusi</label>
+              <input 
+                v-model="testiForm.company"
+                type="text"
+                placeholder="Contoh: Fintech Global"
+                class="w-full px-4 py-2.5 rounded-xl bg-[#090A0D] border border-white/10 text-xs sm:text-sm text-white outline-none"
+              />
+            </div>
+
+            <div class="space-y-1.5">
+              <label class="block text-xs font-mono-tag font-bold uppercase text-zinc-300">Badge Label</label>
+              <input 
+                v-model="testiForm.badge"
+                type="text"
+                placeholder="Contoh: Stakeholder Feedback"
+                class="w-full px-4 py-2.5 rounded-xl bg-[#090A0D] border border-white/10 text-xs sm:text-sm text-white outline-none"
+              />
+            </div>
+          </div>
+
+          <div class="space-y-1.5">
+            <label class="block text-xs font-mono-tag font-bold uppercase text-zinc-300">URL Foto Avatar</label>
+            <input 
+              v-model="testiForm.avatar"
+              type="url"
+              placeholder="https://images.unsplash.com/..."
+              class="w-full px-4 py-2.5 rounded-xl bg-[#090A0D] border border-white/10 text-xs sm:text-sm text-white outline-none"
+            />
+          </div>
+
+          <div class="space-y-1.5">
+            <label class="block text-xs font-mono-tag font-bold uppercase text-zinc-300">Isi Testimoni / Rekomendasi</label>
+            <textarea 
+              v-model="testiForm.content"
+              rows="4"
+              required
+              placeholder="Tuliskan testimoni atau feedback stakeholder..."
+              class="w-full px-4 py-2.5 rounded-xl bg-[#090A0D] border border-white/10 text-xs sm:text-sm text-white outline-none"
+            ></textarea>
+          </div>
+
+          <div class="flex items-center justify-end gap-3 pt-3 border-t border-white/5">
+            <button 
+              type="button"
+              @click="isTestiModalOpen = false"
+              class="px-5 py-2.5 rounded-xl bg-white/5 hover:bg-white/10 text-xs font-mono-tag uppercase text-zinc-300 cursor-pointer"
+            >
+              Batal
+            </button>
+
+            <button 
+              type="submit"
+              class="px-6 py-2.5 rounded-xl bg-[#9E0402] hover:bg-[#B80604] text-white text-xs font-mono-tag font-bold uppercase tracking-wider shadow-md cursor-pointer flex items-center gap-1.5"
+            >
+              <Save class="w-4 h-4" />
+              <span>Simpan Testimoni</span>
+            </button>
+          </div>
         </form>
 
       </div>
