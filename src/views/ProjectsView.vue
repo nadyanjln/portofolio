@@ -25,28 +25,28 @@ const filteredProjects = computed(() => {
   <div class="pt-24 pb-14 sm:pt-28 sm:pb-18 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8 sm:space-y-10">
     <!-- Header -->
     <div class="space-y-3 max-w-3xl">
-      <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-white border border-[#EEDCDC] text-xs font-mono-tag font-bold uppercase text-[#9E0402]">
-        <Sparkles class="w-3.5 h-3.5 text-[#9E0402]" />
+      <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-white dark:bg-[#1A1C24] border border-[#EEDCDC] dark:border-white/10 text-xs font-mono-tag font-bold uppercase text-[#9E0402] dark:text-[#ff4d4d] shadow-xs">
+        <Sparkles class="w-3.5 h-3.5 text-[#9E0402] dark:text-[#ff4d4d]" />
         <span>Case Studies Archive /2026/</span>
       </div>
-      <h1 class="text-4xl sm:text-5xl md:text-6xl font-extrabold text-[#1C1313] tracking-tight">
+      <h1 class="text-4xl sm:text-5xl md:text-6xl font-extrabold text-[#1C1313] dark:text-white tracking-tight">
         Semua Case Studies & Karya
       </h1>
-      <p class="text-[#5C4848] text-sm sm:text-base md:text-lg leading-relaxed">
+      <p class="text-[#5C4848] dark:text-zinc-300 text-sm sm:text-base md:text-lg leading-relaxed">
         Kumpulan studi kasus product management, desain UI/UX, dan riset pengguna — dari penemuan insight hingga delivery produk berdampak.
       </p>
     </div>
 
-    <!-- Search & Filter Controls -->
-    <div class="p-4 sm:p-5 rounded-2xl bg-white border border-[#EEDCDC] flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4 shadow-xs">
+    <!-- Search & Filter Controls Container -->
+    <div class="p-4 sm:p-5 rounded-2xl bg-white dark:bg-[#14161D] border border-[#EEDCDC] dark:border-white/10 flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4 shadow-xs">
       <!-- Search Input -->
       <div class="relative w-full md:w-80 lg:w-96">
-        <Search class="w-4 h-4 text-[#5C4848] absolute left-3.5 top-1/2 -translate-y-1/2" />
+        <Search class="w-4 h-4 text-[#5C4848] dark:text-zinc-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
         <input
           v-model="searchQuery"
           type="text"
           placeholder="Cari case study, skill, atau kata kunci..."
-          class="w-full pl-10 pr-4 py-2.5 rounded-xl bg-[#FFF9F9] border border-[#EEDCDC] focus:border-[#9E0402] focus:ring-1 focus:ring-[#9E0402] text-xs sm:text-sm text-[#1C1313] placeholder:text-[#94A3B8] outline-none transition-all shadow-xs"
+          class="w-full pl-10 pr-4 py-2.5 rounded-xl bg-[#FFF9F9] dark:bg-[#0B0C0E] border border-[#EEDCDC] dark:border-white/10 focus:border-[#9E0402] dark:focus:border-[#ff4d4d] focus:ring-1 focus:ring-[#9E0402] text-xs sm:text-sm text-[#1C1313] dark:text-white placeholder:text-[#94A3B8] outline-none transition-all shadow-xs"
         />
       </div>
 
@@ -60,7 +60,7 @@ const filteredProjects = computed(() => {
           :class="[
             selectedCategory === cat 
               ? 'bg-[#9E0402] text-white shadow-md shadow-[#9E0402]/25' 
-              : 'bg-[#FFF9F9] text-[#5C4848] hover:text-[#9E0402] hover:bg-white border border-[#EEDCDC]'
+              : 'bg-[#FFF9F9] dark:bg-[#1A1C24] text-[#5C4848] dark:text-zinc-300 hover:text-[#9E0402] dark:hover:text-white hover:bg-white dark:hover:bg-[#252834] border border-[#EEDCDC] dark:border-white/10'
           ]"
         >
           {{ cat }}
@@ -78,10 +78,10 @@ const filteredProjects = computed(() => {
     </div>
 
     <!-- Empty State -->
-    <div v-else class="text-center py-16 space-y-3 p-8 rounded-3xl bg-white border border-[#EEDCDC]">
-      <Sparkles class="w-8 h-8 text-[#9E0402] mx-auto" />
-      <h3 class="text-lg font-bold text-[#1C1313]">Tidak ada case study yang sesuai</h3>
-      <p class="text-xs sm:text-sm text-[#5C4848]">Coba gunakan kata kunci pencarian atau kategori lain.</p>
+    <div v-else class="text-center py-16 space-y-3 p-8 rounded-3xl bg-white dark:bg-[#14161D] border border-[#EEDCDC] dark:border-white/10">
+      <Sparkles class="w-8 h-8 text-[#9E0402] dark:text-[#ff4d4d] mx-auto" />
+      <h3 class="text-lg font-bold text-[#1C1313] dark:text-white">Tidak ada case study yang sesuai</h3>
+      <p class="text-xs sm:text-sm text-[#5C4848] dark:text-zinc-400">Coba gunakan kata kunci pencarian atau kategori lain.</p>
       <button 
         @click="searchQuery = ''; selectedCategory = 'All'"
         class="mt-1 px-5 py-2.5 rounded-full bg-[#9E0402] text-white text-xs font-bold font-mono-tag uppercase hover:bg-[#B80604] transition-colors"
