@@ -1,8 +1,9 @@
 <script setup>
-import { ref, reactive } from 'vue'
-import { ArrowUpRight, CheckCircle2, AlertCircle } from 'lucide-vue-next'
+import { ref, reactive, onMounted } from 'vue'
+import { ArrowUpRight, CheckCircle2, AlertCircle, Mail, Linkedin, Github } from 'lucide-vue-next'
 import { portfolioInfo } from '@/data/portfolioData'
 import { sendContactMessage, isSupabaseConfigured } from '@/lib/supabase'
+import { useScrollReveal } from '@/composables/useAnimations'
 
 const isConfigured = isSupabaseConfigured()
 const showForm = ref(false)
@@ -52,14 +53,18 @@ const handleSubmit = async () => {
     isSubmitting.value = false
   }
 }
+
+const sectionRef = ref(null)
+const { observeAll } = useScrollReveal()
+onMounted(() => observeAll(sectionRef.value))
 </script>
 
 <template>
-  <section class="py-14 sm:py-20 relative overflow-hidden" id="contact">
+  <section ref="sectionRef" class="py-14 sm:py-20 relative overflow-hidden" id="contact">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       
       <!-- Big Statement Creative CTA -->
-      <div class="p-8 sm:p-14 lg:p-16 rounded-[36px] sm:rounded-[48px] bg-white dark:bg-[#15161B] border border-[#EEDCDC] dark:border-white/10 shadow-sm relative overflow-hidden text-center space-y-8">
+      <div data-reveal="scale-up" class="p-8 sm:p-14 lg:p-16 rounded-[36px] sm:rounded-[48px] bg-white dark:bg-[#15161B] border border-[#EEDCDC] dark:border-white/10 shadow-sm relative overflow-hidden text-center space-y-8">
         
         <!-- Glow effect -->
         <div class="glow-primary top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 opacity-30"></div>
@@ -83,15 +88,48 @@ const handleSubmit = async () => {
         </div>
 
         <!-- Start the project button / Toggle form (#9E0402 Primary Button) -->
-        <div class="relative z-10 flex flex-col items-center gap-3.5 pt-2">
-          <button
-            @click="showForm = !showForm"
-            class="px-8 py-4 rounded-full bg-[#9E0402] hover:bg-[#B80604] text-white font-mono-tag font-bold text-xs sm:text-sm uppercase tracking-widest transition-all duration-300 shadow-lg shadow-[#9E0402]/25 flex items-center gap-3 cursor-pointer hover:scale-105 active:scale-95"
-          >
-            <span>{{ showForm ? 'TUTUP FORMULIR [X]' : 'START THE PROJECT ↗' }}</span>
-          </button>
+        <div class="relative z-10 flex flex-col items-center gap-4 pt-2">
+          <div class="flex flex-wrap items-center justify-center gap-3">
+            <button
+              @click="showForm = !showForm"
+              class="px-8 py-4 rounded-full bg-[#9E0402] hover:bg-[#B80604] text-white font-mono-tag font-bold text-xs sm:text-sm uppercase tracking-widest transition-all duration-300 shadow-lg shadow-[#9E0402]/25 flex items-center gap-3 cursor-pointer hover:scale-105 active:scale-95"
+            >
+              <span>{{ showForm ? 'TUTUP FORMULIR [X]' : 'START THE PROJECT ↗' }}</span>
+            </button>
+
+            <a
+              :href="'mailto:' + portfolioInfo.email"
+              class="px-6 py-4 rounded-full bg-white dark:bg-[#1A1C24] hover:bg-[#FDF6F6] dark:hover:bg-[#252834] text-[#1C1313] dark:text-white border border-[#EEDCDC] dark:border-white/10 font-mono-tag font-bold text-xs sm:text-sm tracking-wider uppercase transition-all duration-300 flex items-center gap-2 shadow-xs hover:scale-105 active:scale-95"
+            >
+              <Mail class="w-4 h-4 text-[#9E0402] dark:text-[#ff4d4d]" />
+              <span>{{ portfolioInfo.email }}</span>
+            </a>
+          </div>
+
+          <!-- Direct Social Channels -->
+          <div class="flex flex-wrap items-center justify-center gap-3 pt-2">
+            <a
+              :href="portfolioInfo.socials.linkedin"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-[#FFF9F9] dark:bg-[#1A1C24] border border-[#EEDCDC] dark:border-white/10 text-xs font-mono-tag font-bold text-[#1C1313] dark:text-zinc-200 hover:text-[#9E0402] dark:hover:text-[#ff4d4d] hover:border-[#9E0402]/40 transition-all"
+            >
+              <Linkedin class="w-3.5 h-3.5 text-[#1E3A60] dark:text-[#9FC2EA]" />
+              <span>LinkedIn Profile ↗</span>
+            </a>
+
+            <a
+              :href="portfolioInfo.socials.github"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-[#FFF9F9] dark:bg-[#1A1C24] border border-[#EEDCDC] dark:border-white/10 text-xs font-mono-tag font-bold text-[#1C1313] dark:text-zinc-200 hover:text-[#9E0402] dark:hover:text-[#ff4d4d] hover:border-[#9E0402]/40 transition-all"
+            >
+              <Github class="w-3.5 h-3.5 text-[#9E0402] dark:text-[#ff4d4d]" />
+              <span>GitHub Profile ↗</span>
+            </a>
+          </div>
           
-          <p class="text-xs font-mono-tag text-[#5C4848] dark:text-zinc-400">
+          <p class="text-xs font-mono-tag text-[#5C4848] dark:text-zinc-400 pt-1">
             Open for Product Management & UI/UX roles or consulting
           </p>
         </div>

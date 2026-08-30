@@ -1,14 +1,20 @@
 <script setup>
+import { ref, onMounted } from 'vue'
 import { Sparkles, CheckCircle2, ArrowRight } from 'lucide-vue-next'
 import { workflows } from '@/data/portfolioData'
+import { useScrollReveal } from '@/composables/useAnimations'
+
+const sectionRef = ref(null)
+const { observeAll } = useScrollReveal()
+onMounted(() => observeAll(sectionRef.value))
 </script>
 
 <template>
-  <section class="py-12 sm:py-18 relative" id="process">
+  <section ref="sectionRef" class="py-12 sm:py-18 relative" id="process">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10 sm:space-y-12">
       
       <!-- Section Header -->
-      <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 max-w-3xl">
+      <div data-reveal="fade-up" class="flex flex-col md:flex-row md:items-end justify-between gap-4 max-w-3xl">
         <div class="space-y-3">
           <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-white dark:bg-[#1A1C24] border border-[#EEDCDC] dark:border-white/10 text-xs font-mono-tag font-bold uppercase text-[#9E0402] dark:text-[#ff4d4d] shadow-xs">
             <Sparkles class="w-3.5 h-3.5 text-[#9E0402] dark:text-[#ff4d4d]" />
@@ -28,6 +34,8 @@ import { workflows } from '@/data/portfolioData'
         <div
           v-for="(stage, idx) in workflows"
           :key="stage.step"
+          data-reveal="fade-up"
+          :data-reveal-delay="idx + 1"
           class="p-6 sm:p-7 rounded-3xl bg-white dark:bg-[#14161D] border border-[#EEDCDC] dark:border-white/10 hover:border-[#9E0402]/50 dark:hover:border-[#ff4d4d]/50 transition-all duration-300 space-y-4 flex flex-col justify-between group shadow-xs hover:-translate-y-1.5 hover:shadow-md"
         >
           <!-- Top Step Index -->

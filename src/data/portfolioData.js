@@ -6,16 +6,24 @@ export const portfolioInfo = {
   bio: "Hi! Saya Nadya Najelina Salsabillah, seorang Product Manager & UI/UX Designer yang passionate dalam menciptakan pengalaman digital yang bermakna. Saya menggabungkan pemikiran strategis product management dengan keahlian visual design untuk memastikan setiap produk tidak hanya indah secara estetika, tetapi juga memberikan nilai nyata bagi pengguna dan bisnis.",
   status: "Open for Product & Design roles",
   location: "Indonesia",
-  email: "nadya@example.com",
+  email: "nadyanjln@gmail.com",
   socials: {
     github: "https://github.com/nadyanjln",
-    linkedin: "https://linkedin.com/in/",
+    linkedin: "https://www.linkedin.com/in/nadyanjln/",
     twitter: "https://twitter.com/",
     instagram: "https://instagram.com/",
     dribbble: "https://dribbble.com/",
     behance: "https://behance.net/"
   }
 }
+
+export const educations = [
+  {
+    degree: "S1 Informatika (Sarjana Komputer)",
+    school: "Universitas Gunadarma",
+    year: "2020 - 2024"
+  }
+]
 
 export const skills = [
   { name: "Product Strategy", category: "Product", level: "Expert", color: "indigo" },

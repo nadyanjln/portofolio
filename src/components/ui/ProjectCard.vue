@@ -68,7 +68,10 @@ const handleMouseLeave = () => {
     ></div>
 
     <!-- Image Thumbnail -->
-    <div class="relative overflow-hidden aspect-video bg-[#FDF6F6] dark:bg-[#1C1E24] rounded-t-3xl">
+    <div 
+      data-cursor-text="VIEW ↗" 
+      class="relative overflow-hidden aspect-video bg-[#FDF6F6] dark:bg-[#1C1E24] rounded-t-3xl cursor-pointer"
+    >
       <img 
         :src="project.image" 
         :alt="project.title"

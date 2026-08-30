@@ -181,3 +181,180 @@
 .custom-scroll::-webkit-scrollbar-thumb:hover {
   background: #9E0402;
 }
+
+/* ═══════════════════════════════════════════
+   SCROLL-REVEAL ANIMATION SYSTEM
+   Inspired by benjamincreative.me & spragadheeshraj.com
+   ═══════════════════════════════════════════ */
+
+/* Base reveal state — hidden by default */
+[data-reveal] {
+  opacity: 0;
+  transform: translateY(32px);
+  transition:
+    opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform;
+}
+
+/* Variants */
+[data-reveal="fade-up"] {
+  transform: translateY(40px);
+}
+
+[data-reveal="fade-down"] {
+  transform: translateY(-40px);
+}
+
+[data-reveal="fade-left"] {
+  transform: translateX(50px) translateY(0);
+}
+
+[data-reveal="fade-right"] {
+  transform: translateX(-50px) translateY(0);
+}
+
+[data-reveal="zoom-in"] {
+  transform: scale(0.92) translateY(20px);
+}
+
+[data-reveal="blur-in"] {
+  filter: blur(8px);
+  transform: translateY(20px);
+  transition:
+    opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.8s cubic-bezier(0.16, 1, 0.3, 1),
+    filter 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+[data-reveal="scale-up"] {
+  transform: scale(0.85);
+  transform-origin: center bottom;
+}
+
+/* Revealed state — triggered by IntersectionObserver */
+[data-reveal].revealed {
+  opacity: 1;
+  transform: translateY(0) translateX(0) scale(1);
+  filter: blur(0);
+}
+
+/* Stagger delays for child elements */
+[data-reveal-delay="1"] { transition-delay: 0.08s; }
+[data-reveal-delay="2"] { transition-delay: 0.16s; }
+[data-reveal-delay="3"] { transition-delay: 0.24s; }
+[data-reveal-delay="4"] { transition-delay: 0.32s; }
+[data-reveal-delay="5"] { transition-delay: 0.40s; }
+[data-reveal-delay="6"] { transition-delay: 0.48s; }
+[data-reveal-delay="7"] { transition-delay: 0.56s; }
+[data-reveal-delay="8"] { transition-delay: 0.64s; }
+
+/* ═══════════════════════════════════════════
+   TEXT SPLIT / CHARACTER REVEAL
+   Inspired by spragadheeshraj.com hero text
+   ═══════════════════════════════════════════ */
+@keyframes text-reveal-up {
+  0% {
+    opacity: 0;
+    transform: translateY(100%) rotateX(25deg);
+    filter: blur(4px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) rotateX(0deg);
+    filter: blur(0);
+  }
+}
+
+.text-reveal-char {
+  display: inline-block;
+  animation: text-reveal-up 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  opacity: 0;
+}
+
+/* ═══════════════════════════════════════════
+   SMOOTH SECTION DIVIDER WAVE
+   ═══════════════════════════════════════════ */
+@keyframes wave-drift {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+.animate-wave {
+  animation: wave-drift 20s linear infinite;
+}
+
+/* ═══════════════════════════════════════════
+   HOVER TILT / 3D PERSPECTIVE
+   Inspired by benjamincreative.me card hover
+   ═══════════════════════════════════════════ */
+.perspective-card {
+  perspective: 800px;
+  transform-style: preserve-3d;
+}
+
+.perspective-card > * {
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* ═══════════════════════════════════════════
+   GLOW EFFECTS
+   ═══════════════════════════════════════════ */
+.glow-primary {
+  position: absolute;
+  width: 300px;
+  height: 300px;
+  background: radial-gradient(circle, rgba(158, 4, 2, 0.3) 0%, transparent 70%);
+  border-radius: 50%;
+  pointer-events: none;
+  filter: blur(40px);
+}
+
+.dark .glow-primary {
+  background: radial-gradient(circle, rgba(255, 77, 77, 0.2) 0%, transparent 70%);
+}
+
+/* ═══════════════════════════════════════════
+   SMOOTH PAGE TRANSITION OVERRIDES
+   ═══════════════════════════════════════════ */
+.page-fade-enter-active,
+.page-fade-leave-active {
+  transition: opacity 0.35s cubic-bezier(0.16, 1, 0.3, 1), 
+              transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.page-fade-enter-from {
+  opacity: 0;
+  transform: translateY(12px);
+}
+
+.page-fade-leave-to {
+  opacity: 0;
+  transform: translateY(-8px);
+}
+
+/* ═══════════════════════════════════════════
+   LINE REVEAL (horizontal rule animation)
+   Inspired by abhaysingh.in section dividers
+   ═══════════════════════════════════════════ */
+@keyframes line-reveal {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
+}
+
+[data-reveal="line"].revealed {
+  transform: scaleX(1);
+  transform-origin: left center;
+  animation: line-reveal 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Hide default cursor on desktop when custom cursor is active, but keep native for inputs */
+@media (pointer: fine) {
+  body, a, button, [role="button"], .cursor-pointer { 
+    cursor: none !important; 
+  }
+  input, textarea, select, [contenteditable="true"] { 
+    cursor: text !important; 
+  }
+}
+

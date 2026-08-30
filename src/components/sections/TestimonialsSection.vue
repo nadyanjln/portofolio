@@ -1,14 +1,20 @@
 <script setup>
+import { ref, onMounted } from 'vue'
 import { Sparkles, Quote, CheckCircle } from 'lucide-vue-next'
 import { testimonials } from '@/data/portfolioData'
+import { useScrollReveal } from '@/composables/useAnimations'
+
+const sectionRef = ref(null)
+const { observeAll } = useScrollReveal()
+onMounted(() => observeAll(sectionRef.value))
 </script>
 
 <template>
-  <section class="py-12 sm:py-18 relative" id="testimonials">
+  <section ref="sectionRef" class="py-12 sm:py-18 relative" id="testimonials">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10 sm:space-y-12">
       
       <!-- Section Header -->
-      <div class="space-y-3 max-w-3xl">
+      <div data-reveal="fade-up" class="space-y-3 max-w-3xl">
         <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-white dark:bg-[#1A1C24] border border-[#EEDCDC] dark:border-white/10 text-xs font-mono-tag font-bold uppercase text-[#9E0402] dark:text-[#ff4d4d] shadow-xs">
           <Sparkles class="w-3.5 h-3.5 text-[#9E0402] dark:text-[#ff4d4d]" />
           <span>Social Proof & Endorsements</span>
@@ -24,8 +30,10 @@ import { testimonials } from '@/data/portfolioData'
       <!-- Testimonials Cards Grid -->
       <div class="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
         <div
-          v-for="item in testimonials"
+          v-for="(item, idx) in testimonials"
           :key="item.id"
+          data-reveal="fade-up"
+          :data-reveal-delay="idx + 1"
           class="p-6 sm:p-8 rounded-3xl bg-white dark:bg-[#14161D] border border-[#EEDCDC] dark:border-white/10 space-y-5 flex flex-col justify-between shadow-xs hover:border-[#9E0402]/40 dark:hover:border-[#ff4d4d]/40 transition-all duration-300 hover:-translate-y-1 group"
         >
           <!-- Top Quote Icon & Badge -->

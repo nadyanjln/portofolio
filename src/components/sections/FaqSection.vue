@@ -1,21 +1,25 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import { Sparkles, Plus, Minus, HelpCircle } from 'lucide-vue-next'
 import { faqs } from '@/data/portfolioData'
+import { useScrollReveal } from '@/composables/useAnimations'
 
 const activeIndex = ref(0)
 
 const toggleFaq = (idx) => {
   activeIndex.value = activeIndex.value === idx ? null : idx
 }
+const sectionRef = ref(null)
+const { observeAll } = useScrollReveal()
+onMounted(() => observeAll(sectionRef.value))
 </script>
 
 <template>
-  <section class="py-12 sm:py-18 relative" id="faq">
+  <section ref="sectionRef" class="py-12 sm:py-18 relative" id="faq">
     <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10 sm:space-y-12">
       
       <!-- Section Header -->
-      <div class="space-y-3 text-center max-w-2xl mx-auto">
+      <div data-reveal="fade-up" class="space-y-3 text-center max-w-2xl mx-auto">
         <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-white dark:bg-[#1A1C24] border border-[#EEDCDC] dark:border-white/10 text-xs font-mono-tag font-bold uppercase text-[#9E0402] dark:text-[#ff4d4d] shadow-xs">
           <HelpCircle class="w-3.5 h-3.5 text-[#9E0402] dark:text-[#ff4d4d]" />
           <span>Frequently Asked Questions</span>
@@ -33,6 +37,8 @@ const toggleFaq = (idx) => {
         <div
           v-for="(faq, idx) in faqs"
           :key="idx"
+          data-reveal="fade-up"
+          :data-reveal-delay="idx + 1"
           class="rounded-2xl border transition-all duration-300 overflow-hidden shadow-xs"
           :class="[
             activeIndex === idx

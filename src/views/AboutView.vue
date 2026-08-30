@@ -1,8 +1,10 @@
 <script setup>
+import { ref, onMounted } from 'vue'
 import { Sparkles, GraduationCap, Briefcase, Award, CheckCircle2 } from 'lucide-vue-next'
-import { portfolioInfo, skills } from '@/data/portfolioData'
+import { portfolioInfo, skills, educations } from '@/data/portfolioData'
 import SkillBadge from '@/components/ui/SkillBadge.vue'
 import InfiniteMarquee from '@/components/effects/InfiniteMarquee.vue'
+import { useScrollReveal } from '@/composables/useAnimations'
 
 const experiences = [
   {
@@ -25,26 +27,22 @@ const experiences = [
   }
 ]
 
-const educations = [
-  {
-    degree: 'Sarjana — Sistem Informasi / Desain Komunikasi Visual',
-    school: 'Universitas Terkemuka di Indonesia',
-    year: '2019 - 2023'
-  }
-]
-
 const certifications = [
   'Google UX Design Professional Certificate',
   'Product Management Fundamentals — Product School',
   'Interaction Design Foundation — UX Management'
 ]
+
+const sectionRef = ref(null)
+const { observeAll } = useScrollReveal()
+onMounted(() => observeAll(sectionRef.value))
 </script>
 
 <template>
-  <div class="pt-24 pb-14 sm:pt-28 sm:pb-18 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12 sm:space-y-14">
+  <div ref="sectionRef" class="pt-24 pb-14 sm:pt-28 sm:pb-18 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12 sm:space-y-14">
     
     <!-- Hero / Profile Intro with Floating Avatar Animation -->
-    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-10 items-center">
+    <div data-reveal="fade-up" class="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-10 items-center">
       <div class="lg:col-span-8 space-y-3 sm:space-y-4">
         <!-- Top Tag Pill -->
         <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-white dark:bg-[#1A1C24] border border-[#EEDCDC] dark:border-white/10 text-xs font-mono-tag font-bold uppercase text-[#9E0402] dark:text-[#ff4d4d] shadow-xs">
@@ -85,7 +83,7 @@ const certifications = [
     </div>
 
     <!-- Experience Timeline -->
-    <div class="space-y-4">
+    <div data-reveal="fade-up" class="space-y-4">
       <div class="flex items-center gap-2.5">
         <div class="w-8 h-8 rounded-xl bg-[#9FC2EA]/30 dark:bg-[#9FC2EA]/15 text-[#1E3A60] dark:text-[#9FC2EA] flex items-center justify-center shrink-0">
           <Briefcase class="w-4 h-4" />
@@ -112,7 +110,7 @@ const certifications = [
     </div>
 
     <!-- Skills & Expertise -->
-    <div class="space-y-4">
+    <div data-reveal="fade-up" class="space-y-4">
       <div class="flex items-center justify-between">
         <h2 class="text-2xl font-extrabold text-[#1C1313] dark:text-white">Keahlian & Metodologi</h2>
         <span class="text-xs font-mono-tag text-[#5C4848] dark:text-zinc-400">{{ skills.length }} Core Competencies</span>
@@ -127,7 +125,7 @@ const certifications = [
     </div>
 
     <!-- Education & Certifications (2-col grid on desktop) -->
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+    <div data-reveal="fade-up" class="grid grid-cols-1 lg:grid-cols-2 gap-6">
       <!-- Education -->
       <div class="space-y-4">
         <div class="flex items-center gap-2.5">
