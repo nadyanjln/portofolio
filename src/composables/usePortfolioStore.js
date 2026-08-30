@@ -27,6 +27,7 @@ import {
   fetchProjectsFromSupabase,
   fetchSkillsFromSupabase,
   fetchTestimonialsFromSupabase,
+  fetchEducationsFromSupabase,
   fetchProfileFromSupabase
 } from '@/lib/supabase'
 
@@ -195,27 +196,53 @@ const loadFromSupabase = async (forceRefresh = false) => {
 
   isLoadingSupabase.value = true
   try {
-    const [pRes, sRes, tRes, profRes] = await Promise.all([
+    const [pRes, sRes, tRes, eduRes, profRes] = await Promise.all([
       fetchProjectsFromSupabase(),
       fetchSkillsFromSupabase(),
       fetchTestimonialsFromSupabase(),
+      fetchEducationsFromSupabase(),
       fetchProfileFromSupabase()
     ])
 
     if (pRes.data && pRes.data.length > 0) {
-      nadyaProjectsState.value = pRes.data
+      const raqwanProjectIds = new Set([
+        'marketforge-securities-platform', 
+        'pertamina-graphrag-knowledge-graph', 
+        'upstream-energy-data-monitoring', 
+        'ai-learning-insight', 
+        'reclaimyt-smart-conveyor-ai', 
+        'twogether-ondevice-object-detection', 
+        'distributed-voice-cloning-ray', 
+        'slogmate-national-police-agentic'
+      ])
+
+      nadyaProjectsState.value = pRes.data.filter(p => !raqwanProjectIds.has(p.id))
+      raqwanProjectsState.value = pRes.data.filter(p => raqwanProjectIds.has(p.id))
     }
+
     if (sRes.data && sRes.data.length > 0) {
-      nadyaSkillsState.value = sRes.data
+      const nadyaCategories = new Set(['Product', 'UI/UX', 'Design Tool', 'UX Research'])
+      nadyaSkillsState.value = sRes.data.filter(s => nadyaCategories.has(s.category))
+      raqwanSkillsState.value = sRes.data.filter(s => !nadyaCategories.has(s.category))
     }
+
     if (tRes.data && tRes.data.length > 0) {
       nadyaTestimonialsState.value = tRes.data
     }
+
+    if (eduRes.data && eduRes.data.length > 0) {
+      const nadyaEdu = eduRes.data.filter(e => (e.degree && e.degree.includes('3.97')) || e.school.includes('Gunadarma'))
+      const raqwanEdu = eduRes.data.filter(e => e.degree && e.degree.includes('3.78'))
+      if (nadyaEdu.length) nadyaEducationsState.value = nadyaEdu
+      if (raqwanEdu.length) raqwanEducationsState.value = raqwanEdu
+    }
+
     if (profRes.data) {
       nadyaInfoState.value = { ...nadyaInfoState.value, ...profRes.data }
     }
 
     isSupabaseLoaded.value = true
+    console.log('⚡ [Supabase] Data successfully synchronized from Supabase cloud database!')
   } catch (err) {
     console.warn('[Supabase Store] Error loading Supabase data:', err)
   } finally {
@@ -223,7 +250,7 @@ const loadFromSupabase = async (forceRefresh = false) => {
   }
 }
 
-// Load Supabase for Nadya on startup
+// Load Supabase on startup
 loadFromSupabase()
 
 // -------------------------------------------------------------

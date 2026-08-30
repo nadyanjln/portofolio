@@ -157,7 +157,33 @@ export async function fetchProfileFromSupabase() {
 }
 
 // -------------------------------------------------------------
-// 5. SEND CONTACT MESSAGE
+// 5. FETCH EDUCATIONS
+// -------------------------------------------------------------
+export async function fetchEducationsFromSupabase() {
+  if (!isSupabaseConfigured() || !supabase) {
+    return { data: defaultEducations, error: null }
+  }
+
+  try {
+    const { data, error } = await supabase
+      .from('educations')
+      .select('*')
+      .order('id', { ascending: true })
+
+    if (error) throw error
+    if (data && data.length > 0) {
+      return { data, error: null }
+    }
+
+    return { data: defaultEducations, error: null }
+  } catch (err) {
+    console.warn('[Supabase] Gagal mengambil educations:', err.message)
+    return { data: defaultEducations, error: err }
+  }
+}
+
+// -------------------------------------------------------------
+// 6. SEND CONTACT MESSAGE
 // -------------------------------------------------------------
 export async function sendContactMessage(payload) {
   if (!isSupabaseConfigured() || !supabase) {
