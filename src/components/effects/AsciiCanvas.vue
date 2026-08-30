@@ -1,8 +1,10 @@
 <script setup>
 import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { usePortfolioStore } from '@/composables/usePortfolioStore'
+import { useTheme } from '@/composables/useTheme'
 
 const { currentProfile } = usePortfolioStore()
+const { isDark } = useTheme()
 
 const canvasRef = ref(null)
 let animationFrameId = null
@@ -10,7 +12,20 @@ let animationFrameId = null
 const chars = ['@', '#', '$', '%', '&', '*', '+', '=', '-', ':', '.', ' ']
 
 const getPalette = () => {
+  const dark = isDark.value
+
   if (currentProfile.value === 'raqwan') {
+    if (!dark) {
+      return [
+        'rgba(4, 120, 87, 0.20)',   // Soft Emerald
+        'rgba(6, 95, 70, 0.15)',
+        'rgba(5, 150, 105, 0.10)',
+        'rgba(16, 185, 129, 0.07)',
+        'rgba(4, 120, 87, 0.04)',
+        'rgba(6, 95, 70, 0.02)',
+        'rgba(4, 120, 87, 0.01)'
+      ]
+    }
     return [
       'rgba(4, 120, 87, 0.85)',   // Deep Emerald #047857
       'rgba(6, 95, 70, 0.75)',    // Forest Pine #065F46
@@ -19,6 +34,18 @@ const getPalette = () => {
       'rgba(4, 120, 87, 0.30)',
       'rgba(6, 95, 70, 0.20)',
       'rgba(4, 120, 87, 0.08)'
+    ]
+  }
+
+  if (!dark) {
+    return [
+      'rgba(158, 4, 2, 0.18)',     // Soft Crimson Primary
+      'rgba(194, 5, 3, 0.13)',
+      'rgba(159, 194, 234, 0.22)', // Soft Sky
+      'rgba(159, 194, 234, 0.14)',
+      'rgba(158, 4, 2, 0.06)',
+      'rgba(159, 194, 234, 0.03)',
+      'rgba(158, 4, 2, 0.01)'
     ]
   }
 

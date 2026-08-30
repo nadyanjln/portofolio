@@ -514,18 +514,18 @@ onMounted(() => {
   <div class="space-y-6 select-none font-sans">
     
     <!-- Top Interactive Controls Bar (Clean Single-Row Flex Layout) -->
-    <div class="p-3.5 sm:p-4 rounded-2xl sm:rounded-3xl bg-[#0B0C0E] border border-white/10 flex flex-col md:flex-row md:items-center justify-between gap-3 sm:gap-4 shadow-sm">
+    <div class="p-3.5 sm:p-4 rounded-2xl sm:rounded-3xl bg-[#F8FAFC] dark:bg-[#0B0C0E] border border-[#E2E8F0] dark:border-white/10 flex flex-col md:flex-row md:items-center justify-between gap-3 sm:gap-4 shadow-xs transition-colors">
       
       <!-- Left: Pattern Switcher Buttons without Emojis -->
       <div class="flex flex-wrap items-center gap-2 sm:gap-3">
-        <span class="text-xs font-mono-tag font-bold uppercase text-zinc-400">Input Pattern:</span>
-        <div class="flex flex-wrap items-center gap-1 p-1 rounded-xl bg-white/5 border border-white/10">
+        <span class="text-xs font-mono-tag font-bold uppercase text-[#475569] dark:text-zinc-400">Input Pattern:</span>
+        <div class="flex flex-wrap items-center gap-1 p-1 rounded-xl bg-white dark:bg-white/5 border border-[#E2E8F0] dark:border-white/10">
           <button
             v-for="(p, key) in presets"
             :key="key"
             @click="selectedInputPattern = key"
             class="px-3 py-1.5 rounded-lg text-xs font-mono-tag font-bold transition-all cursor-pointer"
-            :class="selectedInputPattern === key ? 'bg-[#047857] text-white shadow-xs' : 'text-zinc-400 hover:text-white'"
+            :class="selectedInputPattern === key ? 'bg-[#047857] text-white shadow-xs' : 'text-[#475569] dark:text-zinc-400 hover:text-[#0F172A] dark:hover:text-white'"
           >
             {{ p.name }}
           </button>
@@ -544,18 +544,18 @@ onMounted(() => {
 
         <button
           @click="isPlaying = !isPlaying"
-          class="p-2 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-white transition-all cursor-pointer"
+          class="p-2 rounded-xl bg-white dark:bg-white/5 hover:bg-slate-100 dark:hover:bg-white/10 border border-[#E2E8F0] dark:border-white/10 text-[#475569] dark:text-white transition-all cursor-pointer"
           :title="isPlaying ? 'Pause Continuous Signal' : 'Play Continuous Signal'"
         >
-          <Pause v-if="isPlaying" class="w-4 h-4 text-emerald-400" />
-          <Play v-else class="w-4 h-4 text-zinc-300" />
+          <Pause v-if="isPlaying" class="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
+          <Play v-else class="w-4 h-4 text-[#475569] dark:text-zinc-300" />
         </button>
       </div>
 
     </div>
 
     <!-- Main CNN Neural Canvas Viewport -->
-    <div class="relative w-full rounded-3xl bg-[#07080A] border border-white/10 overflow-hidden shadow-2xl p-2 sm:p-4">
+    <div class="relative w-full rounded-3xl bg-[#07080A] border border-slate-800 dark:border-white/10 overflow-hidden shadow-2xl p-2 sm:p-4">
       
       <!-- Top HUD Telemetry Overlay -->
       <div class="flex flex-wrap items-center justify-between gap-2 p-3 bg-black/60 border-b border-white/10 rounded-2xl mb-2">
@@ -609,19 +609,19 @@ onMounted(() => {
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
       
       <!-- Left: Hyperparameters & Activation Settings -->
-      <div class="lg:col-span-6 p-6 rounded-3xl bg-[#0B0C0E] border border-white/10 space-y-5 flex flex-col justify-between">
+      <div class="lg:col-span-6 p-6 rounded-3xl bg-[#F8FAFC] dark:bg-[#0B0C0E] border border-[#E2E8F0] dark:border-white/10 space-y-5 flex flex-col justify-between shadow-xs transition-colors">
         <div class="space-y-4">
-          <div class="flex items-center justify-between pb-3 border-b border-white/10">
+          <div class="flex items-center justify-between pb-3 border-b border-[#E2E8F0] dark:border-white/10">
             <div class="flex items-center gap-2">
-              <Sliders class="w-4 h-4 text-emerald-400" />
-              <h4 class="text-xs font-mono-tag font-bold uppercase text-white">Neural Layer Parameters</h4>
+              <Sliders class="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
+              <h4 class="text-xs font-mono-tag font-bold uppercase text-[#0F172A] dark:text-white">Neural Layer Parameters</h4>
             </div>
-            <span class="text-[11px] font-mono-tag text-emerald-400 font-bold">Real-time Reactive</span>
+            <span class="text-[11px] font-mono-tag text-emerald-600 dark:text-emerald-400 font-bold">Real-time Reactive</span>
           </div>
 
           <!-- Activation Function Picker -->
           <div class="space-y-2">
-            <label class="text-xs font-mono-tag uppercase text-zinc-400 font-bold block">
+            <label class="text-xs font-mono-tag uppercase text-[#475569] dark:text-zinc-400 font-bold block">
               Non-Linear Activation Function (Changes Neuron Glow & Zero Clamping)
             </label>
             <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
@@ -635,18 +635,18 @@ onMounted(() => {
                 :key="act.id"
                 @click="selectedActivation = act.id"
                 class="p-2.5 rounded-xl border text-center transition-all cursor-pointer"
-                :class="selectedActivation === act.id ? 'bg-[#047857]/30 border-[#047857] text-white shadow-md shadow-[#047857]/20 scale-102' : 'bg-white/5 border-white/5 text-zinc-400 hover:text-white'"
+                :class="selectedActivation === act.id ? 'bg-[#047857]/15 dark:bg-[#047857]/30 border-[#047857] text-[#047857] dark:text-white shadow-md shadow-[#047857]/20 scale-102 font-bold' : 'bg-white dark:bg-white/5 border-[#E2E8F0] dark:border-white/5 text-[#475569] dark:text-zinc-400 hover:text-[#0F172A] dark:hover:text-white'"
               >
                 <div class="text-xs font-mono-tag font-bold">{{ act.name }}</div>
-                <div class="text-[10px] text-zinc-400 font-mono-tag">{{ act.formula }}</div>
-                <div class="text-[9px] text-emerald-400/80 font-mono-tag pt-0.5">{{ act.desc }}</div>
+                <div class="text-[10px] text-[#64748B] dark:text-zinc-400 font-mono-tag">{{ act.formula }}</div>
+                <div class="text-[9px] text-emerald-600 dark:text-emerald-400/80 font-mono-tag pt-0.5">{{ act.desc }}</div>
               </button>
             </div>
           </div>
 
           <!-- Convolutional Kernel Feature Filter -->
           <div class="space-y-2">
-            <label class="text-xs font-mono-tag uppercase text-zinc-400 font-bold block">
+            <label class="text-xs font-mono-tag uppercase text-[#475569] dark:text-zinc-400 font-bold block">
               Feature Extraction Kernel (Changes Conv2D Filter & Scan Lines)
             </label>
             <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
@@ -660,30 +660,30 @@ onMounted(() => {
                 :key="k.id"
                 @click="selectedKernel = k.id"
                 class="p-2.5 rounded-xl border text-center transition-all cursor-pointer"
-                :class="selectedKernel === k.id ? 'bg-[#047857]/30 border-[#047857] text-white shadow-md shadow-[#047857]/20 scale-102' : 'bg-white/5 border-white/5 text-zinc-400 hover:text-white'"
+                :class="selectedKernel === k.id ? 'bg-[#047857]/15 dark:bg-[#047857]/30 border-[#047857] text-[#047857] dark:text-white shadow-md shadow-[#047857]/20 scale-102 font-bold' : 'bg-white dark:bg-white/5 border-[#E2E8F0] dark:border-white/5 text-[#475569] dark:text-zinc-400 hover:text-[#0F172A] dark:hover:text-white'"
               >
                 <div class="text-xs font-mono-tag font-bold">{{ k.name }}</div>
-                <div class="text-[10px] text-emerald-400/80 font-mono-tag">{{ k.type }}</div>
+                <div class="text-[10px] text-emerald-600 dark:text-emerald-400/80 font-mono-tag">{{ k.type }}</div>
               </button>
             </div>
           </div>
         </div>
 
-        <div class="p-3.5 rounded-2xl bg-white/5 border border-white/5 flex flex-wrap items-center justify-between gap-2 text-xs font-mono-tag text-zinc-300">
-          <span>Active Kernel: <strong>{{ currentKernel.name }}</strong> ({{ currentKernel.type }})</span>
-          <span>Activation: <strong>{{ selectedActivation.toUpperCase() }}</strong></span>
+        <div class="p-3.5 rounded-2xl bg-white dark:bg-white/5 border border-[#E2E8F0] dark:border-white/5 flex flex-wrap items-center justify-between gap-2 text-xs font-mono-tag text-[#334155] dark:text-zinc-300">
+          <span>Active Kernel: <strong class="text-[#0F172A] dark:text-white">{{ currentKernel.name }}</strong> ({{ currentKernel.type }})</span>
+          <span>Activation: <strong class="text-emerald-600 dark:text-emerald-400">{{ selectedActivation.toUpperCase() }}</strong></span>
         </div>
       </div>
 
       <!-- Right: Real-time Softmax Probability Distribution -->
-      <div class="lg:col-span-6 p-6 rounded-3xl bg-[#0B0C0E] border border-white/10 space-y-4 flex flex-col justify-between">
+      <div class="lg:col-span-6 p-6 rounded-3xl bg-[#F8FAFC] dark:bg-[#0B0C0E] border border-[#E2E8F0] dark:border-white/10 space-y-4 flex flex-col justify-between shadow-xs transition-colors">
         <div>
-          <div class="flex items-center justify-between pb-3 border-b border-white/10">
+          <div class="flex items-center justify-between pb-3 border-b border-[#E2E8F0] dark:border-white/10">
             <div class="flex items-center gap-2">
-              <Activity class="w-4 h-4 text-emerald-400" />
-              <h4 class="text-xs font-mono-tag font-bold uppercase text-white">Softmax Classification Output</h4>
+              <Activity class="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
+              <h4 class="text-xs font-mono-tag font-bold uppercase text-[#0F172A] dark:text-white">Softmax Classification Output</h4>
             </div>
-            <span class="px-2 py-0.5 rounded-md bg-[#047857]/20 text-emerald-300 text-[10px] font-mono-tag font-bold">
+            <span class="px-2 py-0.5 rounded-md bg-emerald-500/15 text-emerald-700 dark:text-emerald-300 text-[10px] font-mono-tag font-bold">
               Σ p(y) = 1.0
             </span>
           </div>
@@ -695,12 +695,12 @@ onMounted(() => {
               class="space-y-1.5"
             >
               <div class="flex items-center justify-between text-xs font-mono-tag">
-                <span :class="cIdx === 0 ? 'text-white font-bold' : 'text-zinc-400'">{{ cls.label }}</span>
-                <span class="font-bold font-mono-tag" :class="cIdx === 0 ? 'text-emerald-400' : 'text-zinc-400'">{{ cls.conf }}%</span>
+                <span :class="cIdx === 0 ? 'text-[#0F172A] dark:text-white font-bold' : 'text-[#64748B] dark:text-zinc-400'">{{ cls.label }}</span>
+                <span class="font-bold font-mono-tag" :class="cIdx === 0 ? 'text-emerald-600 dark:text-emerald-400' : 'text-[#64748B] dark:text-zinc-400'">{{ cls.conf }}%</span>
               </div>
 
               <!-- Animated Confidence Bar -->
-              <div class="w-full h-2 rounded-full bg-white/5 overflow-hidden">
+              <div class="w-full h-2 rounded-full bg-slate-200 dark:bg-white/5 overflow-hidden">
                 <div 
                   class="h-full rounded-full transition-all duration-700 ease-out"
                   :style="{
@@ -713,10 +713,10 @@ onMounted(() => {
           </div>
         </div>
 
-        <div class="p-4 rounded-2xl bg-emerald-950/30 border border-[#047857]/40 flex items-center gap-3">
-          <CheckCircle2 class="w-5 h-5 text-emerald-400 shrink-0" />
-          <div class="text-xs font-mono-tag text-zinc-300">
-            <strong class="text-emerald-300">High-Confidence Inference:</strong> Model berhasil mengenali pola <span class="text-white font-bold">{{ currentPreset.name }}</span> dengan probabilitas <span class="text-emerald-400 font-bold">{{ currentPreset.classes[0].conf }}%</span>.
+        <div class="p-4 rounded-2xl bg-emerald-50 dark:bg-emerald-950/30 border border-emerald-200 dark:border-[#047857]/40 flex items-center gap-3">
+          <CheckCircle2 class="w-5 h-5 text-emerald-600 dark:text-emerald-400 shrink-0" />
+          <div class="text-xs font-mono-tag text-[#1E293B] dark:text-zinc-300">
+            <strong class="text-emerald-700 dark:text-emerald-300">High-Confidence Inference:</strong> Model mengenali pola <span class="font-bold text-[#0F172A] dark:text-white">{{ currentPreset.name }}</span> dengan probabilitas <span class="text-emerald-600 dark:text-emerald-400 font-bold">{{ currentPreset.classes[0].conf }}%</span>.
           </div>
         </div>
       </div>

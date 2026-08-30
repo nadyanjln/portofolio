@@ -214,7 +214,7 @@ onMounted(() => observeAll(sectionRef.value))
             :class="[
               activeRaqwanTab === 'cnn'
                 ? 'bg-[#047857] text-white shadow-md shadow-[#047857]/30'
-                : 'text-[#5C4848] dark:text-zinc-400 hover:text-white'
+                : 'text-[#5C4848] dark:text-zinc-400 hover:text-[#1C1313] dark:hover:text-white'
             ]"
           >
             <Activity class="w-4 h-4" />
@@ -227,7 +227,7 @@ onMounted(() => observeAll(sectionRef.value))
             :class="[
               activeRaqwanTab === 'quantization'
                 ? 'bg-[#047857] text-white shadow-md shadow-[#047857]/30'
-                : 'text-[#5C4848] dark:text-zinc-400 hover:text-white'
+                : 'text-[#5C4848] dark:text-zinc-400 hover:text-[#1C1313] dark:hover:text-white'
             ]"
           >
             <Cpu class="w-4 h-4" />
@@ -240,7 +240,7 @@ onMounted(() => observeAll(sectionRef.value))
             :class="[
               activeRaqwanTab === 'agentic'
                 ? 'bg-[#047857] text-white shadow-md shadow-[#047857]/30'
-                : 'text-[#5C4848] dark:text-zinc-400 hover:text-white'
+                : 'text-[#5C4848] dark:text-zinc-400 hover:text-[#1C1313] dark:hover:text-white'
             ]"
           >
             <Bot class="w-4 h-4" />
@@ -253,7 +253,7 @@ onMounted(() => observeAll(sectionRef.value))
             :class="[
               activeRaqwanTab === 'gan'
                 ? 'bg-[#047857] text-white shadow-md shadow-[#047857]/30'
-                : 'text-[#5C4848] dark:text-zinc-400 hover:text-white'
+                : 'text-[#5C4848] dark:text-zinc-400 hover:text-[#1C1313] dark:hover:text-white'
             ]"
           >
             <Network class="w-4 h-4" />
@@ -276,14 +276,14 @@ onMounted(() => observeAll(sectionRef.value))
 
             <!-- Model Selection -->
             <div class="space-y-2">
-              <label class="text-xs font-mono-tag uppercase text-zinc-400 font-bold block">Model Architecture</label>
+              <label class="text-xs font-mono-tag uppercase text-[#5C4848] dark:text-zinc-400 font-bold block">Model Architecture</label>
               <div class="grid grid-cols-3 gap-2">
                 <button 
                   v-for="m in [{ id: 'yolov8', name: 'YOLOv8 Edge' }, { id: 'indobert', name: 'IndoBERT NLP' }, { id: 'gan', name: 'BioGen GAN' }]"
                   :key="m.id"
                   @click="selectedModel = m.id"
                   class="p-2.5 rounded-xl text-xs font-mono-tag font-bold border transition-all cursor-pointer text-center"
-                  :class="selectedModel === m.id ? 'bg-[#047857]/20 border-[#047857] text-emerald-300' : 'bg-white/5 border-white/10 text-zinc-400 hover:text-white'"
+                  :class="selectedModel === m.id ? 'bg-[#047857]/15 dark:bg-[#047857]/20 border-[#047857] text-[#047857] dark:text-emerald-300 font-bold' : 'bg-white dark:bg-white/5 border-[#EEDCDC] dark:border-white/10 text-[#5C4848] dark:text-zinc-400 hover:text-[#1C1313] dark:hover:text-white'"
                 >
                   {{ m.name }}
                 </button>
@@ -292,14 +292,14 @@ onMounted(() => observeAll(sectionRef.value))
 
             <!-- Precision Format Selection -->
             <div class="space-y-2">
-              <label class="text-xs font-mono-tag uppercase text-zinc-400 font-bold block">Precision & Engine</label>
+              <label class="text-xs font-mono-tag uppercase text-[#5C4848] dark:text-zinc-400 font-bold block">Precision & Engine</label>
               <div class="grid grid-cols-3 gap-2">
                 <button 
                   v-for="p in [{ id: 'fp32', name: 'FP32 Baseline' }, { id: 'fp16', name: 'FP16 Half' }, { id: 'int8', name: 'INT8 TensorRT' }]"
                   :key="p.id"
                   @click="selectedPrecision = p.id"
                   class="p-2.5 rounded-xl text-xs font-mono-tag font-bold border transition-all cursor-pointer text-center"
-                  :class="selectedPrecision === p.id ? 'bg-[#047857] border-[#047857] text-white' : 'bg-white/5 border-white/10 text-zinc-400 hover:text-white'"
+                  :class="selectedPrecision === p.id ? 'bg-[#047857] border-[#047857] text-white shadow-xs' : 'bg-white dark:bg-white/5 border-[#EEDCDC] dark:border-white/10 text-[#5C4848] dark:text-zinc-400 hover:text-[#1C1313] dark:hover:text-white'"
                 >
                   {{ p.name }}
                 </button>
@@ -309,8 +309,8 @@ onMounted(() => observeAll(sectionRef.value))
             <!-- Batch Size Slider -->
             <div class="space-y-2">
               <div class="flex items-center justify-between text-xs font-mono-tag">
-                <span class="text-zinc-400 font-bold">Batch Size:</span>
-                <span class="text-emerald-400 font-bold">{{ batchSize }} stream(s)</span>
+                <span class="text-[#5C4848] dark:text-zinc-400 font-bold">Batch Size:</span>
+                <span class="text-emerald-600 dark:text-emerald-400 font-bold">{{ batchSize }} stream(s)</span>
               </div>
               <input 
                 type="range" 
@@ -323,41 +323,41 @@ onMounted(() => observeAll(sectionRef.value))
           </div>
 
           <!-- Right Live Telemetry -->
-          <div class="lg:col-span-6 p-6 rounded-3xl bg-[#0B0C0E] border border-white/10 space-y-6">
-            <div class="flex items-center justify-between pb-3 border-b border-white/10">
+          <div class="lg:col-span-6 p-6 rounded-3xl bg-[#F8FAFC] dark:bg-[#0B0C0E] border border-[#E2E8F0] dark:border-white/10 space-y-6 shadow-xs transition-colors">
+            <div class="flex items-center justify-between pb-3 border-b border-[#E2E8F0] dark:border-white/10">
               <div class="flex items-center gap-2">
-                <Activity class="w-4 h-4 text-emerald-400" />
-                <span class="text-xs font-mono-tag font-bold uppercase text-white">Live Edge Telemetry</span>
+                <Activity class="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
+                <span class="text-xs font-mono-tag font-bold uppercase text-[#0F172A] dark:text-white">Live Edge Telemetry</span>
               </div>
-              <span class="px-2.5 py-0.5 rounded-md bg-[#047857]/20 border border-[#047857]/40 text-emerald-300 text-[10px] font-mono-tag font-bold">
+              <span class="px-2.5 py-0.5 rounded-md bg-emerald-500/15 border border-emerald-500/30 text-emerald-700 dark:text-emerald-300 text-[10px] font-mono-tag font-bold">
                 NVIDIA Jetson / CUDA Active
               </span>
             </div>
 
             <!-- Metrics Grid -->
             <div class="grid grid-cols-2 gap-4">
-              <div class="p-4 rounded-2xl bg-white/5 border border-white/5 space-y-1">
-                <span class="text-[10px] font-mono-tag uppercase text-zinc-400 font-bold block">Inference Latency</span>
-                <p class="text-2xl sm:text-3xl font-black text-emerald-400 font-mono-tag">{{ aiMetrics.latency }} ms</p>
-                <span class="text-[10px] text-zinc-400 block">per frame prediction</span>
+              <div class="p-4 rounded-2xl bg-white dark:bg-white/5 border border-[#E2E8F0] dark:border-white/5 space-y-1 shadow-xs">
+                <span class="text-[10px] font-mono-tag uppercase text-[#64748B] dark:text-zinc-400 font-bold block">Inference Latency</span>
+                <p class="text-2xl sm:text-3xl font-black text-emerald-600 dark:text-emerald-400 font-mono-tag">{{ aiMetrics.latency }} ms</p>
+                <span class="text-[10px] text-[#64748B] dark:text-zinc-400 block">per frame prediction</span>
               </div>
 
-              <div class="p-4 rounded-2xl bg-white/5 border border-white/5 space-y-1">
-                <span class="text-[10px] font-mono-tag uppercase text-zinc-400 font-bold block">Throughput Rate</span>
-                <p class="text-2xl sm:text-3xl font-black text-cyan-400 font-mono-tag">{{ aiMetrics.fps }} FPS</p>
-                <span class="text-[10px] text-zinc-400 block">real-time streaming</span>
+              <div class="p-4 rounded-2xl bg-white dark:bg-white/5 border border-[#E2E8F0] dark:border-white/5 space-y-1 shadow-xs">
+                <span class="text-[10px] font-mono-tag uppercase text-[#64748B] dark:text-zinc-400 font-bold block">Throughput Rate</span>
+                <p class="text-2xl sm:text-3xl font-black text-cyan-600 dark:text-cyan-400 font-mono-tag">{{ aiMetrics.fps }} FPS</p>
+                <span class="text-[10px] text-[#64748B] dark:text-zinc-400 block">real-time streaming</span>
               </div>
 
-              <div class="p-4 rounded-2xl bg-white/5 border border-white/5 space-y-1">
-                <span class="text-[10px] font-mono-tag uppercase text-zinc-400 font-bold block">VRAM Footprint</span>
-                <p class="text-xl sm:text-2xl font-black text-white font-mono-tag">{{ aiMetrics.vram }} MB</p>
-                <span class="text-[10px] text-zinc-400 block">GPU memory usage</span>
+              <div class="p-4 rounded-2xl bg-white dark:bg-white/5 border border-[#E2E8F0] dark:border-white/5 space-y-1 shadow-xs">
+                <span class="text-[10px] font-mono-tag uppercase text-[#64748B] dark:text-zinc-400 font-bold block">VRAM Footprint</span>
+                <p class="text-xl sm:text-2xl font-black text-[#0F172A] dark:text-white font-mono-tag">{{ aiMetrics.vram }} MB</p>
+                <span class="text-[10px] text-[#64748B] dark:text-zinc-400 block">GPU memory usage</span>
               </div>
 
-              <div class="p-4 rounded-2xl bg-white/5 border border-white/5 space-y-1">
-                <span class="text-[10px] font-mono-tag uppercase text-zinc-400 font-bold block">Compression Boost</span>
-                <p class="text-xl sm:text-2xl font-black text-amber-400 font-mono-tag">{{ aiMetrics.compression }}</p>
-                <span class="text-[10px] text-zinc-400 block">vs FP32 raw weights</span>
+              <div class="p-4 rounded-2xl bg-white dark:bg-white/5 border border-[#E2E8F0] dark:border-white/5 space-y-1 shadow-xs">
+                <span class="text-[10px] font-mono-tag uppercase text-[#64748B] dark:text-zinc-400 font-bold block">Compression Boost</span>
+                <p class="text-xl sm:text-2xl font-black text-amber-600 dark:text-amber-400 font-mono-tag">{{ aiMetrics.compression }}</p>
+                <span class="text-[10px] text-[#64748B] dark:text-zinc-400 block">vs FP32 raw weights</span>
               </div>
             </div>
           </div>
@@ -373,11 +373,11 @@ onMounted(() => observeAll(sectionRef.value))
               </div>
 
               <div class="space-y-2">
-                <label class="text-xs font-mono-tag uppercase text-zinc-400 font-bold block">User Request Prompt</label>
+                <label class="text-xs font-mono-tag uppercase text-[#5C4848] dark:text-zinc-400 font-bold block">User Request Prompt</label>
                 <input 
                   type="text" 
                   v-model="agentPrompt"
-                  class="w-full px-4 py-3 rounded-2xl bg-[#0B0C0E] border border-white/10 text-white text-xs font-mono-tag focus:border-[#047857] focus:outline-none"
+                  class="w-full px-4 py-3 rounded-2xl bg-white dark:bg-[#0B0C0E] border border-[#EEDCDC] dark:border-white/10 text-[#1C1313] dark:text-white text-xs font-mono-tag focus:border-[#047857] focus:outline-none shadow-xs"
                 />
               </div>
 
@@ -392,9 +392,9 @@ onMounted(() => observeAll(sectionRef.value))
             </div>
 
             <!-- Pipeline Visual DAG -->
-            <div class="lg:col-span-6 p-6 rounded-3xl bg-[#0B0C0E] border border-white/10 space-y-4 font-mono-tag">
-              <div class="flex items-center gap-2 pb-2 border-b border-white/10 text-xs font-bold text-white uppercase">
-                <Terminal class="w-4 h-4 text-emerald-400" />
+            <div class="lg:col-span-6 p-6 rounded-3xl bg-[#F8FAFC] dark:bg-[#0B0C0E] border border-[#E2E8F0] dark:border-white/10 space-y-4 font-mono-tag shadow-xs transition-colors">
+              <div class="flex items-center gap-2 pb-2 border-b border-[#E2E8F0] dark:border-white/10 text-xs font-bold text-[#0F172A] dark:text-white uppercase">
+                <Terminal class="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
                 <span>DAG State Machine Execution</span>
               </div>
 
@@ -405,19 +405,19 @@ onMounted(() => observeAll(sectionRef.value))
                   class="p-2.5 rounded-xl border flex items-center justify-between transition-all"
                   :class="[
                     agentStep > sIdx 
-                      ? 'bg-[#047857]/20 border-[#047857]/50 text-emerald-300'
+                      ? 'bg-[#047857]/15 dark:bg-[#047857]/20 border-[#047857]/40 text-[#047857] dark:text-emerald-300 font-bold'
                       : agentStep === sIdx + 1 
-                        ? 'bg-amber-500/15 border-amber-500/40 text-amber-300 animate-pulse'
-                        : 'bg-white/5 border-white/5 text-zinc-400'
+                        ? 'bg-amber-500/15 border-amber-500/40 text-amber-700 dark:text-amber-300 animate-pulse font-bold'
+                        : 'bg-white dark:bg-white/5 border-[#E2E8F0] dark:border-white/5 text-[#64748B] dark:text-zinc-400'
                   ]"
                 >
                   <span>{{ sIdx + 1 }}. {{ stepText }}</span>
-                  <CheckCircle2 v-if="agentStep > sIdx" class="w-3.5 h-3.5 text-emerald-400" />
+                  <CheckCircle2 v-if="agentStep > sIdx" class="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
                 </div>
               </div>
 
               <!-- Terminal Log output -->
-              <div v-if="agentLogs.length" class="p-3 rounded-xl bg-black/80 border border-white/5 space-y-1 text-[11px] text-zinc-300 max-h-32 overflow-y-auto">
+              <div v-if="agentLogs.length" class="p-3 rounded-xl bg-slate-900 border border-slate-800 space-y-1 text-[11px] text-zinc-300 max-h-32 overflow-y-auto">
                 <p v-for="(log, lIdx) in agentLogs" :key="lIdx" class="text-emerald-400">> {{ log }}</p>
               </div>
             </div>
@@ -435,34 +435,34 @@ onMounted(() => observeAll(sectionRef.value))
             <div class="space-y-4">
               <div class="space-y-2">
                 <div class="flex items-center justify-between text-xs font-mono-tag">
-                  <span class="text-zinc-400 font-bold">Latent Seed (Z-Space):</span>
-                  <span class="text-purple-400 font-bold">#{{ ganNoise }}</span>
+                  <span class="text-[#5C4848] dark:text-zinc-400 font-bold">Latent Seed (Z-Space):</span>
+                  <span class="text-purple-600 dark:text-purple-400 font-bold">#{{ ganNoise }}</span>
                 </div>
                 <input type="range" min="1" max="100" v-model.number="ganNoise" class="w-full accent-purple-500 cursor-pointer" />
               </div>
 
               <div class="space-y-2">
                 <div class="flex items-center justify-between text-xs font-mono-tag">
-                  <span class="text-zinc-400 font-bold">WGAN-GP Penalty Fidelity:</span>
-                  <span class="text-emerald-400 font-bold">{{ ganFidelity }}%</span>
+                  <span class="text-[#5C4848] dark:text-zinc-400 font-bold">WGAN-GP Penalty Fidelity:</span>
+                  <span class="text-emerald-600 dark:text-emerald-400 font-bold">{{ ganFidelity }}%</span>
                 </div>
                 <input type="range" min="40" max="100" v-model.number="ganFidelity" class="w-full accent-[#047857] cursor-pointer" />
               </div>
             </div>
           </div>
 
-          <div class="lg:col-span-6 p-6 rounded-3xl bg-[#0B0C0E] border border-white/10 space-y-4">
-            <span class="text-xs font-mono-tag font-bold uppercase text-white block pb-2 border-b border-white/10">Synthesis Quality Metrics</span>
+          <div class="lg:col-span-6 p-6 rounded-3xl bg-[#F8FAFC] dark:bg-[#0B0C0E] border border-[#E2E8F0] dark:border-white/10 space-y-4 shadow-xs transition-colors">
+            <span class="text-xs font-mono-tag font-bold uppercase text-[#0F172A] dark:text-white block pb-2 border-b border-[#E2E8F0] dark:border-white/10">Synthesis Quality Metrics</span>
             <div class="grid grid-cols-2 gap-4">
-              <div class="p-4 rounded-2xl bg-white/5 border border-white/5 space-y-1">
-                <span class="text-[10px] font-mono-tag uppercase text-zinc-400 font-bold block">Fréchet Inception Distance (FID)</span>
-                <p class="text-2xl font-black text-emerald-400 font-mono-tag">{{ ganMetrics.fid }}</p>
-                <span class="text-[10px] text-zinc-400 block">Lower score = higher realism</span>
+              <div class="p-4 rounded-2xl bg-white dark:bg-white/5 border border-[#E2E8F0] dark:border-white/5 space-y-1 shadow-xs">
+                <span class="text-[10px] font-mono-tag uppercase text-[#64748B] dark:text-zinc-400 font-bold block">Fréchet Inception Distance (FID)</span>
+                <p class="text-2xl font-black text-emerald-600 dark:text-emerald-400 font-mono-tag">{{ ganMetrics.fid }}</p>
+                <span class="text-[10px] text-[#64748B] dark:text-zinc-400 block">Lower score = higher realism</span>
               </div>
-              <div class="p-4 rounded-2xl bg-white/5 border border-white/5 space-y-1">
-                <span class="text-[10px] font-mono-tag uppercase text-zinc-400 font-bold block">Mode Collapse Risk</span>
-                <p class="text-lg font-black text-purple-400 font-mono-tag">{{ ganMetrics.modeCollapseRisk }}</p>
-                <span class="text-[10px] text-zinc-400 block">Wasserstein convergence</span>
+              <div class="p-4 rounded-2xl bg-white dark:bg-white/5 border border-[#E2E8F0] dark:border-white/5 space-y-1 shadow-xs">
+                <span class="text-[10px] font-mono-tag uppercase text-[#64748B] dark:text-zinc-400 font-bold block">Mode Collapse Risk</span>
+                <p class="text-lg font-black text-purple-600 dark:text-purple-400 font-mono-tag">{{ ganMetrics.modeCollapseRisk }}</p>
+                <span class="text-[10px] text-[#64748B] dark:text-zinc-400 block">Wasserstein convergence</span>
               </div>
             </div>
           </div>
