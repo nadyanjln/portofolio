@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted, watch, nextTick } from 'vue'
 import { RouterLink } from 'vue-router'
 import { Sparkles, Users, Lightbulb, TrendingUp, Cpu, Brain, Network, ArrowRight } from 'lucide-vue-next'
 import { usePortfolioStore } from '@/composables/usePortfolioStore'
@@ -48,9 +48,23 @@ const highlights = computed(() => {
   ]
 })
 
+const maxSkillsToShow = computed(() => (currentProfile.value === 'raqwan' ? 12 : 12))
+const displayedSkills = computed(() => {
+  return (skills.value || []).slice(0, maxSkillsToShow.value)
+})
+const remainingSkillsCount = computed(() => {
+  return Math.max(0, (skills.value || []).length - maxSkillsToShow.value)
+})
+
 const sectionRef = ref(null)
 const { observeAll } = useScrollReveal()
 onMounted(() => observeAll(sectionRef.value))
+
+watch(currentProfile, () => {
+  nextTick(() => {
+    observeAll(sectionRef.value)
+  })
+})
 </script>
 
 <template>
@@ -64,13 +78,13 @@ onMounted(() => observeAll(sectionRef.value))
             <div class="space-y-2.5">
               <div 
                 class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-white dark:bg-[#15161B] border text-xs font-mono-tag font-bold uppercase"
-                :class="currentProfile === 'raqwan' ? 'text-emerald-400 border-[#047857]/40 bg-[#047857]/10' : 'text-[#9E0402] dark:text-[#ff4d4d] border-[#EEDCDC] dark:border-white/10'"
+                :class="currentProfile === 'raqwan' ? 'text-[#047857] dark:text-emerald-400 border-emerald-300 dark:border-[#047857]/40 bg-emerald-50 dark:bg-[#047857]/10' : 'text-[#9E0402] dark:text-[#ff4d4d] border-[#EEDCDC] dark:border-white/10'"
               >
                 <Sparkles class="w-3.5 h-3.5" />
                 <span>About Me</span>
               </div>
               <h2 class="text-3xl sm:text-4xl md:text-5xl font-extrabold text-[#1C1313] dark:text-[#F4F4F6] leading-tight" v-if="currentProfile === 'raqwan'">
-                Dari Fondasi Matematika Hingga Sistem AI yang <span class="text-emerald-400">Scalable</span>
+                Dari Fondasi Matematika Hingga Sistem AI yang <span :class="currentProfile === 'raqwan' ? 'text-[#047857] dark:text-emerald-400' : 'text-[#9E0402] dark:text-[#ff4d4d]'">Scalable</span>
               </h2>
               <h2 class="text-3xl sm:text-4xl md:text-5xl font-extrabold text-[#1C1313] dark:text-[#F4F4F6] leading-tight" v-else>
                 Dari Riset Pengguna Hingga Produk yang <span class="text-[#9E0402] dark:text-[#ff4d4d]">Berdampak</span>
@@ -88,18 +102,18 @@ onMounted(() => observeAll(sectionRef.value))
               v-for="item in highlights" 
               :key="item.title"
               class="p-5 rounded-2xl bg-white dark:bg-[#15161B] border border-[#EEDCDC] dark:border-white/10 space-y-2.5 hover:-translate-y-1.5 transition-all duration-300 group shadow-xs flex flex-col justify-between"
-              :class="currentProfile === 'raqwan' ? 'hover:border-[#047857]/60 hover:bg-[#0e1a16]' : 'hover:border-[#9E0402]/40 hover:bg-[#FDF6F6] dark:hover:bg-[#1C1E24]'"
+              :class="currentProfile === 'raqwan' ? 'hover:border-[#047857]/60 hover:bg-emerald-50/50 dark:hover:bg-[#0e1a16]' : 'hover:border-[#9E0402]/40 hover:bg-[#FDF6F6] dark:hover:bg-[#1C1E24]'"
             >
               <div class="space-y-2.5">
                 <div 
                   class="w-10 h-10 rounded-xl flex items-center justify-center group-hover:scale-110 transition-all duration-300"
-                  :class="currentProfile === 'raqwan' ? 'bg-[#047857]/20 text-emerald-300 group-hover:bg-[#047857] group-hover:text-white' : 'bg-[#9FC2EA]/30 dark:bg-[#9FC2EA]/15 text-[#1E3A60] dark:text-[#9FC2EA] group-hover:bg-[#9E0402] group-hover:text-white'"
+                  :class="currentProfile === 'raqwan' ? 'bg-emerald-100 dark:bg-[#047857]/20 text-[#047857] dark:text-emerald-300 group-hover:bg-[#047857] group-hover:text-white' : 'bg-[#9FC2EA]/30 dark:bg-[#9FC2EA]/15 text-[#1E3A60] dark:text-[#9FC2EA] group-hover:bg-[#9E0402] group-hover:text-white'"
                 >
                   <component :is="item.icon" class="w-5 h-5" />
                 </div>
                 <h3 
                   class="font-bold text-sm text-[#1C1313] dark:text-[#F4F4F6] transition-colors"
-                  :class="currentProfile === 'raqwan' ? 'group-hover:text-emerald-300' : 'group-hover:text-[#9E0402] dark:group-hover:text-[#ff4d4d]'"
+                  :class="currentProfile === 'raqwan' ? 'group-hover:text-[#047857] dark:group-hover:text-emerald-300' : 'group-hover:text-[#9E0402] dark:group-hover:text-[#ff4d4d]'"
                 >
                   {{ item.title }}
                 </h3>
@@ -110,36 +124,49 @@ onMounted(() => observeAll(sectionRef.value))
         </div>
 
         <!-- Right: Skills & Expertise List -->
-        <div data-reveal="fade-left" class="lg:col-span-5 flex flex-col">
-          <div class="h-full p-6 sm:p-8 rounded-3xl bg-white dark:bg-[#15161B] border border-[#EEDCDC] dark:border-white/10 flex flex-col justify-between space-y-6 shadow-sm">
+        <div data-reveal="fade-left" class="lg:col-span-5 flex flex-col h-full">
+          <div class="h-full p-6 sm:p-7 rounded-3xl bg-white dark:bg-[#15161B] border border-[#EEDCDC] dark:border-white/10 flex flex-col justify-between shadow-sm">
+            
             <div class="space-y-4">
+              <!-- Top Header -->
               <div class="flex items-center justify-between pb-3 border-b border-[#EEDCDC] dark:border-white/10">
                 <h3 class="font-bold text-lg text-[#1C1313] dark:text-[#F4F4F6]">Skills & Expertise</h3>
                 <span 
                   class="text-xs font-mono-tag font-bold"
-                  :class="currentProfile === 'raqwan' ? 'text-emerald-400' : 'text-[#9E0402] dark:text-[#ff4d4d]'"
+                  :class="currentProfile === 'raqwan' ? 'text-[#047857] dark:text-emerald-400' : 'text-[#9E0402] dark:text-[#ff4d4d]'"
                 >
                   ({{ skills.length }} Core Skills)
                 </span>
               </div>
               
-              <!-- Skills Badges Flex Wrap -->
-              <div class="flex flex-wrap gap-2 pt-1 max-h-[300px] overflow-y-auto pr-1">
+              <!-- Skills Badges Flex Wrap (No scrollbar, perfectly fitting) -->
+              <div class="flex flex-wrap content-start gap-2 pt-1">
                 <SkillBadge 
-                  v-for="skill in skills" 
+                  v-for="skill in displayedSkills" 
                   :key="skill.name" 
                   :skill="skill" 
                 />
+                
+                <!-- View More Pill -->
+                <RouterLink 
+                  v-if="remainingSkillsCount > 0"
+                  :to="'/' + currentProfile + '/about'"
+                  class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-[#FFF9F9] dark:bg-white/5 border border-dashed border-[#EEDCDC] dark:border-white/15 text-xs font-bold font-mono-tag transition-all duration-200 group hover:scale-[1.03] shadow-2xs"
+                  :class="currentProfile === 'raqwan' ? 'text-[#047857] dark:text-emerald-400 hover:border-[#047857]/60 hover:bg-emerald-50/60 dark:hover:bg-[#047857]/15' : 'text-[#9E0402] dark:text-[#ff4d4d] hover:border-[#9E0402]/50 hover:bg-rose-50/60 dark:hover:bg-[#9E0402]/15'"
+                >
+                  <span>+{{ remainingSkillsCount }} Skill Lainnya</span>
+                  <ArrowRight class="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
+                </RouterLink>
               </div>
             </div>
 
             <!-- Bottom CTA Link inside skills card -->
-            <div class="pt-4 border-t border-[#EEDCDC] dark:border-white/10 flex items-center justify-between">
+            <div class="pt-4 mt-4 border-t border-[#EEDCDC] dark:border-white/10 flex items-center justify-between">
               <span class="text-xs font-mono-tag text-[#5C4848] dark:text-zinc-400">Tertarik berkolaborasi?</span>
               <RouterLink 
                 :to="'/' + currentProfile + '/contact'"
                 class="inline-flex items-center gap-1.5 text-xs font-bold font-mono-tag uppercase tracking-wider transition-colors group"
-                :class="currentProfile === 'raqwan' ? 'text-emerald-400 hover:text-emerald-300' : 'text-[#9E0402] dark:text-[#ff4d4d] hover:text-[#B80604]'"
+                :class="currentProfile === 'raqwan' ? 'text-[#047857] dark:text-emerald-400 hover:text-[#065F46]' : 'text-[#9E0402] dark:text-[#ff4d4d] hover:text-[#B80604]'"
               >
                 <span>Hubungi Saya</span>
                 <ArrowRight class="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />

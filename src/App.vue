@@ -7,9 +7,11 @@ import AsciiCanvas from '@/components/effects/AsciiCanvas.vue'
 import CustomCursor from '@/components/effects/CustomCursor.vue'
 import ScrollProgress from '@/components/effects/ScrollProgress.vue'
 import { useTheme } from '@/composables/useTheme'
+import { usePortfolioStore } from '@/composables/usePortfolioStore'
 
 const route = useRoute()
 const { initTheme } = useTheme()
+const { currentProfile } = usePortfolioStore()
 
 // Hide public Navbar, Footer, and ScrollProgress on Admin, Login, and Gateway routes
 const isPublicRoute = computed(() => {
@@ -28,7 +30,12 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="min-h-screen bg-[#FFF9F9] dark:bg-[#0B0C0E] text-[#1C1313] dark:text-[#F4F4F6] flex flex-col justify-between selection:bg-[#9E0402] selection:text-white relative overflow-x-hidden transition-colors duration-300">
+  <div 
+    class="min-h-screen flex flex-col justify-between relative overflow-x-hidden transition-colors duration-300"
+    :class="currentProfile === 'raqwan' 
+      ? 'bg-[#F8FAFC] dark:bg-[#0B0C0E] text-[#0F172A] dark:text-[#F4F4F6] selection:bg-[#047857] selection:text-white' 
+      : 'bg-[#FFF9F9] dark:bg-[#0B0C0E] text-[#1C1313] dark:text-[#F4F4F6] selection:bg-[#9E0402] selection:text-white'"
+  >
     <!-- Top Reading Scroll Progress Bar (Public only) -->
     <ScrollProgress v-if="isPublicRoute" />
 

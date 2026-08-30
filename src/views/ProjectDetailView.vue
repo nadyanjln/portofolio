@@ -248,7 +248,7 @@ onUnmounted(() => {
           :class="[
             activeSection === sec.id
               ? (currentProfile === 'raqwan' ? 'bg-[#047857] text-white shadow-xs' : 'bg-[#9E0402] text-white shadow-xs')
-              : 'bg-white dark:bg-[#15161B] text-[#5C4848] dark:text-zinc-400 hover:text-white border border-[#EEDCDC] dark:border-white/10'
+              : 'bg-white dark:bg-[#15161B] text-[#5C4848] dark:text-zinc-400 hover:text-[#1C1313] dark:hover:text-white border border-[#EEDCDC] dark:border-white/10'
           ]"
         >
           {{ sec.label }}
@@ -263,7 +263,7 @@ onUnmounted(() => {
         <!-- 01. OVERVIEW & BACKGROUND -->
         <section id="overview" data-reveal="fade-up" class="space-y-5 scroll-mt-28">
           <div class="flex items-center gap-3">
-            <span class="w-8 h-8 rounded-xl flex items-center justify-center font-mono-tag font-bold text-xs" :class="currentProfile === 'raqwan' ? 'bg-[#047857]/20 text-emerald-400' : 'bg-[#9E0402]/15 text-[#9E0402] dark:text-[#ff4d4d]'">01</span>
+            <span class="w-8 h-8 rounded-xl flex items-center justify-center font-mono-tag font-bold text-xs" :class="currentProfile === 'raqwan' ? 'bg-emerald-100 dark:bg-[#047857]/20 text-[#047857] dark:text-emerald-400' : 'bg-[#9E0402]/15 text-[#9E0402] dark:text-[#ff4d4d]'">01</span>
             <h2 class="text-2xl sm:text-3xl font-extrabold text-[#1C1313] dark:text-white">Project Overview & Background</h2>
           </div>
           <p class="text-sm sm:text-base text-[#5C4848] dark:text-zinc-300 leading-relaxed max-w-4xl">
@@ -274,7 +274,7 @@ onUnmounted(() => {
             class="p-5 rounded-2xl bg-[#FFF9F9] dark:bg-[#1A1C24] border-l-4 space-y-1.5"
             :class="currentProfile === 'raqwan' ? 'border-[#047857]' : 'border-[#9E0402]'"
           >
-            <span class="text-xs font-extrabold font-mono-tag uppercase tracking-wider flex items-center gap-1.5" :class="currentProfile === 'raqwan' ? 'text-emerald-400' : 'text-[#9E0402] dark:text-[#ff4d4d]'">
+            <span class="text-xs font-extrabold font-mono-tag uppercase tracking-wider flex items-center gap-1.5" :class="currentProfile === 'raqwan' ? 'text-[#047857] dark:text-emerald-400' : 'text-[#9E0402] dark:text-[#ff4d4d]'">
               <Sparkles class="w-3.5 h-3.5" />
               <span>Core Strategic Objective:</span>
             </span>
@@ -287,7 +287,7 @@ onUnmounted(() => {
         <!-- 02. THE CHALLENGE & PROBLEM STATEMENT -->
         <section id="problem" data-reveal="fade-up" class="space-y-6 scroll-mt-28">
           <div class="flex items-center gap-3">
-            <span class="w-8 h-8 rounded-xl flex items-center justify-center font-mono-tag font-bold text-xs" :class="currentProfile === 'raqwan' ? 'bg-[#047857]/20 text-emerald-400' : 'bg-[#9E0402]/15 text-[#9E0402] dark:text-[#ff4d4d]'">02</span>
+            <span class="w-8 h-8 rounded-xl flex items-center justify-center font-mono-tag font-bold text-xs" :class="currentProfile === 'raqwan' ? 'bg-emerald-100 dark:bg-[#047857]/20 text-[#047857] dark:text-emerald-400' : 'bg-[#9E0402]/15 text-[#9E0402] dark:text-[#ff4d4d]'">02</span>
             <h2 class="text-2xl sm:text-3xl font-extrabold text-[#1C1313] dark:text-white">
               {{ (typeof detail.problem === 'object' && detail.problem?.title) ? detail.problem.title : 'The Core Challenge' }}
             </h2>
@@ -311,7 +311,7 @@ onUnmounted(() => {
               class="p-6 rounded-3xl bg-white dark:bg-[#14161D] border border-[#EEDCDC] dark:border-white/10 flex items-start gap-4 shadow-xs transition-all duration-300 hover:-translate-y-0.5"
               :class="currentProfile === 'raqwan' ? 'hover:border-[#047857]/60' : 'hover:border-[#9E0402]/40'"
             >
-              <div class="w-9 h-9 rounded-2xl flex items-center justify-center font-mono-tag font-bold text-sm shrink-0 border" :class="currentProfile === 'raqwan' ? 'bg-[#047857]/15 text-emerald-400 border-[#047857]/30' : 'bg-[#9E0402]/10 text-[#9E0402] dark:text-[#ff4d4d] border-[#9E0402]/20'">
+              <div class="w-9 h-9 rounded-2xl flex items-center justify-center font-mono-tag font-bold text-sm shrink-0 border" :class="currentProfile === 'raqwan' ? 'bg-emerald-100 dark:bg-[#047857]/15 text-[#047857] dark:text-emerald-400 border-emerald-200 dark:border-[#047857]/30' : 'bg-[#9E0402]/10 text-[#9E0402] dark:text-[#ff4d4d] border-[#9E0402]/20'">
                 0{{ idx + 1 }}
               </div>
               <div class="space-y-1">
@@ -329,7 +329,7 @@ onUnmounted(() => {
               class="p-6 rounded-3xl bg-white dark:bg-[#14161D] border border-[#EEDCDC] dark:border-white/10 flex items-start gap-4 shadow-xs transition-colors"
               :class="currentProfile === 'raqwan' ? 'hover:border-[#047857]/60' : 'hover:border-[#9E0402]/40'"
             >
-              <div class="w-9 h-9 rounded-2xl flex items-center justify-center font-mono-tag font-bold text-sm shrink-0 border" :class="currentProfile === 'raqwan' ? 'bg-[#047857]/15 text-emerald-400 border-[#047857]/30' : 'bg-[#9E0402]/10 text-[#9E0402] dark:text-[#ff4d4d] border-[#9E0402]/20'">
+              <div class="w-9 h-9 rounded-2xl flex items-center justify-center font-mono-tag font-bold text-sm shrink-0 border" :class="currentProfile === 'raqwan' ? 'bg-emerald-100 dark:bg-[#047857]/15 text-[#047857] dark:text-emerald-400 border-emerald-200 dark:border-[#047857]/30' : 'bg-[#9E0402]/10 text-[#9E0402] dark:text-[#ff4d4d] border-[#9E0402]/20'">
                 !
               </div>
               <div class="space-y-1">
@@ -343,7 +343,7 @@ onUnmounted(() => {
         <!-- 03. SOLUTION & WORKFLOW PROCESS -->
         <section id="process" data-reveal="fade-up" class="space-y-6 scroll-mt-28">
           <div class="flex items-center gap-3">
-            <span class="w-8 h-8 rounded-xl flex items-center justify-center font-mono-tag font-bold text-xs" :class="currentProfile === 'raqwan' ? 'bg-[#047857]/20 text-emerald-400' : 'bg-[#9E0402]/15 text-[#9E0402] dark:text-[#ff4d4d]'">03</span>
+            <span class="w-8 h-8 rounded-xl flex items-center justify-center font-mono-tag font-bold text-xs" :class="currentProfile === 'raqwan' ? 'bg-emerald-100 dark:bg-[#047857]/20 text-[#047857] dark:text-emerald-400' : 'bg-[#9E0402]/15 text-[#9E0402] dark:text-[#ff4d4d]'">03</span>
             <h2 class="text-2xl sm:text-3xl font-extrabold text-[#1C1313] dark:text-white">Process & Engineering Solution</h2>
           </div>
           <p v-if="typeof detail.solution === 'string'" class="text-sm sm:text-base text-[#5C4848] dark:text-zinc-300 leading-relaxed max-w-4xl">
@@ -519,7 +519,7 @@ onUnmounted(() => {
         <!-- 05. RESULTS & QUANTITATIVE IMPACT -->
         <section id="impact" data-reveal="fade-up" class="space-y-6 scroll-mt-28">
           <div class="flex items-center gap-3">
-            <span class="w-8 h-8 rounded-xl flex items-center justify-center font-mono-tag font-bold text-xs" :class="currentProfile === 'raqwan' ? 'bg-[#047857]/20 text-emerald-400' : 'bg-[#9E0402]/15 text-[#9E0402] dark:text-[#ff4d4d]'">
+            <span class="w-8 h-8 rounded-xl flex items-center justify-center font-mono-tag font-bold text-xs" :class="currentProfile === 'raqwan' ? 'bg-emerald-100 dark:bg-[#047857]/20 text-[#047857] dark:text-emerald-400' : 'bg-[#9E0402]/15 text-[#9E0402] dark:text-[#ff4d4d]'">
               {{ currentProfile === 'raqwan' ? '04' : '05' }}
             </span>
             <h2 class="text-2xl sm:text-3xl font-extrabold text-[#1C1313] dark:text-white">Measured Impact & Key Results</h2>
@@ -536,7 +536,7 @@ onUnmounted(() => {
                 <span class="text-xs font-mono-tag text-[#5C4848] dark:text-zinc-400 uppercase font-bold">
                   {{ res.metric || res.label }}
                 </span>
-                <p class="text-3xl sm:text-4xl font-extrabold tracking-tight" :class="currentProfile === 'raqwan' ? 'text-emerald-400' : 'text-[#9E0402] dark:text-[#ff4d4d]'">
+                <p class="text-3xl sm:text-4xl font-extrabold tracking-tight" :class="currentProfile === 'raqwan' ? 'text-[#047857] dark:text-emerald-400' : 'text-[#9E0402] dark:text-[#ff4d4d]'">
                   {{ res.after || res.value }}
                 </p>
               </div>
@@ -552,7 +552,7 @@ onUnmounted(() => {
         <!-- 06. GALLERY & SCREENSHOTS -->
         <section id="gallery" data-reveal="fade-up" class="space-y-6 scroll-mt-28" v-if="detail.gallery && detail.gallery.length">
           <div class="flex items-center gap-3">
-            <span class="w-8 h-8 rounded-xl flex items-center justify-center font-mono-tag font-bold text-xs" :class="currentProfile === 'raqwan' ? 'bg-[#047857]/20 text-emerald-400' : 'bg-[#9E0402]/15 text-[#9E0402] dark:text-[#ff4d4d]'">
+            <span class="w-8 h-8 rounded-xl flex items-center justify-center font-mono-tag font-bold text-xs" :class="currentProfile === 'raqwan' ? 'bg-emerald-100 dark:bg-[#047857]/20 text-[#047857] dark:text-emerald-400' : 'bg-[#9E0402]/15 text-[#9E0402] dark:text-[#ff4d4d]'">
               {{ currentProfile === 'raqwan' ? '05' : '06' }}
             </span>
             <h2 class="text-2xl sm:text-3xl font-extrabold text-[#1C1313] dark:text-white">Artifact Gallery & Architecture</h2>
@@ -589,7 +589,7 @@ onUnmounted(() => {
         <!-- 07. KEY LEARNINGS & RETROSPECTIVE -->
         <section id="learnings" data-reveal="fade-up" class="space-y-6 scroll-mt-28">
           <div class="flex items-center gap-3">
-            <span class="w-8 h-8 rounded-xl flex items-center justify-center font-mono-tag font-bold text-xs" :class="currentProfile === 'raqwan' ? 'bg-[#047857]/20 text-emerald-400' : 'bg-[#9E0402]/15 text-[#9E0402] dark:text-[#ff4d4d]'">
+            <span class="w-8 h-8 rounded-xl flex items-center justify-center font-mono-tag font-bold text-xs" :class="currentProfile === 'raqwan' ? 'bg-emerald-100 dark:bg-[#047857]/20 text-[#047857] dark:text-emerald-400' : 'bg-[#9E0402]/15 text-[#9E0402] dark:text-[#ff4d4d]'">
               {{ currentProfile === 'raqwan' ? '06' : '07' }}
             </span>
             <h2 class="text-2xl sm:text-3xl font-extrabold text-[#1C1313] dark:text-white">Key Learnings & Takeaways</h2>
@@ -634,7 +634,7 @@ onUnmounted(() => {
           </div>
           <div class="space-y-0.5 min-w-0">
             <span class="text-[10px] font-mono-tag text-zinc-400 uppercase tracking-wider block">Previous Project</span>
-            <span class="text-sm font-bold text-[#1C1313] dark:text-white transition-colors truncate block" :class="currentProfile === 'raqwan' ? 'group-hover:text-emerald-400' : 'group-hover:text-[#9E0402] dark:group-hover:text-[#ff4d4d]'">
+            <span class="text-sm font-bold text-[#1C1313] dark:text-white transition-colors truncate block" :class="currentProfile === 'raqwan' ? 'group-hover:text-[#047857] dark:group-hover:text-emerald-400' : 'group-hover:text-[#9E0402] dark:group-hover:text-[#ff4d4d]'">
               {{ prevProject.title }}
             </span>
           </div>
@@ -648,7 +648,7 @@ onUnmounted(() => {
         >
           <div class="space-y-0.5 min-w-0 flex-1">
             <span class="text-[10px] font-mono-tag text-zinc-400 uppercase tracking-wider block">Next Project</span>
-            <span class="text-sm font-bold text-[#1C1313] dark:text-white transition-colors truncate block" :class="currentProfile === 'raqwan' ? 'group-hover:text-emerald-400' : 'group-hover:text-[#9E0402] dark:group-hover:text-[#ff4d4d]'">
+            <span class="text-sm font-bold text-[#1C1313] dark:text-white transition-colors truncate block" :class="currentProfile === 'raqwan' ? 'group-hover:text-[#047857] dark:group-hover:text-emerald-400' : 'group-hover:text-[#9E0402] dark:group-hover:text-[#ff4d4d]'">
               {{ nextProject.title }}
             </span>
           </div>

@@ -308,6 +308,9 @@ export function usePortfolioStore(profileExplicit = null) {
   const setActiveProfile = (profile) => {
     if (profile === 'nadya' || profile === 'raqwan') {
       activeProfileKey.value = profile
+      if (typeof document !== 'undefined') {
+        document.documentElement.setAttribute('data-profile', profile)
+      }
     }
   }
 

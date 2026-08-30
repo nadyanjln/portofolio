@@ -133,7 +133,7 @@ const handleMouseLeave = () => {
             v-for="tag in project.tags" 
             :key="tag"
             class="px-2.5 py-1 text-[11px] font-bold font-mono-tag rounded-lg transition-colors"
-            :class="currentProfile === 'raqwan' ? 'bg-[#047857]/20 text-emerald-300 border border-[#047857]/40' : 'bg-[#9FC2EA]/20 dark:bg-[#9FC2EA]/15 text-[#1E3A60] dark:text-[#9FC2EA] border border-[#9FC2EA]/50 dark:border-[#9FC2EA]/30 group-hover:border-[#9E0402]/30'"
+            :class="currentProfile === 'raqwan' ? 'bg-emerald-50 dark:bg-[#047857]/20 text-emerald-800 dark:text-emerald-300 border border-emerald-200 dark:border-[#047857]/40' : 'bg-rose-50 dark:bg-[#9FC2EA]/15 text-rose-900 dark:text-[#9FC2EA] border border-rose-200 dark:border-[#9FC2EA]/30 group-hover:border-[#9E0402]/30'"
           >
             {{ tag }}
           </span>
@@ -142,7 +142,7 @@ const handleMouseLeave = () => {
         <RouterLink 
           :to="'/' + currentProfile + '/projects/' + project.id"
           class="inline-flex items-center gap-1.5 text-xs font-bold group-hover:translate-x-1.5 transition-all uppercase tracking-wider font-mono-tag"
-          :class="currentProfile === 'raqwan' ? 'text-emerald-400 hover:text-emerald-300' : 'text-[#9E0402] dark:text-[#ff4d4d] hover:text-[#B80604]'"
+          :class="currentProfile === 'raqwan' ? 'text-[#047857] dark:text-emerald-400 hover:text-emerald-700 dark:hover:text-emerald-300' : 'text-[#9E0402] dark:text-[#ff4d4d] hover:text-[#B80604]'"
         >
           <span>Explore Case Study</span>
           <ArrowRight class="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />

@@ -85,7 +85,7 @@ onMounted(() => observeAll(sectionRef.value))
           >
             <span 
               class="text-sm sm:text-base font-bold text-[#1C1313] dark:text-white" 
-              :class="activeIndex === idx ? (currentProfile === 'raqwan' ? 'text-emerald-400' : 'text-[#9E0402] dark:text-[#ff4d4d]') : ''"
+              :class="activeIndex === idx ? (currentProfile === 'raqwan' ? 'text-[#047857] dark:text-emerald-400' : 'text-[#9E0402] dark:text-[#ff4d4d]') : ''"
             >
               {{ faq.question }}
             </span>
@@ -93,7 +93,7 @@ onMounted(() => observeAll(sectionRef.value))
               class="w-8 h-8 rounded-full flex items-center justify-center shrink-0 transition-transform duration-300"
               :class="[
                 activeIndex === idx
-                  ? (currentProfile === 'raqwan' ? 'bg-emerald-500/20 text-emerald-400 rotate-180' : 'bg-[#9E0402]/10 text-[#9E0402] dark:text-[#ff4d4d] rotate-180')
+                  ? (currentProfile === 'raqwan' ? 'bg-emerald-100 dark:bg-emerald-500/20 text-[#047857] dark:text-emerald-400 rotate-180' : 'bg-[#9E0402]/10 text-[#9E0402] dark:text-[#ff4d4d] rotate-180')
                   : 'bg-[#FFF9F9] dark:bg-white/5 text-[#5C4848] dark:text-zinc-400'
               ]"
             >

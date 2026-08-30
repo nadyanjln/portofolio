@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted, watch, nextTick } from 'vue'
 import { 
   Sparkles, 
   GraduationCap, 
@@ -136,6 +136,12 @@ const experienceSections = computed(() => {
 const sectionRef = ref(null)
 const { observeAll } = useScrollReveal()
 onMounted(() => observeAll(sectionRef.value))
+
+watch(currentProfile, () => {
+  nextTick(() => {
+    observeAll(sectionRef.value)
+  })
+})
 </script>
 
 <template>
@@ -229,7 +235,7 @@ onMounted(() => observeAll(sectionRef.value))
           <button
             @click="activeSkillFilter = 'all'"
             class="px-3 py-1.5 rounded-xl text-xs font-mono-tag font-bold transition-all cursor-pointer"
-            :class="activeSkillFilter === 'all' ? (currentProfile === 'raqwan' ? 'bg-[#047857] text-white shadow-xs' : 'bg-[#9E0402] text-white shadow-xs') : 'text-zinc-400 hover:text-white'"
+            :class="activeSkillFilter === 'all' ? (currentProfile === 'raqwan' ? 'bg-[#047857] text-white shadow-xs' : 'bg-[#9E0402] text-white shadow-xs') : 'text-[#5C4848] dark:text-zinc-400 hover:text-[#1C1313] dark:hover:text-white'"
           >
             All Categories
           </button>
@@ -238,7 +244,7 @@ onMounted(() => observeAll(sectionRef.value))
             :key="cat.id"
             @click="activeSkillFilter = cat.id"
             class="px-3 py-1.5 rounded-xl text-xs font-mono-tag font-bold transition-all cursor-pointer"
-            :class="activeSkillFilter === cat.id ? (currentProfile === 'raqwan' ? 'bg-[#047857] text-white shadow-xs' : 'bg-[#9E0402] text-white shadow-xs') : 'text-zinc-400 hover:text-white'"
+            :class="activeSkillFilter === cat.id ? (currentProfile === 'raqwan' ? 'bg-[#047857] text-white shadow-xs' : 'bg-[#9E0402] text-white shadow-xs') : 'text-[#5C4848] dark:text-zinc-400 hover:text-[#1C1313] dark:hover:text-white'"
           >
             {{ cat.name.split('&')[0].trim() }}
           </button>
@@ -259,7 +265,7 @@ onMounted(() => observeAll(sectionRef.value))
               <div class="flex items-center gap-3">
                 <div 
                   class="w-10 h-10 rounded-2xl flex items-center justify-center shrink-0 shadow-xs"
-                  :class="currentProfile === 'raqwan' ? 'bg-[#047857]/20 text-emerald-300 border border-[#047857]/30' : 'bg-[#9E0402]/10 text-[#9E0402] dark:text-[#ff4d4d] border border-[#9E0402]/20'"
+                  :class="currentProfile === 'raqwan' ? 'bg-emerald-100 dark:bg-[#047857]/20 text-[#047857] dark:text-emerald-300 border border-emerald-200 dark:border-[#047857]/30' : 'bg-rose-100 dark:bg-[#9E0402]/10 text-[#9E0402] dark:text-[#ff4d4d] border border-rose-200 dark:border-[#9E0402]/20'"
                 >
                   <component :is="category.icon" class="w-5 h-5" />
                 </div>
@@ -267,7 +273,7 @@ onMounted(() => observeAll(sectionRef.value))
                   {{ category.name }}
                 </h3>
               </div>
-              <span class="text-xs font-mono-tag font-bold text-zinc-400 px-2.5 py-1 rounded-full bg-white/5 border border-white/10 shrink-0">
+              <span class="text-xs font-mono-tag font-bold text-[#5C4848] dark:text-zinc-400 px-2.5 py-1 rounded-full bg-[#FFF9F9] dark:bg-white/5 border border-[#EEDCDC] dark:border-white/10 shrink-0">
                 {{ category.skills.length }} Skills
               </span>
             </div>
@@ -321,7 +327,7 @@ onMounted(() => observeAll(sectionRef.value))
                 {{ sec.title }}
               </h3>
             </div>
-            <span class="text-xs font-mono-tag font-bold text-zinc-400">{{ sec.items.length }} Peran</span>
+            <span class="text-xs font-mono-tag font-bold text-[#5C4848] dark:text-zinc-400">{{ sec.items.length }} Peran</span>
           </div>
 
           <!-- Spacious 2-Column Experience Cards (No Cramping) -->
@@ -336,11 +342,11 @@ onMounted(() => observeAll(sectionRef.value))
                 <div class="flex flex-wrap items-center justify-between gap-2">
                   <span 
                     class="px-3 py-1 rounded-lg text-xs font-mono-tag font-bold uppercase tracking-wider" 
-                    :class="currentProfile === 'raqwan' ? 'bg-[#047857]/20 text-emerald-300 border border-[#047857]/40' : 'bg-[#9E0402]/10 text-[#ff4d4d] border border-[#9E0402]/30'"
+                    :class="currentProfile === 'raqwan' ? 'bg-emerald-50 dark:bg-[#047857]/20 text-emerald-800 dark:text-emerald-300 border border-emerald-200 dark:border-[#047857]/40' : 'bg-rose-50 dark:bg-[#9E0402]/10 text-rose-900 dark:text-[#ff4d4d] border border-rose-200 dark:border-[#9E0402]/30'"
                   >
                     {{ exp.company }}
                   </span>
-                  <span class="text-xs font-mono-tag font-bold text-zinc-400">{{ exp.period }}</span>
+                  <span class="text-xs font-mono-tag font-bold text-[#5C4848] dark:text-zinc-400">{{ exp.period }}</span>
                 </div>
 
                 <h4 class="text-lg font-bold text-[#1C1313] dark:text-white leading-snug">

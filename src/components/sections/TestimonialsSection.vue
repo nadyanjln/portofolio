@@ -48,13 +48,13 @@ onMounted(() => observeAll(sectionRef.value))
           <div class="flex items-center justify-between">
             <div 
               class="w-10 h-10 rounded-2xl flex items-center justify-center transition-colors duration-300"
-              :class="currentProfile === 'raqwan' ? 'bg-[#047857]/20 text-emerald-300 group-hover:bg-[#047857] group-hover:text-white' : 'bg-[#9FC2EA]/20 dark:bg-[#9FC2EA]/10 text-[#1E3A60] dark:text-[#9FC2EA] group-hover:bg-[#9E0402] group-hover:text-white'"
+              :class="currentProfile === 'raqwan' ? 'bg-emerald-100 dark:bg-[#047857]/20 text-[#047857] dark:text-emerald-300 group-hover:bg-[#047857] group-hover:text-white' : 'bg-[#9FC2EA]/20 dark:bg-[#9FC2EA]/10 text-[#1E3A60] dark:text-[#9FC2EA] group-hover:bg-[#9E0402] group-hover:text-white'"
             >
               <Quote class="w-5 h-5" />
             </div>
             <span 
               class="inline-flex items-center gap-1 text-[11px] font-mono-tag font-bold px-2.5 py-1 rounded-full border"
-              :class="currentProfile === 'raqwan' ? 'bg-[#047857]/15 border-[#047857]/40 text-emerald-300' : 'bg-[#FDF6F6] dark:bg-[#1A1C24] border-[#EEDCDC] dark:border-white/10 text-[#9E0402] dark:text-[#ff4d4d]'"
+              :class="currentProfile === 'raqwan' ? 'bg-emerald-50 dark:bg-[#047857]/15 border-emerald-200 dark:border-[#047857]/40 text-[#047857] dark:text-emerald-300' : 'bg-[#FDF6F6] dark:bg-[#1A1C24] border-[#EEDCDC] dark:border-white/10 text-[#9E0402] dark:text-[#ff4d4d]'"
             >
               <CheckCircle class="w-3 h-3" />
               <span>{{ item.badge || 'Verified Colleague' }}</span>

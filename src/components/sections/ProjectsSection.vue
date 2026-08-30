@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted, watch, nextTick } from 'vue'
 import { RouterLink, useRouter } from 'vue-router'
 import { 
   ArrowUpRight, 
@@ -91,6 +91,12 @@ const { observeAll } = useScrollReveal()
 onMounted(() => {
   observeAll(sectionRef.value)
 })
+
+watch(currentProfile, () => {
+  nextTick(() => {
+    observeAll(sectionRef.value)
+  })
+})
 </script>
 
 <template>
@@ -104,13 +110,13 @@ onMounted(() => {
         <div class="space-y-3 max-w-2xl">
           <div 
             class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-white dark:bg-[#1A1C24] border text-xs font-mono-tag font-bold uppercase shadow-xs"
-            :class="currentProfile === 'raqwan' ? 'text-emerald-400 border-[#047857]/40 bg-[#047857]/10' : 'text-[#9E0402] dark:text-[#ff4d4d] border-[#EEDCDC] dark:border-white/10'"
+            :class="currentProfile === 'raqwan' ? 'text-[#047857] dark:text-emerald-400 border-emerald-300 dark:border-[#047857]/40 bg-emerald-50 dark:bg-[#047857]/10' : 'text-[#9E0402] dark:text-[#ff4d4d] border-[#EEDCDC] dark:border-white/10'"
           >
             <Sparkles class="w-3.5 h-3.5" />
             <span>Selected Case Studies /2026/</span>
           </div>
           <h2 class="text-3xl sm:text-5xl lg:text-6xl font-extrabold tracking-tighter leading-tight text-[#1C1313] dark:text-white">
-            Featured Works & <span :class="currentProfile === 'raqwan' ? 'text-emerald-400' : 'text-[#9E0402] dark:text-[#ff3b38]'">Craft</span>
+            Featured Works & <span :class="currentProfile === 'raqwan' ? 'text-[#047857] dark:text-emerald-400' : 'text-[#9E0402] dark:text-[#ff3b38]'">Craft</span>
           </h2>
           <p class="text-sm sm:text-base text-[#5C4848] dark:text-zinc-300 leading-relaxed max-w-xl" v-if="currentProfile === 'raqwan'">
             Sistem kecerdasan buatan end-to-end — dari Computer Vision dan NLP canggih hingga Autonomous Agentic AI & Generative Modeling.
@@ -125,27 +131,27 @@ onMounted(() => {
           <div class="p-1 rounded-2xl bg-white dark:bg-[#14161D] border border-[#EEDCDC] dark:border-white/10 flex items-center gap-1 shadow-xs">
             <button
               @click="viewMode = 'showcase'"
-              class="px-4 py-2 rounded-xl text-xs font-mono-tag font-bold uppercase flex items-center gap-1.5 transition-all cursor-pointer"
+              class="px-4 py-2 rounded-xl text-xs font-mono-tag font-bold uppercase flex items-center gap-1.5 transition-all cursor-pointer shrink-0"
               :class="[
                 viewMode === 'showcase' 
                   ? (currentProfile === 'raqwan' ? 'bg-[#047857] text-white shadow-xs' : 'bg-[#9E0402] text-white shadow-xs')
-                  : 'text-[#5C4848] dark:text-zinc-400 hover:text-white'
+                  : (currentProfile === 'raqwan' ? 'text-[#1C1313] dark:text-zinc-400 hover:text-[#047857] dark:hover:text-white' : 'text-[#1C1313] dark:text-zinc-400 hover:text-[#9E0402] dark:hover:text-[#ff4d4d]')
               ]"
             >
-              <Columns class="w-3.5 h-3.5" />
+              <Columns class="w-3.5 h-3.5 shrink-0" />
               <span>Interactive View</span>
             </button>
 
             <button
               @click="viewMode = 'grid'"
-              class="px-4 py-2 rounded-xl text-xs font-mono-tag font-bold uppercase flex items-center gap-1.5 transition-all cursor-pointer"
+              class="px-4 py-2 rounded-xl text-xs font-mono-tag font-bold uppercase flex items-center gap-1.5 transition-all cursor-pointer shrink-0"
               :class="[
                 viewMode === 'grid' 
                   ? (currentProfile === 'raqwan' ? 'bg-[#047857] text-white shadow-xs' : 'bg-[#9E0402] text-white shadow-xs')
-                  : 'text-[#5C4848] dark:text-zinc-400 hover:text-white'
+                  : (currentProfile === 'raqwan' ? 'text-[#1C1313] dark:text-zinc-400 hover:text-[#047857] dark:hover:text-white' : 'text-[#1C1313] dark:text-zinc-400 hover:text-[#9E0402] dark:hover:text-[#ff4d4d]')
               ]"
             >
-              <LayoutGrid class="w-3.5 h-3.5" />
+              <LayoutGrid class="w-3.5 h-3.5 shrink-0" />
               <span>Grid View</span>
             </button>
           </div>
@@ -153,7 +159,7 @@ onMounted(() => {
           <RouterLink
             :to="'/' + currentProfile + '/projects'"
             class="px-5 py-2.5 rounded-2xl bg-white dark:bg-[#14161D] border border-[#EEDCDC] dark:border-white/10 text-xs font-mono-tag font-bold uppercase tracking-wider flex items-center gap-1.5 shadow-xs transition-colors"
-            :class="currentProfile === 'raqwan' ? 'text-emerald-400 hover:border-[#047857]/60' : 'text-[#9E0402] dark:text-[#ff4d4d] hover:border-[#9E0402]/40'"
+            :class="currentProfile === 'raqwan' ? 'text-[#047857] dark:text-emerald-400 hover:border-[#047857]/60' : 'text-[#9E0402] dark:text-[#ff4d4d] hover:border-[#9E0402]/40'"
           >
             <span>All Works ({{ projects.length }})</span>
             <ArrowUpRight class="w-3.5 h-3.5" />
@@ -172,7 +178,9 @@ onMounted(() => {
             :class="[
               selectedCategory === cat 
                 ? (currentProfile === 'raqwan' ? 'bg-[#047857] text-white shadow-md shadow-[#047857]/30' : 'bg-[#9E0402] text-white shadow-md shadow-[#9E0402]/25')
-                : 'bg-white dark:bg-[#15161B] text-[#5C4848] dark:text-zinc-300 hover:text-white border border-[#EEDCDC] dark:border-white/10'
+                : (currentProfile === 'raqwan'
+                    ? 'bg-white dark:bg-[#15161B] text-[#1C1313] dark:text-zinc-300 hover:bg-emerald-50 dark:hover:bg-white/10 hover:border-[#047857]/40 hover:text-[#047857] border border-[#EEDCDC] dark:border-white/10'
+                    : 'bg-white dark:bg-[#15161B] text-[#1C1313] dark:text-zinc-300 hover:bg-[#FDF6F6] dark:hover:bg-white/10 hover:border-[#9E0402]/40 hover:text-[#9E0402] border border-[#EEDCDC] dark:border-white/10')
             ]"
           >
             {{ cat }}
@@ -230,7 +238,7 @@ onMounted(() => {
                   <div class="flex items-center gap-2">
                     <span 
                       class="text-xs font-mono-tag font-bold"
-                      :class="activeIndex === idx ? (currentProfile === 'raqwan' ? 'text-emerald-400' : 'text-[#9E0402] dark:text-[#ff4d4d]') : 'text-[#5C4848] dark:text-zinc-400'"
+                      :class="activeIndex === idx ? (currentProfile === 'raqwan' ? 'text-[#047857] dark:text-emerald-400' : 'text-[#9E0402] dark:text-[#ff4d4d]') : 'text-[#5C4848] dark:text-zinc-400'"
                     >
                       ({{ String(idx + 1).padStart(2, '0') }})
                     </span>
@@ -253,8 +261,8 @@ onMounted(() => {
                     class="text-base sm:text-lg font-bold leading-snug transition-colors"
                     :class="[
                       activeIndex === idx 
-                        ? (currentProfile === 'raqwan' ? 'text-emerald-400' : 'text-[#9E0402] dark:text-[#ff4d4d]') 
-                        : (currentProfile === 'raqwan' ? 'text-[#1C1313] dark:text-white group-hover:text-emerald-400' : 'text-[#1C1313] dark:text-white group-hover:text-[#9E0402] dark:group-hover:text-[#ff4d4d]')
+                        ? (currentProfile === 'raqwan' ? 'text-[#047857] dark:text-emerald-400' : 'text-[#9E0402] dark:text-[#ff4d4d]') 
+                        : (currentProfile === 'raqwan' ? 'text-[#1C1313] dark:text-white group-hover:text-[#047857] dark:group-hover:text-emerald-400' : 'text-[#1C1313] dark:text-white group-hover:text-[#9E0402] dark:group-hover:text-[#ff4d4d]')
                     ]"
                   >
                     {{ p.title }}
@@ -272,7 +280,7 @@ onMounted(() => {
                         v-for="tag in p.tags" 
                         :key="tag"
                         class="px-2 py-0.5 text-[10px] font-bold font-mono-tag rounded-md"
-                        :class="currentProfile === 'raqwan' ? 'bg-[#047857]/20 text-emerald-300 border border-[#047857]/40' : 'bg-[#9FC2EA]/20 dark:bg-[#9FC2EA]/15 text-[#1E3A60] dark:text-[#9FC2EA] border border-[#9FC2EA]/40'"
+                        :class="currentProfile === 'raqwan' ? 'bg-emerald-50 dark:bg-[#047857]/20 text-emerald-800 dark:text-emerald-300 border border-emerald-200 dark:border-[#047857]/40' : 'bg-rose-50 dark:bg-[#9FC2EA]/15 text-rose-900 dark:text-[#9FC2EA] border border-rose-200 dark:border-[#9FC2EA]/40'"
                       >
                         {{ tag }}
                       </span>
@@ -285,7 +293,7 @@ onMounted(() => {
                   <RouterLink
                     :to="'/' + currentProfile + '/projects/' + p.id"
                     class="text-xs font-bold font-mono-tag uppercase flex items-center gap-1.5 hover:underline"
-                    :class="currentProfile === 'raqwan' ? 'text-emerald-400' : 'text-[#9E0402] dark:text-[#ff4d4d]'"
+                    :class="currentProfile === 'raqwan' ? 'text-[#047857] dark:text-emerald-400' : 'text-[#9E0402] dark:text-[#ff4d4d]'"
                   >
                     <span>Read Full Case Study</span>
                     <ArrowRight class="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
@@ -369,8 +377,8 @@ onMounted(() => {
                 <!-- Bottom Title & Action Strip -->
                 <div class="absolute bottom-4 left-4 right-4 z-10 flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-black/60 backdrop-blur-md p-4 rounded-2xl border border-white/10 text-white">
                   <div class="space-y-0.5 min-w-0">
-                    <span class="text-[10px] font-mono-tag text-zinc-400 uppercase tracking-wider block">Featured Project</span>
-                    <h4 class="text-sm sm:text-base font-bold truncate">{{ activeProject.title }}</h4>
+                    <span class="text-[10px] font-mono-tag text-zinc-300 uppercase tracking-wider block">Featured Project</span>
+                    <h4 class="text-sm sm:text-base font-bold truncate text-white">{{ activeProject.title }}</h4>
                   </div>
 
                   <RouterLink

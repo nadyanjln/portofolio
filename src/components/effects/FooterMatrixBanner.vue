@@ -1,8 +1,10 @@
 <script setup>
 import { ref, onMounted, onUnmounted, watch } from 'vue'
 import { usePortfolioStore } from '@/composables/usePortfolioStore'
+import { useTheme } from '@/composables/useTheme'
 
 const { portfolioInfo, currentProfile } = usePortfolioStore()
+const { isDark } = useTheme()
 const canvasRef = ref(null)
 const currentYear = new Date().getFullYear()
 
@@ -88,14 +90,14 @@ class MatrixDot {
     this.y += this.vy
   }
 
-  draw(context, time) {
+  draw(context, time, dark) {
     const dx = mouse.x - this.x
     const dy = mouse.y - this.y
     const dist = Math.sqrt(dx * dx + dy * dy)
     const proximity = mouse.isHovered && dist < mouse.radius ? (1 - dist / mouse.radius) : 0
 
     const shimmer = (Math.sin(time * this.speed + this.phase) + 1) * 0.5
-    const baseAlpha = 0.28 + shimmer * 0.35
+    const baseAlpha = dark ? (0.28 + shimmer * 0.35) : (0.35 + shimmer * 0.40)
     const finalAlpha = Math.min(1, baseAlpha + proximity * 0.75)
 
     context.beginPath()
@@ -126,10 +128,19 @@ class MatrixDot {
         context.shadowBlur = 8
       }
     } else {
-      context.fillStyle = `rgba(255, 255, 255, ${finalAlpha})`
-      if (proximity > 0.3) {
-        context.shadowColor = 'rgba(255, 255, 255, 0.9)'
-        context.shadowBlur = 10
+      // White dots: in light mode use dark dots instead
+      if (dark) {
+        context.fillStyle = `rgba(255, 255, 255, ${finalAlpha})`
+        if (proximity > 0.3) {
+          context.shadowColor = 'rgba(255, 255, 255, 0.9)'
+          context.shadowBlur = 10
+        }
+      } else {
+        context.fillStyle = `rgba(100, 116, 139, ${finalAlpha * 0.6})`
+        if (proximity > 0.3) {
+          context.shadowColor = 'rgba(100, 116, 139, 0.5)'
+          context.shadowBlur = 8
+        }
       }
     }
 
@@ -205,6 +216,8 @@ onMounted(() => {
     const ctx = canvas.getContext('2d')
     ctx.clearRect(0, 0, width, height)
 
+    const dark = isDark.value
+
     // Render connection filaments between close particles
     ctx.lineWidth = 0.5
     for (let i = 0; i < particles.length; i += 3) {
@@ -227,7 +240,7 @@ onMounted(() => {
     // Render particles
     for (let i = 0; i < particles.length; i++) {
       particles[i].update(time)
-      particles[i].draw(ctx, time)
+      particles[i].draw(ctx, time, dark)
     }
 
     animationFrameId = requestAnimationFrame(loop)
@@ -244,7 +257,10 @@ onUnmounted(() => {
 
 <template>
   <div 
-    class="relative w-full rounded-[36px] sm:rounded-[48px] bg-[#07080A] border border-white/10 overflow-hidden py-12 sm:py-20 px-4 sm:px-8 select-none group"
+    class="relative w-full rounded-[36px] sm:rounded-[48px] border overflow-hidden py-12 sm:py-20 px-4 sm:px-8 select-none group transition-colors duration-300"
+    :class="currentProfile === 'raqwan'
+      ? 'bg-[#F0FDF4] dark:bg-[#07080A] border-emerald-200 dark:border-white/10'
+      : 'bg-[#FFF5F5] dark:bg-[#07080A] border-[#EEDCDC] dark:border-white/10'"
     @mousemove="handleMouseMove"
     @mouseenter="handleMouseEnter"
     @mouseleave="handleMouseLeave"
@@ -256,7 +272,12 @@ onUnmounted(() => {
     ></canvas>
 
     <!-- Top & Radial Atmosphere Glows -->
-    <div class="absolute inset-0 pointer-events-none z-10 bg-gradient-to-b from-[#07080A] via-transparent to-[#07080A]/90"></div>
+    <div 
+      class="absolute inset-0 pointer-events-none z-10"
+      :class="currentProfile === 'raqwan'
+        ? 'bg-gradient-to-b from-[#F0FDF4]/80 via-transparent to-[#F0FDF4]/60 dark:from-[#07080A] dark:via-transparent dark:to-[#07080A]/90'
+        : 'bg-gradient-to-b from-[#FFF5F5]/80 via-transparent to-[#FFF5F5]/60 dark:from-[#07080A] dark:via-transparent dark:to-[#07080A]/90'"
+    ></div>
     <div 
       class="absolute top-0 left-1/2 -translate-x-1/2 w-3/4 h-32 blur-[100px] pointer-events-none z-10"
       :class="currentProfile === 'raqwan' ? 'bg-[#047857]/15' : 'bg-[#9E0402]/10'"
@@ -266,41 +287,60 @@ onUnmounted(() => {
     <div class="relative z-20 max-w-5xl mx-auto flex flex-col items-center justify-center text-center px-2">
       
       <!-- Top Small Monospace Badge -->
-      <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-white/5 border border-white/10 backdrop-blur-md mb-4 sm:mb-6 shadow-sm">
+      <div 
+        class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full backdrop-blur-md mb-4 sm:mb-6 shadow-sm border transition-colors"
+        :class="currentProfile === 'raqwan'
+          ? 'bg-emerald-50 dark:bg-white/10 border-emerald-200 dark:border-white/20'
+          : 'bg-[#FFF0F0] dark:bg-white/10 border-[#EEDCDC] dark:border-white/20'"
+      >
         <span 
           class="w-2 h-2 rounded-full animate-pulse"
-          :class="currentProfile === 'raqwan' ? 'bg-[#047857]' : 'bg-[#9E0402]'"
+          :class="currentProfile === 'raqwan' ? 'bg-emerald-400' : 'bg-[#ff4d4d]'"
         ></span>
-        <span class="text-[11px] font-mono-tag tracking-widest text-zinc-300 uppercase font-bold">
+        <span 
+          class="text-[11px] font-mono-tag tracking-widest uppercase font-bold transition-colors"
+          :class="currentProfile === 'raqwan' ? 'text-[#047857] dark:text-white' : 'text-[#9E0402] dark:text-white'"
+        >
           {{ portfolioInfo.title }}
         </span>
       </div>
 
       <!-- Clean 2-Line Bold Typography -->
       <h2 
-        class="text-4xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl font-black tracking-tight text-white uppercase leading-[0.92] sm:leading-[0.88] drop-shadow-2xl transition-transform duration-500 ease-out group-hover:scale-[1.01]"
-        style="font-family: 'Syne', 'Space Grotesk', system-ui, sans-serif; text-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);"
+        class="text-4xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl font-black tracking-tight uppercase leading-[0.92] sm:leading-[0.88] transition-all duration-500 ease-out group-hover:scale-[1.01]"
+        :class="currentProfile === 'raqwan' 
+          ? 'text-[#0F172A] dark:text-white drop-shadow-[0_4px_20px_rgba(4,120,87,0.15)] dark:drop-shadow-2xl' 
+          : 'text-[#1C1313] dark:text-white drop-shadow-[0_4px_20px_rgba(158,4,2,0.12)] dark:drop-shadow-2xl'"
+        style="font-family: 'Syne', 'Space Grotesk', system-ui, sans-serif;"
       >
         <span class="block">{{ currentProfile === 'raqwan' ? 'Muhammad' : 'Nadya' }}</span>
         <span class="block">{{ currentProfile === 'raqwan' ? 'Raqwan' : 'Najelina' }}</span>
       </h2>
 
       <!-- Bottom Subtitle / Tagline -->
-      <p class="mt-4 sm:mt-6 text-xs sm:text-sm md:text-base font-mono-tag text-zinc-400 max-w-2xl px-4 leading-relaxed">
+      <p 
+        class="mt-4 sm:mt-6 text-xs sm:text-sm md:text-base font-mono-tag max-w-2xl px-4 leading-relaxed font-medium transition-colors"
+        :class="currentProfile === 'raqwan' ? 'text-slate-600 dark:text-zinc-200' : 'text-[#5C4848] dark:text-zinc-200'"
+      >
         {{ portfolioInfo.tagline }}
       </p>
     </div>
 
     <!-- Bottom Metadata Details -->
-    <div class="relative z-20 max-w-7xl mx-auto mt-8 sm:mt-12 pt-4 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-2 text-[11px] font-mono-tag text-zinc-400">
+    <div 
+      class="relative z-20 max-w-7xl mx-auto mt-8 sm:mt-12 pt-4 border-t flex flex-col sm:flex-row items-center justify-between gap-2 text-[11px] font-mono-tag transition-colors"
+      :class="currentProfile === 'raqwan'
+        ? 'border-emerald-200 dark:border-white/15 text-slate-500 dark:text-zinc-300'
+        : 'border-[#EEDCDC] dark:border-white/15 text-[#5C4848] dark:text-zinc-300'"
+    >
       <div class="flex items-center gap-2">
-        <span class="w-1.5 h-1.5 rounded-full" :class="currentProfile === 'raqwan' ? 'bg-[#047857]' : 'bg-[#9E0402]'"></span>
+        <span class="w-1.5 h-1.5 rounded-full" :class="currentProfile === 'raqwan' ? 'bg-emerald-400' : 'bg-[#ff4d4d]'"></span>
         <span>Indonesia & Worldwide • Open for collaboration</span>
       </div>
 
-      <div class="text-center sm:text-right text-[10px] text-zinc-400 leading-tight">
+      <div class="text-center sm:text-right text-[10px] leading-tight">
         <p>©{{ currentYear }} All rights reserved. {{ portfolioInfo.name }}.</p>
-        <p class="text-zinc-400">Crafted with precision & code. Unauthorised reproduction prohibited.</p>
+        <p :class="currentProfile === 'raqwan' ? 'text-slate-400 dark:text-zinc-400' : 'text-[#8B7676] dark:text-zinc-400'">Crafted with precision & code. Unauthorised reproduction prohibited.</p>
       </div>
     </div>
   </div>

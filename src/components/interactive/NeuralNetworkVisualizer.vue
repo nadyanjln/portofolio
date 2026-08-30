@@ -15,6 +15,9 @@ import {
   SlidersHorizontal,
   Workflow
 } from 'lucide-vue-next'
+import { useTheme } from '@/composables/useTheme'
+
+const { isDark } = useTheme()
 
 const canvasRef = ref(null)
 const isPlaying = ref(true)
@@ -268,6 +271,8 @@ onMounted(() => {
 
     ctx.clearRect(0, 0, width, height)
 
+    const dark = isDark.value
+
     // Calculate Layer Positions horizontally
     const numLayers = layerSpecs.length
     const marginX = Math.max(40, width * 0.07)
@@ -337,18 +342,20 @@ onMounted(() => {
             ctx.shadowColor = currentPreset.value.primaryColor
             ctx.shadowBlur = 10
           } else if (isNodeConnectedToHover) {
-            ctx.strokeStyle = 'rgba(52, 211, 153, 0.95)'
+            ctx.strokeStyle = dark ? 'rgba(52, 211, 153, 0.95)' : 'rgba(4, 120, 87, 0.95)'
             ctx.lineWidth = 2.0
-            ctx.shadowColor = '#34d399'
+            ctx.shadowColor = dark ? '#34d399' : '#047857'
             ctx.shadowBlur = 8
           } else if (dynamicActivation > 0.5) {
-            ctx.strokeStyle = `rgba(4, 120, 87, ${0.15 + dynamicActivation * 0.45})`
+            ctx.strokeStyle = dark
+              ? `rgba(4, 120, 87, ${0.15 + dynamicActivation * 0.45})`
+              : `rgba(5, 150, 105, ${0.25 + dynamicActivation * 0.55})`
             ctx.lineWidth = 1.0 + dynamicActivation * 0.6
             ctx.shadowBlur = 0
           } else {
-            ctx.strokeStyle = selectedActivation.value === 'relu' 
-              ? 'rgba(6, 95, 70, 0.04)'
-              : 'rgba(6, 95, 70, 0.12)'
+            ctx.strokeStyle = dark
+              ? (selectedActivation.value === 'relu' ? 'rgba(6, 95, 70, 0.04)' : 'rgba(6, 95, 70, 0.12)')
+              : (selectedActivation.value === 'relu' ? 'rgba(148, 163, 184, 0.20)' : 'rgba(148, 163, 184, 0.35)')
             ctx.lineWidth = 0.5
             ctx.shadowBlur = 0
           }
@@ -365,7 +372,7 @@ onMounted(() => {
             if (particlePhase > 0.05 && particlePhase < 0.95 && (i + j) % 2 === 0 && dynamicActivation > 0.3) {
               ctx.beginPath()
               ctx.arc(px, py, isForwardPulse ? 3.0 : 1.5, 0, Math.PI * 2)
-              ctx.fillStyle = isForwardPulse ? '#ffffff' : currentPreset.value.primaryColor
+              ctx.fillStyle = isForwardPulse ? (dark ? '#ffffff' : '#047857') : currentPreset.value.primaryColor
               ctx.fill()
             }
           }
@@ -379,7 +386,7 @@ onMounted(() => {
       ctx.beginPath()
       ctx.moveTo(beamX, 70)
       ctx.lineTo(beamX, height - 20)
-      ctx.strokeStyle = 'rgba(52, 211, 153, 0.6)'
+      ctx.strokeStyle = dark ? 'rgba(52, 211, 153, 0.6)' : 'rgba(4, 120, 87, 0.5)'
       ctx.lineWidth = 3
       ctx.shadowColor = currentPreset.value.primaryColor
       ctx.shadowBlur = 16
@@ -389,12 +396,14 @@ onMounted(() => {
 
     // 3. Draw Layer Headers & Bounding Boxes
     layerPositions.forEach((layer, lIdx) => {
-      ctx.fillStyle = lIdx === layerPositions.length - 1 ? currentPreset.value.primaryColor : 'rgba(255, 255, 255, 0.95)'
+      ctx.fillStyle = lIdx === layerPositions.length - 1 
+        ? (dark ? currentPreset.value.primaryColor : '#047857') 
+        : (dark ? 'rgba(255, 255, 255, 0.95)' : '#0F172A')
       ctx.font = 'bold 11px "Fragment Mono", monospace'
       ctx.textAlign = 'center'
       ctx.fillText(layer.spec.name, layer.x, 32)
 
-      ctx.fillStyle = 'rgba(156, 163, 175, 0.7)'
+      ctx.fillStyle = dark ? 'rgba(156, 163, 175, 0.7)' : '#64748B'
       ctx.font = '10px "Fragment Mono", monospace'
       ctx.fillText(layer.spec.shape, layer.x, 48)
 
@@ -403,14 +412,14 @@ onMounted(() => {
         const kernelSpeed = lIdx === 1 ? 1.4 : 1.9
         const kernelY = 95 + (height - 180) / 2 + Math.sin(time * kernelSpeed + lIdx) * ((height - 190) * 0.35)
         
-        ctx.strokeStyle = currentKernel.value.glowColor
+        ctx.strokeStyle = dark ? currentKernel.value.glowColor : '#047857'
         ctx.lineWidth = 1.6
         ctx.strokeRect(layer.x - 16, kernelY - 16, 32, 32)
-        ctx.fillStyle = 'rgba(4, 120, 87, 0.25)'
+        ctx.fillStyle = dark ? 'rgba(4, 120, 87, 0.25)' : 'rgba(16, 185, 129, 0.15)'
         ctx.fillRect(layer.x - 16, kernelY - 16, 32, 32)
 
         // 3x3 grid inside kernel
-        ctx.strokeStyle = 'rgba(52, 211, 153, 0.5)'
+        ctx.strokeStyle = dark ? 'rgba(52, 211, 153, 0.5)' : 'rgba(4, 120, 87, 0.45)'
         ctx.lineWidth = 0.6
         ctx.beginPath()
         ctx.moveTo(layer.x - 5, kernelY - 16); ctx.lineTo(layer.x - 5, kernelY + 16)
@@ -419,7 +428,7 @@ onMounted(() => {
         ctx.moveTo(layer.x - 16, kernelY + 5); ctx.lineTo(layer.x + 16, kernelY + 5)
         ctx.stroke()
 
-        ctx.fillStyle = '#34d399'
+        ctx.fillStyle = dark ? '#34d399' : '#047857'
         ctx.font = 'bold 8px "Fragment Mono", monospace'
         ctx.fillText(selectedKernel.value.toUpperCase(), layer.x, kernelY + 24)
       }
@@ -437,8 +446,8 @@ onMounted(() => {
           ctx.beginPath()
           ctx.arc(node.x, node.y, nodeRadius + (finalAct * 5), 0, Math.PI * 2)
           ctx.fillStyle = isTopOutput
-            ? `rgba(16, 185, 129, ${0.25 + finalAct * 0.45})`
-            : `rgba(4, 120, 87, ${0.10 + finalAct * 0.35})`
+            ? (dark ? `rgba(16, 185, 129, ${0.25 + finalAct * 0.45})` : `rgba(4, 120, 87, ${0.20 + finalAct * 0.35})`)
+            : (dark ? `rgba(4, 120, 87, ${0.10 + finalAct * 0.35})` : `rgba(16, 185, 129, ${0.15 + finalAct * 0.35})`)
           ctx.fill()
         }
 
@@ -446,25 +455,25 @@ onMounted(() => {
         ctx.arc(node.x, node.y, nodeRadius, 0, Math.PI * 2)
 
         if (isTopOutput) {
-          ctx.fillStyle = currentPreset.value.primaryColor
-          ctx.strokeStyle = '#ffffff'
+          ctx.fillStyle = dark ? currentPreset.value.primaryColor : '#047857'
+          ctx.strokeStyle = dark ? '#ffffff' : '#10b981'
           ctx.lineWidth = 2.5
           ctx.shadowColor = currentPreset.value.primaryColor
-          ctx.shadowBlur = 12
+          ctx.shadowBlur = dark ? 12 : 6
         } else if (finalAct > 0.65) {
-          ctx.fillStyle = '#059669'
-          ctx.strokeStyle = '#34d399'
+          ctx.fillStyle = dark ? '#059669' : '#047857'
+          ctx.strokeStyle = dark ? '#34d399' : '#10b981'
           ctx.lineWidth = 1.6
           ctx.shadowColor = '#059669'
-          ctx.shadowBlur = 6
+          ctx.shadowBlur = dark ? 6 : 2
         } else if (finalAct > 0.2) {
-          ctx.fillStyle = '#064e3b'
-          ctx.strokeStyle = 'rgba(52, 211, 153, 0.7)'
+          ctx.fillStyle = dark ? '#064e3b' : '#10b981'
+          ctx.strokeStyle = dark ? 'rgba(52, 211, 153, 0.7)' : '#047857'
           ctx.lineWidth = 1.0
           ctx.shadowBlur = 0
         } else {
-          ctx.fillStyle = '#090d16'
-          ctx.strokeStyle = 'rgba(255, 255, 255, 0.15)'
+          ctx.fillStyle = dark ? '#090d16' : '#E2E8F0'
+          ctx.strokeStyle = dark ? 'rgba(255, 255, 255, 0.15)' : 'rgba(100, 116, 139, 0.4)'
           ctx.lineWidth = 0.8
           ctx.shadowBlur = 0
         }
@@ -483,15 +492,15 @@ onMounted(() => {
         const val = computeActivation(targetNode.baseWeight, selectedActivation.value).toFixed(3)
         const tooltipText = `${layerName} [Node #${nodeIdx + 1}] • a: ${val}`
         
-        ctx.fillStyle = 'rgba(11, 12, 16, 0.92)'
-        ctx.strokeStyle = 'rgba(52, 211, 153, 0.7)'
+        ctx.fillStyle = dark ? 'rgba(11, 12, 16, 0.92)' : 'rgba(255, 255, 255, 0.98)'
+        ctx.strokeStyle = dark ? 'rgba(52, 211, 153, 0.7)' : '#047857'
         ctx.lineWidth = 1
         ctx.beginPath()
         ctx.roundRect(targetNode.x - 80, targetNode.y - 34, 160, 22, 6)
         ctx.fill()
         ctx.stroke()
 
-        ctx.fillStyle = '#34d399'
+        ctx.fillStyle = dark ? '#34d399' : '#047857'
         ctx.font = 'bold 9px "Fragment Mono", monospace'
         ctx.textAlign = 'center'
         ctx.fillText(tooltipText, targetNode.x, targetNode.y - 20)
@@ -555,20 +564,20 @@ onMounted(() => {
     </div>
 
     <!-- Main CNN Neural Canvas Viewport -->
-    <div class="relative w-full rounded-3xl bg-[#07080A] border border-slate-800 dark:border-white/10 overflow-hidden shadow-2xl p-2 sm:p-4">
+    <div class="relative w-full rounded-3xl bg-white dark:bg-[#07080A] border border-slate-200 dark:border-white/10 overflow-hidden shadow-lg dark:shadow-2xl p-2 sm:p-4 transition-colors">
       
       <!-- Top HUD Telemetry Overlay -->
-      <div class="flex flex-wrap items-center justify-between gap-2 p-3 bg-black/60 border-b border-white/10 rounded-2xl mb-2">
-        <div class="inline-flex items-center gap-2 text-xs font-mono-tag text-zinc-300">
-          <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+      <div class="flex flex-wrap items-center justify-between gap-2 p-3 bg-slate-50 dark:bg-black/60 border-b border-slate-200 dark:border-white/10 rounded-2xl mb-2">
+        <div class="inline-flex items-center gap-2 text-xs font-mono-tag text-slate-800 dark:text-zinc-300 font-medium">
+          <span class="w-2 h-2 rounded-full bg-[#047857] dark:bg-emerald-400 animate-pulse"></span>
           <span>Deep Vision CNN Pipeline: Conv2D → MaxPool → Dense → Softmax</span>
         </div>
 
-        <div class="inline-flex items-center gap-3 text-[11px] font-mono-tag text-zinc-400">
-          <span>Inference: <strong class="text-emerald-400">3.4ms</strong></span>
-          <span>FLOPs: <strong class="text-cyan-400">42.8M</strong></span>
-          <span>FPS: <strong class="text-white">{{ liveFps }}</strong></span>
-          <span>Pass: <strong class="text-emerald-300">#{{ forwardPassCount }}</strong></span>
+        <div class="inline-flex items-center gap-3 text-[11px] font-mono-tag text-slate-500 dark:text-zinc-400">
+          <span>Inference: <strong class="text-[#047857] dark:text-emerald-400 font-bold">3.4ms</strong></span>
+          <span>FLOPs: <strong class="text-teal-600 dark:text-cyan-400 font-bold">42.8M</strong></span>
+          <span>FPS: <strong class="text-slate-800 dark:text-white font-bold">{{ liveFps }}</strong></span>
+          <span>Pass: <strong class="text-[#047857] dark:text-emerald-300 font-bold">#{{ forwardPassCount }}</strong></span>
         </div>
       </div>
 
@@ -581,25 +590,25 @@ onMounted(() => {
       ></canvas>
 
       <!-- Bottom Architecture Flow Legend -->
-      <div class="p-3 bg-white/5 border-t border-white/10 rounded-2xl flex flex-wrap items-center justify-between gap-3 text-xs font-mono-tag">
-        <div class="flex flex-wrap items-center gap-4 text-zinc-400">
+      <div class="p-3 bg-slate-50 dark:bg-white/5 border-t border-slate-200 dark:border-white/10 rounded-2xl flex flex-wrap items-center justify-between gap-3 text-xs font-mono-tag">
+        <div class="flex flex-wrap items-center gap-4 text-slate-600 dark:text-zinc-400">
           <div class="flex items-center gap-1.5">
-            <span class="w-2.5 h-2.5 rounded-full bg-[#10b981]"></span>
+            <span class="w-2.5 h-2.5 rounded-full bg-[#047857] dark:bg-[#10b981]"></span>
             <span>Active Neurons (f(x) &gt; 0)</span>
           </div>
           <div class="flex items-center gap-1.5">
-            <span class="w-2.5 h-2.5 rounded-md border border-emerald-400 bg-emerald-500/20"></span>
+            <span class="w-2.5 h-2.5 rounded-md border border-[#047857] dark:border-emerald-400 bg-emerald-500/20"></span>
             <span>3×3 Kernel Convolution ({{ currentKernel.name }})</span>
           </div>
           <div class="flex items-center gap-1.5">
-            <span class="w-2.5 h-2.5 rounded-full bg-[#047857]"></span>
+            <span class="w-2.5 h-2.5 rounded-full bg-slate-400 dark:bg-[#047857]"></span>
             <span>Dense Synapses</span>
           </div>
         </div>
 
-        <div class="text-emerald-400 font-bold flex items-center gap-1.5">
+        <div class="text-[#047857] dark:text-emerald-400 font-bold flex items-center gap-1.5">
           <span>Top Detection:</span>
-          <span class="text-white underline decoration-emerald-400">{{ currentPreset.classes[0].label }} ({{ currentPreset.classes[0].conf }}%)</span>
+          <span class="text-slate-900 dark:text-white underline decoration-emerald-500 font-bold">{{ currentPreset.classes[0].label }} ({{ currentPreset.classes[0].conf }}%)</span>
         </div>
       </div>
 

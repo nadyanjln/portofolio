@@ -85,10 +85,10 @@ onMounted(() => observeAll(sectionRef.value))
         <div class="relative z-10 max-w-3xl mx-auto select-none space-y-3" v-if="currentProfile === 'raqwan'">
           <h2 class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight text-[#1C1313] dark:text-[#F4F4F6] leading-[1.15]">
             <span class="inline-block whitespace-nowrap">
-              <span class="text-emerald-400 font-light">(</span> Have an ambitious AI idea? <span class="text-emerald-400 font-light">)</span>
+              <span class="text-[#047857] dark:text-emerald-400 font-light">(</span> Have an ambitious AI idea? <span class="text-[#047857] dark:text-emerald-400 font-light">)</span>
             </span>
             <span class="block mt-2 sm:mt-3">
-              Let's <span class="text-emerald-400 underline decoration-cyan-500 decoration-wavy decoration-2 sm:decoration-3">train & deploy it</span> together!
+              Let's <span class="text-[#047857] dark:text-emerald-400 underline decoration-cyan-500 decoration-wavy decoration-2 sm:decoration-3">train & deploy it</span> together!
             </span>
           </h2>
 
@@ -127,9 +127,10 @@ onMounted(() => observeAll(sectionRef.value))
 
             <a
               :href="'mailto:' + portfolioInfo.email"
-              class="px-6 py-4 rounded-full bg-white dark:bg-[#1A1C24] hover:bg-[#FDF6F6] dark:hover:bg-[#252834] text-[#1C1313] dark:text-white border border-[#EEDCDC] dark:border-white/10 font-mono-tag font-bold text-xs sm:text-sm tracking-wider uppercase transition-all duration-300 flex items-center gap-2 shadow-xs hover:scale-105 active:scale-95"
+              class="px-6 py-4 rounded-full bg-white dark:bg-[#1A1C24] text-[#1C1313] dark:text-white border border-[#EEDCDC] dark:border-white/10 font-mono-tag font-bold text-xs sm:text-sm tracking-wider uppercase transition-all duration-300 flex items-center gap-2 shadow-xs hover:scale-105 active:scale-95"
+              :class="currentProfile === 'raqwan' ? 'hover:bg-emerald-50 dark:hover:bg-[#252834] hover:border-[#047857]/50' : 'hover:bg-[#FDF6F6] dark:hover:bg-[#252834]'"
             >
-              <Mail class="w-4 h-4" :class="currentProfile === 'raqwan' ? 'text-emerald-400' : 'text-[#9E0402] dark:text-[#ff4d4d]'" />
+              <Mail class="w-4 h-4" :class="currentProfile === 'raqwan' ? 'text-[#047857] dark:text-emerald-400' : 'text-[#9E0402] dark:text-[#ff4d4d]'" />
               <span>{{ portfolioInfo.email }}</span>
             </a>
           </div>

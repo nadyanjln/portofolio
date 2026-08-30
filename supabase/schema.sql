@@ -252,6 +252,14 @@ VALUES
     'https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&w=200&q=80',
     'Kepemimpinan produk Nadya dalam mengembangkan MeatSure sangat impresif. Kemampuannya mengintegrasikan teknologi AI dengan pemecahan masalah rantai pasok nyata mengantarkan timnya meraih predikat Best AI Integration.',
     'Best AI Integration 2025'
+  ),
+  (
+    'Universitas Gunadarma Computerization Institute',
+    'Academic Coordination Team',
+    'Gunadarma University',
+    'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80',
+    'Sebagai asisten tutor dan interviewer, Nadya memiliki kemampuan komunikasi yang luar biasa dan pemikiran analitis yang tajam dalam memproses feedback mahasiswa dan menyederhanakan proses administratif institusi.',
+    'Academic & Leadership'
   )
 ON CONFLICT DO NOTHING;
 
