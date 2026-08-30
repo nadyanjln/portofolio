@@ -1,8 +1,9 @@
 export const portfolioInfo = {
-  name: "Nadya",
+  name: "Nadya Najelina Salsabillah",
+  shortName: "Nadya",
   title: "Product Manager & UI/UX Designer",
   tagline: "Merancang produk digital yang berdampak — dari riset pengguna hingga desain interface yang intuitif dan scalable.",
-  bio: "Hi! Saya Nadya, seorang Product Manager & UI/UX Designer yang passionate dalam menciptakan pengalaman digital yang bermakna. Saya menggabungkan pemikiran strategis product management dengan keahlian visual design untuk memastikan setiap produk tidak hanya indah secara estetika, tetapi juga memberikan nilai nyata bagi pengguna dan bisnis.",
+  bio: "Hi! Saya Nadya Najelina Salsabillah, seorang Product Manager & UI/UX Designer yang passionate dalam menciptakan pengalaman digital yang bermakna. Saya menggabungkan pemikiran strategis product management dengan keahlian visual design untuk memastikan setiap produk tidak hanya indah secara estetika, tetapi juga memberikan nilai nyata bagi pengguna dan bisnis.",
   status: "Open for Product & Design roles",
   location: "Indonesia",
   email: "nadya@example.com",
@@ -412,3 +413,84 @@ export const projects = [
     }
   }
 ]
+
+export const workflows = [
+  {
+    step: "01",
+    phase: "Discover & Empathize",
+    tagline: "Uncovering Deep Insights",
+    description: "Memahami akar masalah pengguna dan peluang bisnis melalui wawancara mendalam, telemetry data, competitive audit, dan user journey mapping.",
+    deliverables: ["User Persona & Empathy Map", "Competitive Matrix", "Quantitative Funnel Audit", "Problem Definition (HMW)"]
+  },
+  {
+    step: "02",
+    phase: "Define & Strategize",
+    tagline: "Framing The Product Vision",
+    description: "Menyusun Product Requirement Document (PRD), merumuskan acceptance criteria, mendefinisikan OKR/KPI kesuksesan, serta prioritisasi fitur via RICE framework.",
+    deliverables: ["Comprehensive PRD", "User Stories & Acceptance Criteria", "RICE Prioritization Matrix", "Information Architecture"]
+  },
+  {
+    step: "03",
+    phase: "Design & Prototype",
+    tagline: "Crafting Intuitive Interfaces",
+    description: "Merancang wireframe terstruktur hingga high-fidelity prototype interaktif di Figma, dengan fondasi design system yang accessible (WCAG 2.1 AA) dan scalable.",
+    deliverables: ["Interactive Figma Prototypes", "Design System Tokens & Components", "Micro-Interactions & Motion", "Usability Test Scripts"]
+  },
+  {
+    step: "04",
+    phase: "Deliver, Test & Iterate",
+    tagline: "Measuring Real Impact",
+    description: "Mendampingi sprint engineering via clear dev-handoff, memfasilitasi usability testing & A/B testing, serta mengukur metrik post-launch untuk iterasi berkelanjutan.",
+    deliverables: ["Dev Handoff & Redline Specs", "Usability Findings & Iteration Log", "A/B Testing Statistical Validation", "Post-Launch Growth Telemetry"]
+  }
+]
+
+export const testimonials = [
+  {
+    id: 1,
+    name: "Rian Pratama",
+    role: "VP of Product",
+    company: "Scale-up SaaS Enterprise",
+    avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80",
+    content: "Nadya memiliki kombinasi langka antara pemikiran strategis product management dan ketajaman visual UI/UX kelas atas. Kecepatannya dalam menyederhanakan workflow yang rumit menjadi interface yang intuitif benar-benar mendongkrak retensi produk kami.",
+    badge: "Verified Colleague"
+  },
+  {
+    id: 2,
+    name: "Devi Anggraini",
+    role: "Lead Frontend Engineer",
+    company: "Digital Fintech Studio",
+    avatar: "https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&w=200&q=80",
+    content: "Bekerja dengan Nadya sangat menyenangkan untuk tim engineering. Dokumentasi PRD-nya sangat rinci, design system di Figma terstruktur rapi dengan token standar, sehingga proses handoff dan slicing berjalan 2x lebih cepat tanpa multitafsir.",
+    badge: "Engineering Partner"
+  },
+  {
+    id: 3,
+    name: "Arif Wicaksono",
+    role: "Startup Founder & CEO",
+    company: "TaskFlow Workspace",
+    avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=200&q=80",
+    content: "Nadya memimpin produk kami dari tahap 0 ke 1 dengan kepemimpinan yang solid. Riset penggunanya tajam, validasi MVP tepat sasaran, dan hasil desainnya mendapat rating kepuasan 4.6/5 saat debut peluncuran.",
+    badge: "Founder Endorsement"
+  }
+]
+
+export const faqs = [
+  {
+    question: "Apakah Anda terbuka untuk posisi Full-time (Remote/Hybrid) atau Freelance Consulting?",
+    answer: "Ya, saya terbuka untuk peluang Full-Time (baik Remote, Hybrid, maupun On-site di Indonesia) untuk peran Product Manager, UI/UX Designer, maupun Product Designer. Saya juga menerima konsultasi freelance strategis untuk startup yang ingin merancang MVP atau meredesain produk."
+  },
+  {
+    question: "Bagaimana pendekatan Anda dalam menyelaraskan kebutuhan Bisnis dengan Pengalaman Pengguna (UX)?",
+    answer: "Saya menggunakan pendekatan 'Impact-First Design' — setiap keputusan desain harus memiliki hipotesis terukur yang mendukung metrik bisnis (seperti konversi, retensi, atau efisiensi waktu tugas) tanpa mengorbankan kenyamanan dan aksesibilitas pengguna."
+  },
+  {
+    question: "Apa saja tools dan metodologi utama yang menjadi andalan harian Anda?",
+    answer: "Untuk Design: Figma (Auto Layout, Variables, Component Properties, Interactive Prototypes) & FigJam. Untuk Product Management: Notion, Jira, Linear, PRD Documentation, RICE Framework, dan Agile/Scrum. Untuk Riset & Analitik: Maze, Hotjar, Google Analytics, Amplitude, serta moderated user interviews."
+  },
+  {
+    question: "Bagaimana cara Anda berkolaborasi dengan tim Engineering agar delivery tetap lancar?",
+    answer: "Saya melibatkan tim engineering sejak tahap awal discovery untuk memvalidasi feasibility teknis. Saat handoff, saya menyediakan annotated screens, token documentation, edge cases (empty, error, loading states), serta aktif mendampingi selama sprint grooming dan QA review."
+  }
+]
+

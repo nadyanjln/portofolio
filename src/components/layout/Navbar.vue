@@ -45,7 +45,7 @@ const closeMobileMenu = () => {
         </div>
         <div class="hidden sm:flex flex-col">
           <span class="font-bold text-sm tracking-tight text-[#1C1313] dark:text-[#F4F4F6] group-hover:text-[#9E0402] transition-colors">
-            Nadya
+            Nadya N. S.
           </span>
           <span class="font-mono-tag text-[9px] text-[#5C4848] dark:text-zinc-400 tracking-wider uppercase">
             Product & Design
