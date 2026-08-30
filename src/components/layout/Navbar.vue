@@ -16,7 +16,7 @@ import { usePortfolioStore } from '@/composables/usePortfolioStore'
 const route = useRoute()
 const isMobileMenuOpen = ref(false)
 const { isDark, toggleTheme } = useTheme()
-const { portfolioInfo, currentProfile } = usePortfolioStore()
+const { portfolioInfo, currentProfile, setActiveProfile } = usePortfolioStore()
 
 // Dynamic navigation links based on active profile
 const navLinks = computed(() => {
@@ -111,7 +111,8 @@ const closeMobileMenu = () => {
 
         <RouterLink
           :to="'/' + otherProfile.key"
-          class="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white/90 dark:bg-[#15161B] text-[#5C4848] dark:text-zinc-300 border border-[#EEDCDC] dark:border-white/10 text-xs font-mono-tag transition-all shadow-xs"
+          @click="setActiveProfile(otherProfile.key); closeMobileMenu()"
+          class="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white/90 dark:bg-[#15161B] text-[#5C4848] dark:text-zinc-300 border border-[#EEDCDC] dark:border-white/10 text-xs font-mono-tag transition-all shadow-xs cursor-pointer"
           :class="currentProfile === 'nadya' ? 'hover:border-[#9E0402]/40' : 'hover:border-[#047857]/50'"
           :title="'Beralih ke Portofolio ' + otherProfile.name"
         >
@@ -191,7 +192,7 @@ const closeMobileMenu = () => {
         <div class="pt-3 mt-1 border-t border-[#EEDCDC] dark:border-white/10 flex items-center justify-between gap-2">
           <RouterLink
             :to="'/' + otherProfile.key"
-            @click="closeMobileMenu"
+            @click="setActiveProfile(otherProfile.key); closeMobileMenu()"
             class="px-3 py-1.5 rounded-xl bg-white/5 border border-white/10 text-xs font-mono-tag text-zinc-300 flex items-center gap-1.5"
           >
             <ArrowLeftRight class="w-3.5 h-3.5" />

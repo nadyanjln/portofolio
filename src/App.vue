@@ -48,7 +48,7 @@ onMounted(() => {
           name="page-fade" 
           mode="out-in"
         >
-          <component :is="Component" />
+          <component :is="Component" :key="route.fullPath" />
         </transition>
       </router-view>
     </main>
