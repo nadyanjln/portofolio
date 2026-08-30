@@ -73,7 +73,7 @@ onMounted(() => observeAll(sectionRef.value))
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       
       <!-- Big Statement Creative CTA -->
-      <div data-reveal="scale-up" class="p-8 sm:p-12 lg:p-16 rounded-[36px] sm:rounded-[48px] bg-white dark:bg-[#15161B] border border-[#EEDCDC] dark:border-white/10 shadow-sm relative overflow-hidden text-center space-y-6 sm:space-y-8">
+      <div data-reveal="scale-up" class="p-6 sm:p-10 lg:p-16 rounded-3xl sm:rounded-[48px] bg-white dark:bg-[#15161B] border border-[#EEDCDC] dark:border-white/10 shadow-sm relative overflow-hidden text-center space-y-6 sm:space-y-8">
         
         <!-- Glow effect -->
         <div 
@@ -82,44 +82,44 @@ onMounted(() => observeAll(sectionRef.value))
         ></div>
 
         <!-- Parenthesized Creative Headline (Clean 2-line structure) -->
-        <div class="relative z-10 max-w-3xl mx-auto select-none space-y-3" v-if="currentProfile === 'raqwan'">
-          <h2 class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight text-[#1C1313] dark:text-[#F4F4F6] leading-[1.15]">
-            <span class="inline-block whitespace-nowrap">
+        <div class="relative z-10 max-w-3xl mx-auto select-none space-y-2 sm:space-y-3" v-if="currentProfile === 'raqwan'">
+          <h2 class="text-2xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight text-[#1C1313] dark:text-[#F4F4F6] leading-tight sm:leading-[1.15]">
+            <span class="inline sm:inline-block">
               <span class="text-[#047857] dark:text-emerald-400 font-light">(</span> Have an ambitious AI idea? <span class="text-[#047857] dark:text-emerald-400 font-light">)</span>
             </span>
-            <span class="block mt-2 sm:mt-3">
+            <span class="block mt-1.5 sm:mt-3">
               Let's <span class="text-[#047857] dark:text-emerald-400 underline decoration-cyan-500 decoration-wavy decoration-2 sm:decoration-3">train & deploy it</span> together!
             </span>
           </h2>
 
           <!-- Pulsing Beacon Dot -->
-          <div class="pt-2 flex justify-center">
-            <span class="w-3 h-3 rounded-full bg-[#047857] shadow-md shadow-[#047857] animate-pulse"></span>
+          <div class="pt-1 sm:pt-2 flex justify-center">
+            <span class="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full bg-[#047857] shadow-md shadow-[#047857] animate-pulse"></span>
           </div>
         </div>
 
-        <div class="relative z-10 max-w-3xl mx-auto select-none space-y-3" v-else>
-          <h2 class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight text-[#1C1313] dark:text-[#F4F4F6] leading-[1.15]">
-            <span class="inline-block whitespace-nowrap">
+        <div class="relative z-10 max-w-3xl mx-auto select-none space-y-2 sm:space-y-3" v-else>
+          <h2 class="text-2xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight text-[#1C1313] dark:text-[#F4F4F6] leading-tight sm:leading-[1.15]">
+            <span class="inline sm:inline-block">
               <span class="text-[#9E0402] dark:text-[#ff4d4d] font-light">(</span> Have an ambitious idea? <span class="text-[#9E0402] dark:text-[#ff4d4d] font-light">)</span>
             </span>
-            <span class="block mt-2 sm:mt-3">
+            <span class="block mt-1.5 sm:mt-3">
               Let's <span class="text-[#9E0402] dark:text-[#ff4d4d] underline decoration-[#9FC2EA] decoration-wavy decoration-2 sm:decoration-3">build it</span> together!
             </span>
           </h2>
 
           <!-- Pulsing Beacon Dot -->
-          <div class="pt-2 flex justify-center">
-            <span class="w-3 h-3 rounded-full bg-[#9E0402] dark:bg-[#ff4d4d] shadow-md shadow-[#9E0402] animate-pulse"></span>
+          <div class="pt-1 sm:pt-2 flex justify-center">
+            <span class="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full bg-[#9E0402] dark:bg-[#ff4d4d] shadow-md shadow-[#9E0402] animate-pulse"></span>
           </div>
         </div>
 
         <!-- Start the project button / Toggle form -->
-        <div class="relative z-10 flex flex-col items-center gap-4 pt-1">
-          <div class="flex flex-wrap items-center justify-center gap-3">
+        <div class="relative z-10 flex flex-col items-center gap-3 sm:gap-4 pt-1">
+          <div class="flex flex-col sm:flex-row items-center justify-center gap-3 w-full sm:w-auto">
             <button
               @click="showForm = !showForm"
-              class="px-8 py-4 rounded-full text-white font-mono-tag font-bold text-xs sm:text-sm uppercase tracking-widest transition-all duration-300 shadow-lg flex items-center gap-3 cursor-pointer hover:scale-105 active:scale-95"
+              class="w-full sm:w-auto justify-center px-6 sm:px-8 py-3.5 sm:py-4 rounded-full text-white font-mono-tag font-bold text-xs sm:text-sm uppercase tracking-wider sm:tracking-widest transition-all duration-300 shadow-lg flex items-center gap-2.5 sm:gap-3 cursor-pointer hover:scale-105 active:scale-95"
               :class="currentProfile === 'raqwan' ? 'bg-[#047857] hover:bg-[#065F46] shadow-[#047857]/30' : 'bg-[#9E0402] hover:bg-[#B80604] shadow-[#9E0402]/25'"
             >
               <span>{{ showForm ? 'TUTUP FORMULIR [X]' : 'START THE PROJECT ↗' }}</span>
@@ -127,22 +127,22 @@ onMounted(() => observeAll(sectionRef.value))
 
             <a
               :href="'mailto:' + portfolioInfo.email"
-              class="px-6 py-4 rounded-full bg-white dark:bg-[#1A1C24] text-[#1C1313] dark:text-white border border-[#EEDCDC] dark:border-white/10 font-mono-tag font-bold text-xs sm:text-sm tracking-wider uppercase transition-all duration-300 flex items-center gap-2 shadow-xs hover:scale-105 active:scale-95"
+              class="w-full sm:w-auto justify-center px-5 sm:px-6 py-3.5 sm:py-4 rounded-full bg-white dark:bg-[#1A1C24] text-[#1C1313] dark:text-white border border-[#EEDCDC] dark:border-white/10 font-mono-tag font-bold text-xs sm:text-sm tracking-wider uppercase transition-all duration-300 flex items-center gap-2 shadow-xs hover:scale-105 active:scale-95 truncate"
               :class="currentProfile === 'raqwan' ? 'hover:bg-emerald-50 dark:hover:bg-[#252834] hover:border-[#047857]/50' : 'hover:bg-[#FDF6F6] dark:hover:bg-[#252834]'"
             >
-              <Mail class="w-4 h-4" :class="currentProfile === 'raqwan' ? 'text-[#047857] dark:text-emerald-400' : 'text-[#9E0402] dark:text-[#ff4d4d]'" />
-              <span>{{ portfolioInfo.email }}</span>
+              <Mail class="w-4 h-4 shrink-0" :class="currentProfile === 'raqwan' ? 'text-[#047857] dark:text-emerald-400' : 'text-[#9E0402] dark:text-[#ff4d4d]'" />
+              <span class="truncate">{{ portfolioInfo.email }}</span>
             </a>
           </div>
 
           <!-- Direct Social Channels -->
-          <div class="flex flex-wrap items-center justify-center gap-3 pt-1">
+          <div class="flex flex-wrap items-center justify-center gap-2 sm:gap-3 pt-1 w-full sm:w-auto">
             <a
               v-if="portfolioInfo.socials?.linkedin"
               :href="portfolioInfo.socials.linkedin"
               target="_blank"
               rel="noopener noreferrer"
-              class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-[#FFF9F9] dark:bg-[#1A1C24] border border-[#EEDCDC] dark:border-white/10 text-xs font-mono-tag font-bold text-[#1C1313] dark:text-zinc-200 hover:text-white transition-all"
+              class="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-[#FFF9F9] dark:bg-[#1A1C24] border border-[#EEDCDC] dark:border-white/10 text-xs font-mono-tag font-bold text-[#1C1313] dark:text-zinc-200 hover:text-white transition-all shadow-2xs"
               :class="currentProfile === 'raqwan' ? 'hover:border-[#047857]/60 hover:text-emerald-300' : 'hover:border-[#9E0402]/40 hover:text-[#9E0402]'"
             >
               <Linkedin class="w-3.5 h-3.5" :class="currentProfile === 'raqwan' ? 'text-emerald-400' : 'text-[#1E3A60] dark:text-[#9FC2EA]'" />
@@ -154,7 +154,7 @@ onMounted(() => observeAll(sectionRef.value))
               :href="portfolioInfo.socials.github"
               target="_blank"
               rel="noopener noreferrer"
-              class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-[#FFF9F9] dark:bg-[#1A1C24] border border-[#EEDCDC] dark:border-white/10 text-xs font-mono-tag font-bold text-[#1C1313] dark:text-zinc-200 hover:text-white transition-all"
+              class="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-[#FFF9F9] dark:bg-[#1A1C24] border border-[#EEDCDC] dark:border-white/10 text-xs font-mono-tag font-bold text-[#1C1313] dark:text-zinc-200 hover:text-white transition-all shadow-2xs"
               :class="currentProfile === 'raqwan' ? 'hover:border-[#047857]/60 hover:text-emerald-300' : 'hover:border-[#9E0402]/40 hover:text-[#9E0402]'"
             >
               <Github class="w-3.5 h-3.5" :class="currentProfile === 'raqwan' ? 'text-emerald-400' : 'text-[#9E0402] dark:text-[#ff4d4d]'" />
@@ -162,10 +162,10 @@ onMounted(() => observeAll(sectionRef.value))
             </a>
           </div>
           
-          <p class="text-xs font-mono-tag text-[#5C4848] dark:text-zinc-400 pt-1" v-if="currentProfile === 'raqwan'">
+          <p class="text-[11px] sm:text-xs font-mono-tag text-[#5C4848] dark:text-zinc-400 pt-1 text-center max-w-md px-2" v-if="currentProfile === 'raqwan'">
             Open for AI Engineering, Computer Vision & Research roles
           </p>
-          <p class="text-xs font-mono-tag text-[#5C4848] dark:text-zinc-400 pt-1" v-else>
+          <p class="text-[11px] sm:text-xs font-mono-tag text-[#5C4848] dark:text-zinc-400 pt-1 text-center max-w-md px-2" v-else>
             Open for Product Management & UI/UX roles or consulting
           </p>
         </div>

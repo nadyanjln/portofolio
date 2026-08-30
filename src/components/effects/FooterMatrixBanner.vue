@@ -257,7 +257,7 @@ onUnmounted(() => {
 
 <template>
   <div 
-    class="relative w-full rounded-[36px] sm:rounded-[48px] border overflow-hidden py-12 sm:py-20 px-4 sm:px-8 select-none group transition-colors duration-300"
+    class="relative w-full rounded-3xl sm:rounded-[48px] border overflow-hidden py-8 sm:py-16 lg:py-20 px-3 sm:px-8 select-none group transition-colors duration-300"
     :class="currentProfile === 'raqwan'
       ? 'bg-[#F0FDF4] dark:bg-[#07080A] border-emerald-200 dark:border-white/10'
       : 'bg-[#FFF5F5] dark:bg-[#07080A] border-[#EEDCDC] dark:border-white/10'"
@@ -284,21 +284,21 @@ onUnmounted(() => {
     ></div>
 
     <!-- Center Stage: Giant Typographic Monogram/Name -->
-    <div class="relative z-20 max-w-5xl mx-auto flex flex-col items-center justify-center text-center px-2">
+    <div class="relative z-20 max-w-5xl mx-auto flex flex-col items-center justify-center text-center px-1 sm:px-2">
       
       <!-- Top Small Monospace Badge -->
       <div 
-        class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full backdrop-blur-md mb-4 sm:mb-6 shadow-sm border transition-colors"
+        class="inline-flex items-center gap-1.5 sm:gap-2 px-3 sm:px-3.5 py-1 rounded-full backdrop-blur-md mb-3 sm:mb-6 shadow-sm border transition-colors max-w-[95%] sm:max-w-none"
         :class="currentProfile === 'raqwan'
           ? 'bg-emerald-50 dark:bg-white/10 border-emerald-200 dark:border-white/20'
           : 'bg-[#FFF0F0] dark:bg-white/10 border-[#EEDCDC] dark:border-white/20'"
       >
         <span 
-          class="w-2 h-2 rounded-full animate-pulse"
+          class="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full animate-pulse shrink-0"
           :class="currentProfile === 'raqwan' ? 'bg-emerald-400' : 'bg-[#ff4d4d]'"
         ></span>
         <span 
-          class="text-[11px] font-mono-tag tracking-widest uppercase font-bold transition-colors"
+          class="text-[9px] sm:text-[11px] font-mono-tag tracking-wider sm:tracking-widest uppercase font-bold transition-colors truncate"
           :class="currentProfile === 'raqwan' ? 'text-[#047857] dark:text-white' : 'text-[#9E0402] dark:text-white'"
         >
           {{ portfolioInfo.title }}
@@ -307,7 +307,7 @@ onUnmounted(() => {
 
       <!-- Clean 2-Line Bold Typography -->
       <h2 
-        class="text-3xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl font-black tracking-tight uppercase leading-[0.92] sm:leading-[0.88] transition-all duration-500 ease-out group-hover:scale-[1.01]"
+        class="text-[28px] xs:text-3xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl font-black tracking-tight uppercase leading-[0.92] sm:leading-[0.88] transition-all duration-500 ease-out group-hover:scale-[1.01] px-1"
         :class="currentProfile === 'raqwan' 
           ? 'text-[#0F172A] dark:text-white drop-shadow-[0_4px_20px_rgba(4,120,87,0.15)] dark:drop-shadow-2xl' 
           : 'text-[#1C1313] dark:text-white drop-shadow-[0_4px_20px_rgba(158,4,2,0.12)] dark:drop-shadow-2xl'"
@@ -319,7 +319,7 @@ onUnmounted(() => {
 
       <!-- Bottom Subtitle / Tagline -->
       <p 
-        class="mt-4 sm:mt-6 text-xs sm:text-sm md:text-base font-mono-tag max-w-2xl px-4 leading-relaxed font-medium transition-colors"
+        class="mt-3 sm:mt-6 text-xs sm:text-sm md:text-base font-mono-tag max-w-2xl px-2 sm:px-4 leading-relaxed font-medium transition-colors text-center"
         :class="currentProfile === 'raqwan' ? 'text-slate-600 dark:text-zinc-200' : 'text-[#5C4848] dark:text-zinc-200'"
       >
         {{ portfolioInfo.tagline }}
@@ -328,17 +328,17 @@ onUnmounted(() => {
 
     <!-- Bottom Metadata Details -->
     <div 
-      class="relative z-20 max-w-7xl mx-auto mt-8 sm:mt-12 pt-4 border-t flex flex-col sm:flex-row items-center justify-between gap-2 text-[11px] font-mono-tag transition-colors"
+      class="relative z-20 max-w-7xl mx-auto mt-6 sm:mt-12 pt-4 border-t flex flex-col sm:flex-row items-center justify-between gap-2.5 text-center sm:text-left text-[10px] sm:text-[11px] font-mono-tag transition-colors"
       :class="currentProfile === 'raqwan'
         ? 'border-emerald-200 dark:border-white/15 text-slate-500 dark:text-zinc-300'
         : 'border-[#EEDCDC] dark:border-white/15 text-[#5C4848] dark:text-zinc-300'"
     >
-      <div class="flex items-center gap-2">
+      <div class="flex items-center justify-center sm:justify-start gap-2">
         <span class="w-1.5 h-1.5 rounded-full" :class="currentProfile === 'raqwan' ? 'bg-emerald-400' : 'bg-[#ff4d4d]'"></span>
         <span>Indonesia & Worldwide • Open for collaboration</span>
       </div>
 
-      <div class="text-center sm:text-right text-[10px] leading-tight">
+      <div class="text-center sm:text-right text-[10px] leading-tight space-y-0.5">
         <p>©{{ currentYear }} All rights reserved. {{ portfolioInfo.name }}.</p>
         <p :class="currentProfile === 'raqwan' ? 'text-slate-400 dark:text-zinc-400' : 'text-[#8B7676] dark:text-zinc-400'">Crafted with precision & code. Unauthorised reproduction prohibited.</p>
       </div>
