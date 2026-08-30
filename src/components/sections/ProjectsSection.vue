@@ -203,7 +203,7 @@ watch(currentProfile, () => {
           class="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-stretch"
         >
           <!-- LEFT: Clean Vertical Project Index List -->
-          <div class="lg:col-span-5 flex flex-col justify-between h-full space-y-2">
+          <div class="lg:col-span-5 flex flex-col justify-between h-full space-y-2 order-2 lg:order-1">
             <div 
               class="h-full flex flex-col gap-2.5"
               :class="[
@@ -316,7 +316,7 @@ watch(currentProfile, () => {
           </div>
 
           <!-- RIGHT: Large Cinematic Mockup Stage -->
-          <div class="lg:col-span-7 flex flex-col h-full">
+          <div class="lg:col-span-7 flex flex-col h-full order-1 lg:order-2">
             <div 
               ref="stageRef"
               @mousemove="handleStageMouseMove"

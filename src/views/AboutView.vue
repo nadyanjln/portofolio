@@ -149,7 +149,7 @@ watch(currentProfile, () => {
     
     <!-- Hero / Profile Intro with Floating Avatar Animation -->
     <div data-reveal="fade-up" class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
-      <div class="lg:col-span-8 space-y-4">
+      <div class="lg:col-span-8 space-y-4 order-2 lg:order-1">
         <!-- Top Tag Pill -->
         <div 
           class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-white dark:bg-[#1A1C24] border text-xs font-mono-tag font-bold uppercase shadow-xs"
@@ -184,7 +184,7 @@ watch(currentProfile, () => {
       </div>
 
       <!-- Right Visual Monogram Card -->
-      <div class="lg:col-span-4 flex justify-center">
+      <div class="lg:col-span-4 flex justify-center order-1 lg:order-2">
         <div 
           class="relative w-64 h-64 sm:w-72 sm:h-72 rounded-3xl p-1 shadow-2xl"
           :class="currentProfile === 'raqwan' ? 'bg-gradient-to-br from-[#047857]/40 via-white/10 to-teal-500/20' : 'bg-gradient-to-br from-[#9E0402]/30 via-white/10 to-[#9FC2EA]/30'"
