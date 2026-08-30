@@ -1,19 +1,37 @@
 <script setup>
-import { ref, onMounted, onUnmounted } from 'vue'
+import { ref, computed, onMounted, onUnmounted } from 'vue'
+import { usePortfolioStore } from '@/composables/usePortfolioStore'
+
+const { currentProfile } = usePortfolioStore()
 
 const canvasRef = ref(null)
 let animationFrameId = null
 
 const chars = ['@', '#', '$', '%', '&', '*', '+', '=', '-', ':', '.', ' ']
-const paletteHues = [
-  'rgba(158, 4, 2, 0.85)',     // Primary #9E0402
-  'rgba(194, 5, 3, 0.65)',     // Crimson bright
-  'rgba(159, 194, 234, 0.75)', // Secondary #9FC2EA
-  'rgba(159, 194, 234, 0.45)', // Secondary soft
-  'rgba(158, 4, 2, 0.30)',
-  'rgba(159, 194, 234, 0.20)',
-  'rgba(158, 4, 2, 0.08)'
-]
+
+const getPalette = () => {
+  if (currentProfile.value === 'raqwan') {
+    return [
+      'rgba(4, 120, 87, 0.85)',   // Deep Emerald #047857
+      'rgba(6, 95, 70, 0.75)',    // Forest Pine #065F46
+      'rgba(5, 150, 105, 0.60)',  // Medium Emerald #059669
+      'rgba(16, 185, 129, 0.45)', // Accent Green
+      'rgba(4, 120, 87, 0.30)',
+      'rgba(6, 95, 70, 0.20)',
+      'rgba(4, 120, 87, 0.08)'
+    ]
+  }
+
+  return [
+    'rgba(158, 4, 2, 0.85)',     // Primary #9E0402
+    'rgba(194, 5, 3, 0.65)',     // Crimson bright
+    'rgba(159, 194, 234, 0.75)', // Secondary #9FC2EA
+    'rgba(159, 194, 234, 0.45)', // Secondary soft
+    'rgba(158, 4, 2, 0.30)',
+    'rgba(159, 194, 234, 0.20)',
+    'rgba(158, 4, 2, 0.08)'
+  ]
+}
 
 onMounted(() => {
   const canvas = canvasRef.value
@@ -56,6 +74,7 @@ onMounted(() => {
 
     const cols = Math.ceil(width / fontSize)
     const rows = Math.ceil(height / fontSize)
+    const palette = getPalette()
 
     for (let i = 0; i < cols; i += 1) {
       for (let j = 0; j < rows; j += 1) {
@@ -78,8 +97,8 @@ onMounted(() => {
         const char = chars[charIndex]
 
         if (density > 0.38) {
-          const colorIdx = Math.min(Math.floor((1 - density) * paletteHues.length), paletteHues.length - 1)
-          ctx.fillStyle = paletteHues[colorIdx]
+          const colorIdx = Math.min(Math.floor((1 - density) * palette.length), palette.length - 1)
+          ctx.fillStyle = palette[colorIdx]
           ctx.fillText(char, x, y)
         }
       }
@@ -99,11 +118,8 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="fixed inset-0 pointer-events-none z-0 overflow-hidden select-none opacity-65 dark:opacity-75 transition-opacity duration-500">
-    <canvas ref="canvasRef" class="w-full h-full block"></canvas>
-    
-    <!-- Seamless Gradient Vignette for Light and Dark Modes -->
-    <div class="absolute inset-0 bg-gradient-to-t from-[#FFF9F9] dark:from-[#0B0C0E] via-transparent to-[#FFF9F9]/80 dark:to-[#0B0C0E]/80 pointer-events-none transition-colors duration-300"></div>
-    <div class="absolute inset-0 bg-gradient-to-r from-[#FFF9F9]/80 dark:from-[#0B0C0E]/80 via-transparent to-[#FFF9F9]/80 dark:to-[#0B0C0E]/80 pointer-events-none transition-colors duration-300"></div>
-  </div>
+  <canvas 
+    ref="canvasRef" 
+    class="fixed inset-0 pointer-events-none z-0 opacity-45 dark:opacity-35 transition-opacity duration-500"
+  ></canvas>
 </template>

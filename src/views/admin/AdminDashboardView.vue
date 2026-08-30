@@ -45,6 +45,7 @@ const {
   cacheExpiryTime,
   refreshCacheFromBackend,
   pushDataToSupabase,
+  setActiveProfile,
   updateInfo,
   addProject,
   updateProject,
@@ -56,6 +57,17 @@ const {
   deleteMessage,
   resetToDefault
 } = usePortfolioStore()
+
+// Selected Profile to manage in Admin CMS: 'nadya' | 'raqwan'
+const selectedAdminProfile = ref('nadya')
+
+const switchAdminProfile = (profileKey) => {
+  selectedAdminProfile.value = profileKey
+  setActiveProfile(profileKey)
+  profileForm.value = { ...portfolioInfo.value }
+  educationList.value = JSON.parse(JSON.stringify(educations.value))
+  showToast(`Beralih ke pengelolaan portofolio: ${profileKey === 'nadya' ? 'Nadya Najelina' : 'Muhammad Raqwan'}`)
+}
 
 // Navigation Tabs: 'overview' | 'projects' | 'profile' | 'skills' | 'education' | 'inbox'
 const activeTab = ref('overview')
@@ -109,8 +121,8 @@ const handleLogout = () => {
 // -------------------------------------------------------------
 const profileForm = ref({ ...portfolioInfo.value })
 const saveProfile = () => {
-  updateInfo(profileForm.value)
-  showToast('Profil dan data diri berhasil diperbarui!')
+  updateInfo(profileForm.value, selectedAdminProfile.value)
+  showToast(`Profil ${selectedAdminProfile.value === 'nadya' ? 'Nadya' : 'Raqwan'} berhasil diperbarui!`)
 }
 
 // -------------------------------------------------------------
@@ -142,17 +154,17 @@ const openAddProjectModal = () => {
   editingProjectId.value = null
   projectForm.value = {
     title: '',
-    category: 'Product Design',
+    category: selectedAdminProfile.value === 'raqwan' ? 'Computer Vision' : 'Product Design',
     description: '',
-    tagsString: 'Figma, UI/UX, Product Strategy',
+    tagsString: selectedAdminProfile.value === 'raqwan' ? 'PyTorch, Computer Vision, Deep Learning' : 'Figma, UI/UX, Product Strategy',
     image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=1200&q=80',
     liveUrl: '',
     githubUrl: '',
     featured: true,
     duration: '3 bulan',
-    problem: 'Tantangan utama yang dihadapi pengguna.',
-    solution: 'Pendekatan desain dan strategi produk yang diterapkan.',
-    resultMetric: 'Task Completion Rate',
+    problem: 'Tantangan teknis utama yang diselesaikan.',
+    solution: 'Pendekatan arsitektur dan sistem yang diimplementasikan.',
+    resultMetric: 'Performance Boost',
     resultBefore: '55%',
     resultAfter: '85%'
   }
@@ -202,10 +214,10 @@ const saveProjectForm = () => {
     githubUrl: projectForm.value.githubUrl,
     featured: projectForm.value.featured,
     detail: {
-      client: 'Internal Project',
+      client: 'Internal / Client Project',
       duration: projectForm.value.duration,
-      role: 'Lead PM & UI/UX Designer',
-      team: 'Cross-functional Team',
+      role: selectedAdminProfile.value === 'raqwan' ? 'Lead AI Engineer' : 'Lead PM & UI/UX Designer',
+      team: selectedAdminProfile.value === 'raqwan' ? ['1 AI Engineer', '1 Backend Dev'] : ['1 PM', '2 Designers'],
       problem: projectForm.value.problem,
       solution: projectForm.value.solution,
       results: projectForm.value.resultMetric ? [
@@ -213,17 +225,17 @@ const saveProjectForm = () => {
           metric: projectForm.value.resultMetric,
           before: projectForm.value.resultBefore,
           after: projectForm.value.resultAfter,
-          note: 'Berdasarkan data analytics post-launch'
+          change: `${projectForm.value.resultAfter} achieved`
         }
       ] : []
     }
   }
 
   if (isEditingProject.value && editingProjectId.value) {
-    updateProject(editingProjectId.value, payload)
+    updateProject(editingProjectId.value, payload, selectedAdminProfile.value)
     showToast('Proyek berhasil diperbarui!')
   } else {
-    addProject(payload)
+    addProject(payload, selectedAdminProfile.value)
     showToast('Proyek baru berhasil ditambahkan!')
   }
 
@@ -232,7 +244,7 @@ const saveProjectForm = () => {
 
 const handleDeleteProject = (id, title) => {
   if (confirm(`Apakah Anda yakin ingin menghapus proyek "${title}"?`)) {
-    deleteProject(id)
+    deleteProject(id, selectedAdminProfile.value)
     showToast('Proyek berhasil dihapus!')
   }
 }
@@ -241,53 +253,73 @@ const handleDeleteProject = (id, title) => {
 // SKILLS FORM STATE
 // -------------------------------------------------------------
 const newSkillName = ref('')
-const newSkillCategory = ref('UI/UX')
+const newSkillCategory = ref('AI Core')
 const newSkillLevel = ref('Expert')
 
 const handleAddSkill = () => {
   if (!newSkillName.value.trim()) return
+
   addSkill({
     name: newSkillName.value.trim(),
     category: newSkillCategory.value,
     level: newSkillLevel.value,
-    color: 'indigo'
-  })
+    color: selectedAdminProfile.value === 'raqwan' ? 'emerald' : 'rose'
+  }, selectedAdminProfile.value)
+
   newSkillName.value = ''
-  showToast('Skill berhasil ditambahkan!')
+  showToast('Skill baru berhasil ditambahkan!')
 }
 
 const handleDeleteSkill = (name) => {
-  deleteSkill(name)
-  showToast('Skill dihapus!')
+  if (confirm(`Hapus skill "${name}"?`)) {
+    deleteSkill(name, selectedAdminProfile.value)
+    showToast('Skill berhasil dihapus!')
+  }
 }
 
 // -------------------------------------------------------------
-// EDUCATION STATE
+// EDUCATION EDITING STATE
 // -------------------------------------------------------------
 const educationList = ref(JSON.parse(JSON.stringify(educations.value)))
-const saveEducations = () => {
-  updateEducations(educationList.value)
-  showToast('Data pendidikan berhasil disimpan!')
-}
-
-const addEducationEntry = () => {
+const addEducationRow = () => {
   educationList.value.push({
-    degree: 'Gelar / Jurusan Baru',
-    school: 'Nama Universitas',
-    year: '2024 - 2026'
+    degree: 'S1 Teknik Informatika',
+    school: 'Universitas Gunadarma',
+    year: '2020 - 2024'
   })
 }
 
-const removeEducationEntry = (idx) => {
-  educationList.value.splice(idx, 1)
+const removeEducationRow = (index) => {
+  educationList.value.splice(index, 1)
+}
+
+const saveEducation = () => {
+  updateEducations(educationList.value, selectedAdminProfile.value)
+  showToast('Daftar riwayat pendidikan berhasil disimpan!')
 }
 
 // -------------------------------------------------------------
-// RESET TO DEFAULT
+// INBOX & RESET
 // -------------------------------------------------------------
+const activeMessage = ref(null)
+const openMessageModal = (msg) => {
+  activeMessage.value = msg
+  markMessageRead(msg.id, selectedAdminProfile.value)
+}
+
+const handleDeleteMessage = (id) => {
+  if (confirm('Hapus pesan kontak ini?')) {
+    deleteMessage(id, selectedAdminProfile.value)
+    if (activeMessage.value?.id === id) {
+      activeMessage.value = null
+    }
+    showToast('Pesan berhasil dihapus.')
+  }
+}
+
 const handleReset = () => {
-  if (confirm('PERINGATAN: Apakah Anda yakin ingin mereset seluruh data kembali ke bawaan awal?')) {
-    resetToDefault()
+  if (confirm(`Peringatan: Seluruh data lokal ${selectedAdminProfile.value === 'nadya' ? 'Nadya' : 'Raqwan'} akan dikembalikan ke data awal. Lanjutkan?`)) {
+    resetToDefault(selectedAdminProfile.value)
     profileForm.value = { ...portfolioInfo.value }
     educationList.value = JSON.parse(JSON.stringify(educations.value))
     showToast('Seluruh data berhasil direset ke nilai awal!')
@@ -299,19 +331,37 @@ const handleReset = () => {
   <div class="min-h-screen bg-[#07080A] text-white flex flex-col font-sans">
     
     <!-- Top Navbar -->
-    <header class="sticky top-0 z-40 bg-[#0B0C10]/80 border-b border-white/10 backdrop-blur-xl px-4 sm:px-8 py-3.5 flex items-center justify-between">
-      <div class="flex items-center gap-3">
+    <header class="sticky top-0 z-40 bg-[#0B0C10]/80 border-b border-white/10 backdrop-blur-xl px-4 sm:px-8 py-3.5 flex flex-col sm:flex-row items-center justify-between gap-3">
+      <div class="flex items-center gap-3 self-start sm:self-auto">
         <div class="w-8 h-8 rounded-lg bg-[#9E0402] text-white font-extrabold flex items-center justify-center text-xs shadow-md">
           CMS
         </div>
         <div>
           <h1 class="text-sm sm:text-base font-bold text-white leading-tight">Admin Dashboard</h1>
-          <span class="text-[10px] font-mono-tag text-zinc-400">Nadya Portfolio CMS • v2.0</span>
+          <span class="text-[10px] font-mono-tag text-zinc-400">Multi-Portfolio CMS Hub • v2.0</span>
         </div>
       </div>
 
+      <!-- Profile Selector Switcher in Header -->
+      <div class="flex items-center p-1 rounded-2xl bg-white/5 border border-white/10 shadow-inner">
+        <button 
+          @click="switchAdminProfile('nadya')"
+          class="px-3.5 py-1.5 rounded-xl text-xs font-mono-tag font-bold transition-all flex items-center gap-1.5 cursor-pointer"
+          :class="selectedAdminProfile === 'nadya' ? 'bg-[#9E0402] text-white shadow-md' : 'text-zinc-400 hover:text-white'"
+        >
+          <span>👩‍💼 Nadya (PM & UX)</span>
+        </button>
+        <button 
+          @click="switchAdminProfile('raqwan')"
+          class="px-3.5 py-1.5 rounded-xl text-xs font-mono-tag font-bold transition-all flex items-center gap-1.5 cursor-pointer"
+          :class="selectedAdminProfile === 'raqwan' ? 'bg-[#047857] text-white shadow-md' : 'text-zinc-400 hover:text-white'"
+        >
+          <span>👨‍💻 Raqwan (AI Eng)</span>
+        </button>
+      </div>
+
       <!-- Actions -->
-      <div class="flex items-center gap-2 sm:gap-3">
+      <div class="flex items-center gap-2 sm:gap-3 self-end sm:self-auto">
         <!-- Supabase Live Connection Indicator -->
         <div class="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-xl bg-white/5 border border-white/10 text-[11px] font-mono-tag">
           <div class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></div>
@@ -319,11 +369,12 @@ const handleReset = () => {
         </div>
 
         <RouterLink 
-          to="/" 
+          :to="'/' + selectedAdminProfile" 
           target="_blank"
           class="px-3.5 py-1.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-xs font-mono-tag text-zinc-300 hover:text-white flex items-center gap-1.5 transition-colors"
+          :title="'Buka live portofolio ' + selectedAdminProfile"
         >
-          <span>Live Site</span>
+          <span>Lihat Site ({{ selectedAdminProfile }})</span>
           <ExternalLink class="w-3 h-3" />
         </RouterLink>
 

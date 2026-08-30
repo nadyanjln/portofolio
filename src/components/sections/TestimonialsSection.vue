@@ -4,7 +4,7 @@ import { Sparkles, Quote, CheckCircle } from 'lucide-vue-next'
 import { usePortfolioStore } from '@/composables/usePortfolioStore'
 import { useScrollReveal } from '@/composables/useAnimations'
 
-const { testimonials } = usePortfolioStore()
+const { testimonials, currentProfile } = usePortfolioStore()
 const sectionRef = ref(null)
 const { observeAll } = useScrollReveal()
 onMounted(() => observeAll(sectionRef.value))
@@ -16,14 +16,20 @@ onMounted(() => observeAll(sectionRef.value))
       
       <!-- Section Header -->
       <div data-reveal="fade-up" class="space-y-3 max-w-3xl">
-        <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-white dark:bg-[#1A1C24] border border-[#EEDCDC] dark:border-white/10 text-xs font-mono-tag font-bold uppercase text-[#9E0402] dark:text-[#ff4d4d] shadow-xs">
-          <Sparkles class="w-3.5 h-3.5 text-[#9E0402] dark:text-[#ff4d4d]" />
+        <div 
+          class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-white dark:bg-[#1A1C24] border text-xs font-mono-tag font-bold uppercase shadow-xs"
+          :class="currentProfile === 'raqwan' ? 'text-emerald-400 border-[#047857]/40 bg-[#047857]/10' : 'text-[#9E0402] dark:text-[#ff4d4d] border-[#EEDCDC] dark:border-white/10'"
+        >
+          <Sparkles class="w-3.5 h-3.5" />
           <span>Social Proof & Endorsements</span>
         </div>
         <h2 class="text-3xl sm:text-5xl font-extrabold text-[#1C1313] dark:text-white tracking-tight">
-          Apa Kata Rekan & <span class="text-[#9E0402] dark:text-[#ff3b38]">Stakeholder</span>
+          Apa Kata Rekan & <span :class="currentProfile === 'raqwan' ? 'text-emerald-400' : 'text-[#9E0402] dark:text-[#ff3b38]'">Stakeholder</span>
         </h2>
-        <p class="text-sm sm:text-base text-[#5C4848] dark:text-zinc-300 leading-relaxed">
+        <p class="text-sm sm:text-base text-[#5C4848] dark:text-zinc-300 leading-relaxed" v-if="currentProfile === 'raqwan'">
+          Testimoni langsung dari AI Research Lead, Principal ML Engineer, dan Tech Lead yang pernah berkolaborasi bersama dalam deployment sistem AI.
+        </p>
+        <p class="text-sm sm:text-base text-[#5C4848] dark:text-zinc-300 leading-relaxed" v-else>
           Testimoni langsung dari VP of Product, Engineering Lead, dan Startup Founder yang pernah berkolaborasi bersama.
         </p>
       </div>
@@ -35,14 +41,21 @@ onMounted(() => observeAll(sectionRef.value))
           :key="item.id || idx"
           data-reveal="fade-up"
           :data-reveal-delay="idx + 1"
-          class="p-6 sm:p-8 rounded-3xl bg-white dark:bg-[#14161D] border border-[#EEDCDC] dark:border-white/10 space-y-5 flex flex-col justify-between shadow-xs hover:border-[#9E0402]/40 dark:hover:border-[#ff4d4d]/40 transition-all duration-300 hover:-translate-y-1 group"
+          class="p-6 sm:p-8 rounded-3xl bg-white dark:bg-[#14161D] border border-[#EEDCDC] dark:border-white/10 space-y-5 flex flex-col justify-between shadow-xs transition-all duration-300 hover:-translate-y-1 group"
+          :class="currentProfile === 'raqwan' ? 'hover:border-[#047857]/60' : 'hover:border-[#9E0402]/40 dark:hover:border-[#ff4d4d]/40'"
         >
           <!-- Top Quote Icon & Badge -->
           <div class="flex items-center justify-between">
-            <div class="w-10 h-10 rounded-2xl bg-[#9FC2EA]/20 dark:bg-[#9FC2EA]/10 text-[#1E3A60] dark:text-[#9FC2EA] flex items-center justify-center group-hover:bg-[#9E0402] group-hover:text-white transition-colors duration-300">
+            <div 
+              class="w-10 h-10 rounded-2xl flex items-center justify-center transition-colors duration-300"
+              :class="currentProfile === 'raqwan' ? 'bg-[#047857]/20 text-emerald-300 group-hover:bg-[#047857] group-hover:text-white' : 'bg-[#9FC2EA]/20 dark:bg-[#9FC2EA]/10 text-[#1E3A60] dark:text-[#9FC2EA] group-hover:bg-[#9E0402] group-hover:text-white'"
+            >
               <Quote class="w-5 h-5" />
             </div>
-            <span class="inline-flex items-center gap-1 text-[11px] font-mono-tag font-bold px-2.5 py-1 rounded-full bg-[#FDF6F6] dark:bg-[#1A1C24] text-[#9E0402] dark:text-[#ff4d4d] border border-[#EEDCDC] dark:border-white/10">
+            <span 
+              class="inline-flex items-center gap-1 text-[11px] font-mono-tag font-bold px-2.5 py-1 rounded-full border"
+              :class="currentProfile === 'raqwan' ? 'bg-[#047857]/15 border-[#047857]/40 text-emerald-300' : 'bg-[#FDF6F6] dark:bg-[#1A1C24] border-[#EEDCDC] dark:border-white/10 text-[#9E0402] dark:text-[#ff4d4d]'"
+            >
               <CheckCircle class="w-3 h-3" />
               <span>{{ item.badge || 'Verified Colleague' }}</span>
             </span>
@@ -58,18 +71,15 @@ onMounted(() => observeAll(sectionRef.value))
             <img
               :src="item.avatar"
               :alt="item.name"
-              class="w-11 h-11 rounded-full object-cover border-2 border-[#9E0402]/20"
+              class="w-11 h-11 rounded-full object-cover border border-[#EEDCDC] dark:border-white/10 bg-zinc-800 shrink-0"
               loading="lazy"
             />
-            <div class="min-w-0">
-              <h4 class="text-sm font-bold text-[#1C1313] dark:text-white truncate">
+            <div>
+              <h4 class="font-bold text-xs sm:text-sm text-[#1C1313] dark:text-white leading-tight">
                 {{ item.name }}
               </h4>
-              <p class="text-xs text-[#9E0402] dark:text-[#ff4d4d] font-mono-tag font-bold truncate">
-                {{ item.role }}
-              </p>
-              <p class="text-[11px] text-[#5C4848] dark:text-zinc-400 font-mono-tag truncate">
-                {{ item.company }}
+              <p class="text-[11px] font-mono-tag text-[#5C4848] dark:text-zinc-400 pt-0.5">
+                {{ item.role }} • {{ item.company }}
               </p>
             </div>
           </div>

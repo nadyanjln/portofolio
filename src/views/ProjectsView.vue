@@ -7,21 +7,24 @@ import {
   Columns, 
   LayoutGrid, 
   ArrowUpRight, 
-  ArrowRight,
-  TrendingUp
+  ArrowRight, 
+  TrendingUp 
 } from 'lucide-vue-next'
 import { usePortfolioStore } from '@/composables/usePortfolioStore'
 import ProjectCard from '@/components/ui/ProjectCard.vue'
 import { useScrollReveal } from '@/composables/useAnimations'
 
 const router = useRouter()
-const { projects } = usePortfolioStore()
+const { projects, currentProfile } = usePortfolioStore()
 
 const searchQuery = ref('')
 const selectedCategory = ref('All')
 const viewMode = ref('showcase') // 'showcase' | 'grid'
 
-const categories = ['All', 'Product Design', 'UX Design', 'Product Management', 'Design System']
+const categories = computed(() => {
+  const cats = Array.from(new Set((projects.value || []).map(p => p.category).filter(Boolean)))
+  return ['All', ...cats]
+})
 
 const filteredProjects = computed(() => {
   const list = projects.value || []
@@ -48,7 +51,7 @@ const selectProject = (idx) => {
 }
 
 const navigateToProject = (id) => {
-  router.push(`/projects/${id}`)
+  router.push(`/${currentProfile.value}/projects/${id}`)
 }
 
 // 3D Tilt Stage
@@ -84,14 +87,20 @@ onMounted(() => observeAll(sectionRef.value))
     <!-- Header -->
     <div data-reveal="fade-up" class="flex flex-col lg:flex-row lg:items-end justify-between gap-6">
       <div class="space-y-3 max-w-3xl">
-        <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-white dark:bg-[#1A1C24] border border-[#EEDCDC] dark:border-white/10 text-xs font-mono-tag font-bold uppercase text-[#9E0402] dark:text-[#ff4d4d] shadow-xs">
-          <Sparkles class="w-3.5 h-3.5 text-[#9E0402] dark:text-[#ff4d4d]" />
+        <div 
+          class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-white dark:bg-[#1A1C24] border text-xs font-mono-tag font-bold uppercase shadow-xs"
+          :class="currentProfile === 'raqwan' ? 'text-emerald-400 border-[#047857]/40 bg-[#047857]/10' : 'text-[#9E0402] dark:text-[#ff4d4d] border-[#EEDCDC] dark:border-white/10'"
+        >
+          <Sparkles class="w-3.5 h-3.5" />
           <span>Case Studies Archive /2026/</span>
         </div>
         <h1 class="text-4xl sm:text-5xl md:text-6xl font-extrabold text-[#1C1313] dark:text-white tracking-tight">
           Semua Case Studies & Karya
         </h1>
-        <p class="text-[#5C4848] dark:text-zinc-300 text-sm sm:text-base md:text-lg leading-relaxed">
+        <p class="text-[#5C4848] dark:text-zinc-300 text-sm sm:text-base md:text-lg leading-relaxed" v-if="currentProfile === 'raqwan'">
+          Kumpulan studi kasus AI Engineering, Computer Vision, Agentic Workflows, dan Generative Modeling — dari formulasi matematis hingga deployment berlatensi rendah.
+        </p>
+        <p class="text-[#5C4848] dark:text-zinc-300 text-sm sm:text-base md:text-lg leading-relaxed" v-else>
           Kumpulan studi kasus product management, desain UI/UX, dan riset pengguna — dari penemuan insight hingga delivery produk berdampak.
         </p>
       </div>
@@ -103,8 +112,8 @@ onMounted(() => observeAll(sectionRef.value))
           class="px-4 py-2 rounded-xl text-xs font-mono-tag font-bold uppercase flex items-center gap-1.5 transition-all cursor-pointer"
           :class="[
             viewMode === 'showcase' 
-              ? 'bg-[#9E0402] text-white shadow-xs' 
-              : 'text-[#5C4848] dark:text-zinc-400 hover:text-[#9E0402] dark:hover:text-white'
+              ? (currentProfile === 'raqwan' ? 'bg-[#047857] text-white shadow-xs' : 'bg-[#9E0402] text-white shadow-xs')
+              : 'text-[#5C4848] dark:text-zinc-400 hover:text-white'
           ]"
         >
           <Columns class="w-3.5 h-3.5" />
@@ -116,8 +125,8 @@ onMounted(() => observeAll(sectionRef.value))
           class="px-4 py-2 rounded-xl text-xs font-mono-tag font-bold uppercase flex items-center gap-1.5 transition-all cursor-pointer"
           :class="[
             viewMode === 'grid' 
-              ? 'bg-[#9E0402] text-white shadow-xs' 
-              : 'text-[#5C4848] dark:text-zinc-400 hover:text-[#9E0402] dark:hover:text-white'
+              ? (currentProfile === 'raqwan' ? 'bg-[#047857] text-white shadow-xs' : 'bg-[#9E0402] text-white shadow-xs')
+              : 'text-[#5C4848] dark:text-zinc-400 hover:text-white'
           ]"
         >
           <LayoutGrid class="w-3.5 h-3.5" />
@@ -135,7 +144,8 @@ onMounted(() => observeAll(sectionRef.value))
           v-model="searchQuery"
           type="text"
           placeholder="Cari case study, skill, atau kata kunci..."
-          class="w-full pl-10 pr-4 py-2.5 rounded-xl bg-[#FFF9F9] dark:bg-[#0B0C0E] border border-[#EEDCDC] dark:border-white/10 focus:border-[#9E0402] dark:focus:border-[#ff4d4d] focus:ring-1 focus:ring-[#9E0402] text-xs sm:text-sm text-[#1C1313] dark:text-white placeholder:text-[#94A3B8] outline-none transition-all shadow-xs"
+          class="w-full pl-10 pr-4 py-2.5 rounded-xl bg-[#FFF9F9] dark:bg-[#0B0C0E] border border-[#EEDCDC] dark:border-white/10 text-xs sm:text-sm text-[#1C1313] dark:text-white placeholder:text-[#94A3B8] outline-none transition-all shadow-xs"
+          :class="currentProfile === 'raqwan' ? 'focus:border-[#047857] focus:ring-1 focus:ring-[#047857]' : 'focus:border-[#9E0402] focus:ring-1 focus:ring-[#9E0402]'"
         />
       </div>
 
@@ -148,8 +158,8 @@ onMounted(() => observeAll(sectionRef.value))
           class="px-3.5 py-1.5 rounded-full text-xs font-mono-tag font-bold uppercase tracking-wider transition-all duration-200 cursor-pointer whitespace-nowrap"
           :class="[
             selectedCategory === cat 
-              ? 'bg-[#9E0402] text-white shadow-md shadow-[#9E0402]/25' 
-              : 'bg-[#FFF9F9] dark:bg-[#1A1C24] text-[#5C4848] dark:text-zinc-300 hover:text-[#9E0402] dark:hover:text-white hover:bg-white dark:hover:bg-[#252834] border border-[#EEDCDC] dark:border-white/10'
+              ? (currentProfile === 'raqwan' ? 'bg-[#047857] text-white shadow-md shadow-[#047857]/30' : 'bg-[#9E0402] text-white shadow-md shadow-[#9E0402]/25')
+              : 'bg-[#FFF9F9] dark:bg-[#1A1C24] text-[#5C4848] dark:text-zinc-300 hover:text-white border border-[#EEDCDC] dark:border-white/10'
           ]"
         >
           {{ cat }}
@@ -157,9 +167,7 @@ onMounted(() => observeAll(sectionRef.value))
       </div>
     </div>
 
-    <!-- ═══════════════════════════════════════════ -->
-    <!-- RESULTS VIEW                                -->
-    <!-- ═══════════════════════════════════════════ -->
+    <!-- RESULTS VIEW -->
     <div v-if="filteredProjects.length > 0">
       
       <transition name="view-fade" mode="out-in">
@@ -188,20 +196,23 @@ onMounted(() => observeAll(sectionRef.value))
                 class="p-4 sm:p-5 rounded-3xl border transition-all duration-300 cursor-pointer flex flex-col justify-between group relative overflow-hidden shrink-0"
                 :class="[
                   activeIndex === idx
-                    ? 'bg-white dark:bg-[#14161D] border-[#9E0402] dark:border-[#ff4d4d]/60 shadow-lg shadow-[#9E0402]/5 -translate-y-0.5'
-                    : 'bg-white/70 dark:bg-[#14161D]/50 border-[#EEDCDC] dark:border-white/10 hover:border-[#9E0402]/30 hover:bg-white dark:hover:bg-[#14161D]'
+                    ? (currentProfile === 'raqwan'
+                        ? 'bg-white dark:bg-[#14161D] border-[#047857] dark:border-[#047857]/90 shadow-lg shadow-[#047857]/15 -translate-y-0.5'
+                        : 'bg-white dark:bg-[#14161D] border-[#9E0402] dark:border-[#ff4d4d]/60 shadow-lg shadow-[#9E0402]/5 -translate-y-0.5')
+                    : 'bg-white/70 dark:bg-[#14161D]/50 border-[#EEDCDC] dark:border-white/10 hover:bg-white dark:hover:bg-[#14161D]'
                 ]"
               >
                 <div 
                   v-if="activeIndex === idx"
-                  class="absolute left-0 top-3 bottom-3 w-1.5 bg-[#9E0402] dark:bg-[#ff4d4d] rounded-r-full"
+                  class="absolute left-0 top-3 bottom-3 w-1.5 rounded-r-full"
+                  :class="currentProfile === 'raqwan' ? 'bg-[#047857]' : 'bg-[#9E0402] dark:bg-[#ff4d4d]'"
                 ></div>
 
                 <div class="flex items-center justify-between gap-2 pb-1">
                   <div class="flex items-center gap-2">
                     <span 
                       class="text-xs font-mono-tag font-bold"
-                      :class="activeIndex === idx ? 'text-[#9E0402] dark:text-[#ff4d4d]' : 'text-[#5C4848] dark:text-zinc-400'"
+                      :class="activeIndex === idx ? (currentProfile === 'raqwan' ? 'text-emerald-400' : 'text-[#9E0402] dark:text-[#ff4d4d]') : 'text-[#5C4848] dark:text-zinc-400'"
                     >
                       ({{ String(idx + 1).padStart(2, '0') }})
                     </span>
@@ -223,8 +234,8 @@ onMounted(() => observeAll(sectionRef.value))
                     class="text-base sm:text-lg font-bold leading-snug transition-colors"
                     :class="[
                       activeIndex === idx 
-                        ? 'text-[#9E0402] dark:text-[#ff4d4d]' 
-                        : 'text-[#1C1313] dark:text-white group-hover:text-[#9E0402] dark:group-hover:text-[#ff4d4d]'
+                        ? (currentProfile === 'raqwan' ? 'text-emerald-400' : 'text-[#9E0402] dark:text-[#ff4d4d]') 
+                        : (currentProfile === 'raqwan' ? 'text-[#1C1313] dark:text-white group-hover:text-emerald-400' : 'text-[#1C1313] dark:text-white group-hover:text-[#9E0402] dark:group-hover:text-[#ff4d4d]')
                     ]"
                   >
                     {{ p.title }}
@@ -239,7 +250,8 @@ onMounted(() => observeAll(sectionRef.value))
                       <span 
                         v-for="tag in p.tags" 
                         :key="tag"
-                        class="px-2 py-0.5 text-[10px] font-bold font-mono-tag rounded-md bg-[#9FC2EA]/20 dark:bg-[#9FC2EA]/15 text-[#1E3A60] dark:text-[#9FC2EA] border border-[#9FC2EA]/40"
+                        class="px-2 py-0.5 text-[10px] font-bold font-mono-tag rounded-md"
+                        :class="currentProfile === 'raqwan' ? 'bg-[#047857]/20 text-emerald-300 border border-[#047857]/40' : 'bg-[#9FC2EA]/20 dark:bg-[#9FC2EA]/15 text-[#1E3A60] dark:text-[#9FC2EA] border border-[#9FC2EA]/40'"
                       >
                         {{ tag }}
                       </span>
@@ -249,28 +261,30 @@ onMounted(() => observeAll(sectionRef.value))
 
                 <div v-if="activeIndex === idx" class="pt-2.5 mt-1.5 border-t border-[#EEDCDC] dark:border-white/10 flex items-center justify-between">
                   <RouterLink
-                    :to="'/projects/' + p.id"
-                    class="text-xs font-bold font-mono-tag uppercase text-[#9E0402] dark:text-[#ff4d4d] flex items-center gap-1.5 hover:underline"
+                    :to="'/' + currentProfile + '/projects/' + p.id"
+                    class="text-xs font-bold font-mono-tag uppercase flex items-center gap-1.5 hover:underline"
+                    :class="currentProfile === 'raqwan' ? 'text-emerald-400' : 'text-[#9E0402] dark:text-[#ff4d4d]'"
                   >
                     <span>Read Full Case Study</span>
                     <ArrowRight class="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
                   </RouterLink>
 
-                  <span class="text-xs font-mono-tag text-[#1E3A60] dark:text-[#9FC2EA] font-semibold">
-                    Live Preview ↗
-                  </span>
+                  <div class="flex items-center gap-1">
+                    <span class="text-xs font-mono-tag text-[#5C4848] dark:text-zinc-400 font-semibold">
+                      Live Preview ↗
+                    </span>
+                  </div>
                 </div>
               </div>
             </div>
 
-            <!-- Scroll Indicator Helper when > 4 projects -->
             <div v-if="filteredProjects.length > 4" class="pt-1.5 text-center text-xs font-mono-tag text-[#5C4848] dark:text-zinc-400 flex items-center justify-center gap-1.5">
               <span>Scroll untuk melihat {{ filteredProjects.length - 4 }} proyek lainnya</span>
-              <span class="animate-bounce text-[#9E0402] dark:text-[#ff4d4d]">↓</span>
+              <span class="animate-bounce" :class="currentProfile === 'raqwan' ? 'text-emerald-400' : 'text-[#9E0402] dark:text-[#ff4d4d]'">↓</span>
             </div>
           </div>
 
-          <!-- RIGHT: Cinematic Stage (Matching Height) -->
+          <!-- RIGHT: Large Cinematic Mockup Stage -->
           <div class="lg:col-span-7 flex flex-col h-full">
             <div 
               ref="stageRef"
@@ -284,7 +298,9 @@ onMounted(() => observeAll(sectionRef.value))
                 class="absolute inset-0 pointer-events-none z-20 transition-opacity duration-300 rounded-[36px]"
                 :style="{
                   opacity: isStageHovered ? 1 : 0,
-                  background: `radial-gradient(circle at ${shineX}% ${shineY}%, rgba(255, 255, 255, 0.2) 0%, rgba(158, 4, 2, 0.08) 45%, transparent 70%)`
+                  background: currentProfile === 'raqwan'
+                    ? `radial-gradient(circle at ${shineX}% ${shineY}%, rgba(255, 255, 255, 0.2) 0%, rgba(4, 120, 87, 0.12) 45%, transparent 70%)`
+                    : `radial-gradient(circle at ${shineX}% ${shineY}%, rgba(255, 255, 255, 0.2) 0%, rgba(158, 4, 2, 0.08) 45%, transparent 70%)`
                 }"
               ></div>
 
@@ -304,7 +320,8 @@ onMounted(() => observeAll(sectionRef.value))
 
                   <span 
                     v-if="activeProject.detail?.results?.length" 
-                    class="px-3.5 py-1 text-xs font-bold font-mono-tag uppercase rounded-xl bg-[#9E0402] text-white border border-white/20 backdrop-blur-md shadow-md flex items-center gap-1.5"
+                    class="px-3.5 py-1 text-xs font-bold font-mono-tag uppercase rounded-xl text-white border border-white/20 backdrop-blur-md shadow-md flex items-center gap-1.5"
+                    :class="currentProfile === 'raqwan' ? 'bg-[#047857]' : 'bg-[#9E0402]'"
                   >
                     <TrendingUp class="w-3.5 h-3.5" />
                     <span>{{ activeProject.detail.results[0].metric }}: {{ activeProject.detail.results[0].after }}</span>
@@ -312,7 +329,10 @@ onMounted(() => observeAll(sectionRef.value))
                 </div>
 
                 <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 z-30">
-                  <span class="px-7 py-3.5 rounded-full bg-[#9E0402] hover:bg-[#B80604] text-white font-mono-tag font-bold text-xs uppercase tracking-widest shadow-2xl flex items-center gap-2 transform group-hover:scale-105 transition-transform">
+                  <span 
+                    class="px-7 py-3.5 rounded-full text-white font-mono-tag font-bold text-xs uppercase tracking-widest shadow-2xl flex items-center gap-2 transform group-hover:scale-105 transition-transform"
+                    :class="currentProfile === 'raqwan' ? 'bg-[#047857] hover:bg-[#065F46]' : 'bg-[#9E0402] hover:bg-[#B80604]'"
+                  >
                     <span>Explore Case Study</span>
                     <ArrowUpRight class="w-4 h-4" />
                   </span>
@@ -325,9 +345,10 @@ onMounted(() => observeAll(sectionRef.value))
                   </div>
 
                   <RouterLink
-                    :to="'/projects/' + activeProject.id"
+                    :to="'/' + currentProfile + '/projects/' + activeProject.id"
                     @click.stop
-                    class="px-4 py-2 rounded-xl bg-white text-[#9E0402] hover:bg-[#FFF9F9] font-mono-tag text-xs font-extrabold uppercase tracking-wider flex items-center gap-1.5 shrink-0 shadow-md hover:scale-103 transition-all"
+                    class="px-4 py-2 rounded-xl bg-white font-mono-tag text-xs font-extrabold uppercase tracking-wider flex items-center gap-1.5 shrink-0 shadow-md hover:scale-103 transition-all cursor-pointer"
+                    :class="currentProfile === 'raqwan' ? 'text-[#047857] hover:bg-emerald-50' : 'text-[#9E0402] hover:bg-[#FFF9F9]'"
                   >
                     <span>Read Study</span>
                     <ArrowRight class="w-3.5 h-3.5" />
@@ -357,13 +378,13 @@ onMounted(() => observeAll(sectionRef.value))
     </div>
 
     <!-- Empty State -->
-    <div v-else class="text-center py-16 space-y-3 p-8 rounded-3xl bg-white dark:bg-[#14161D] border border-[#EEDCDC] dark:border-white/10">
-      <Sparkles class="w-8 h-8 text-[#9E0402] dark:text-[#ff4d4d] mx-auto" />
-      <h3 class="text-lg font-bold text-[#1C1313] dark:text-white">Tidak ada case study yang sesuai</h3>
-      <p class="text-xs sm:text-sm text-[#5C4848] dark:text-zinc-400">Coba gunakan kata kunci pencarian atau kategori lain.</p>
+    <div v-else class="text-center py-20 bg-white dark:bg-[#14161D] rounded-3xl border border-[#EEDCDC] dark:border-white/10 p-8 space-y-3">
+      <p class="text-base font-bold text-[#1C1313] dark:text-white">Tidak ada case study yang sesuai.</p>
+      <p class="text-xs font-mono-tag text-[#5C4848] dark:text-zinc-400">Coba ubah kata kunci pencarian atau pilih filter kategori lainnya.</p>
       <button 
-        @click="searchQuery = ''; selectedCategory = 'All'"
-        class="mt-1 px-5 py-2.5 rounded-full bg-[#9E0402] text-white text-xs font-bold font-mono-tag uppercase hover:bg-[#B80604] transition-colors"
+        @click="searchQuery = ''; selectedCategory = 'All'" 
+        class="mt-2 px-4 py-2 text-xs font-mono-tag font-bold rounded-xl text-white cursor-pointer"
+        :class="currentProfile === 'raqwan' ? 'bg-[#047857]' : 'bg-[#9E0402]'"
       >
         Reset Filter
       </button>

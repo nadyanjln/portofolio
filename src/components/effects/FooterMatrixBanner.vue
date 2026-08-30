@@ -1,60 +1,66 @@
 <script setup>
-import { ref, onMounted, onUnmounted } from 'vue'
+import { ref, onMounted, onUnmounted, watch } from 'vue'
 import { usePortfolioStore } from '@/composables/usePortfolioStore'
 
-const { portfolioInfo } = usePortfolioStore()
-
+const { portfolioInfo, currentProfile } = usePortfolioStore()
 const canvasRef = ref(null)
-const containerRef = ref(null)
-let ctx = null
+const currentYear = new Date().getFullYear()
+
 let animationFrameId = null
 let width = 0
 let height = 0
+let particles = []
 
-// Mouse state for interactive particle glow & distortion
+// Mouse Interaction State
 const mouse = {
   x: -1000,
   y: -1000,
-  targetX: -1000,
-  targetY: -1000,
-  isHovered: false,
-  radius: 140
+  radius: 180,
+  isHovered: false
 }
 
-// Particle grid data
-let particles = []
-const currentYear = new Date().getFullYear()
-
-class Particle {
-  constructor(x, y) {
+// Particle Class
+class MatrixDot {
+  constructor(x, y, profile) {
     this.originX = x
     this.originY = y
     this.x = x
     this.y = y
     this.vx = 0
     this.vy = 0
-    this.baseRadius = Math.random() * 1.2 + 0.8
+    this.baseRadius = 1.8 + Math.random() * 1.0
     this.radius = this.baseRadius
+    this.speed = 0.02 + Math.random() * 0.03
     this.phase = Math.random() * Math.PI * 2
-    this.speed = Math.random() * 0.02 + 0.01
-    
-    // Color distribution: 60% brand cyan/ice blue, 30% crimson red, 10% white
+
+    // Palette per profile
     const rand = Math.random()
-    if (rand < 0.60) {
-      this.colorType = 'ice'      // #9FC2EA / cyan
-    } else if (rand < 0.88) {
-      this.colorType = 'crimson'  // #9E0402 / red
+    if (profile === 'raqwan') {
+      // Dark Emerald / Teal / White for Raqwan
+      if (rand < 0.60) {
+        this.colorType = 'emerald'  // #047857
+      } else if (rand < 0.88) {
+        this.colorType = 'teal'     // #0d9488
+      } else {
+        this.colorType = 'white'
+      }
     } else {
-      this.colorType = 'white'    // white glow
+      // Crimson / Ice Blue / White for Nadya
+      if (rand < 0.60) {
+        this.colorType = 'ice'      // #9FC2EA
+      } else if (rand < 0.88) {
+        this.colorType = 'crimson'  // #9E0402
+      } else {
+        this.colorType = 'white'
+      }
     }
   }
 
   update(time) {
-    // 1. Ambient undulating wave
+    // Ambient undulating wave
     const wave = Math.sin(this.originX * 0.015 + time * 0.002 + this.phase) * 2.5
-    const waveY = Math.cos(this.originY * 0.015 + time * 0.002 + this.phase) * 2.5
 
-    // 2. Mouse repulsion & interaction
+    // Mouse repulsion & interaction
     const dx = mouse.x - this.x
     const dy = mouse.y - this.y
     const dist = Math.sqrt(dx * dx + dy * dy)
@@ -65,9 +71,9 @@ class Particle {
     if (dist < mouse.radius && mouse.isHovered) {
       force = (mouse.radius - dist) / mouse.radius
       angle = Math.atan2(dy, dx)
-      this.vx -= Math.cos(angle) * force * 1.8
-      this.vy -= Math.sin(angle) * force * 1.8
-      this.radius = this.baseRadius + force * 2.5
+      this.vx -= Math.cos(angle) * force * 2.0
+      this.vy -= Math.sin(angle) * force * 2.0
+      this.radius = this.baseRadius + force * 2.8
     } else {
       this.radius += (this.baseRadius - this.radius) * 0.1
     }
@@ -83,48 +89,52 @@ class Particle {
   }
 
   draw(context, time) {
-    // Calculate brightness and proximity boost
     const dx = mouse.x - this.x
     const dy = mouse.y - this.y
     const dist = Math.sqrt(dx * dx + dy * dy)
     const proximity = mouse.isHovered && dist < mouse.radius ? (1 - dist / mouse.radius) : 0
 
-    // Dynamic Alpha with shimmering
     const shimmer = (Math.sin(time * this.speed + this.phase) + 1) * 0.5
-    const baseAlpha = 0.25 + shimmer * 0.35
+    const baseAlpha = 0.28 + shimmer * 0.35
     const finalAlpha = Math.min(1, baseAlpha + proximity * 0.75)
 
     context.beginPath()
     context.arc(this.x, this.y, this.radius + proximity * 1.5, 0, Math.PI * 2)
 
-    if (this.colorType === 'crimson') {
-      context.fillStyle = `rgba(230, 40, 40, ${finalAlpha})`
+    if (this.colorType === 'emerald') {
+      context.fillStyle = `rgba(4, 120, 87, ${finalAlpha})`
       if (proximity > 0.3) {
-        context.shadowColor = 'rgba(230, 40, 40, 0.8)'
+        context.shadowColor = 'rgba(4, 120, 87, 0.8)'
         context.shadowBlur = 8
-      } else {
-        context.shadowBlur = 0
+      }
+    } else if (this.colorType === 'teal') {
+      context.fillStyle = `rgba(13, 148, 136, ${finalAlpha})`
+      if (proximity > 0.3) {
+        context.shadowColor = 'rgba(13, 148, 136, 0.8)'
+        context.shadowBlur = 8
+      }
+    } else if (this.colorType === 'crimson') {
+      context.fillStyle = `rgba(158, 4, 2, ${finalAlpha})`
+      if (proximity > 0.3) {
+        context.shadowColor = 'rgba(158, 4, 2, 0.8)'
+        context.shadowBlur = 8
       }
     } else if (this.colorType === 'ice') {
-      context.fillStyle = `rgba(100, 200, 240, ${finalAlpha})`
+      context.fillStyle = `rgba(159, 194, 234, ${finalAlpha})`
       if (proximity > 0.3) {
-        context.shadowColor = 'rgba(100, 200, 240, 0.8)'
+        context.shadowColor = 'rgba(159, 194, 234, 0.8)'
         context.shadowBlur = 8
-      } else {
-        context.shadowBlur = 0
       }
     } else {
       context.fillStyle = `rgba(255, 255, 255, ${finalAlpha})`
       if (proximity > 0.3) {
         context.shadowColor = 'rgba(255, 255, 255, 0.9)'
         context.shadowBlur = 10
-      } else {
-        context.shadowBlur = 0
       }
     }
 
     context.fill()
-    context.shadowBlur = 0 // Reset
+    context.shadowBlur = 0
   }
 }
 
@@ -132,180 +142,166 @@ const initGrid = () => {
   if (!width || !height) return
   particles = []
 
-  // Spacing between grid points
-  const spacing = Math.max(16, Math.min(22, width / 70))
-  const cols = Math.floor(width / spacing) + 2
-  const rows = Math.floor(height / spacing) + 2
+  const spacing = Math.max(18, Math.min(24, width / 55))
+  const cols = Math.ceil(width / spacing) + 2
+  const rows = Math.ceil(height / spacing) + 2
   const offsetX = (width - (cols - 1) * spacing) / 2
   const offsetY = (height - (rows - 1) * spacing) / 2
 
-  for (let r = 0; r < rows; r++) {
-    for (let c = 0; c < cols; c++) {
-      // Add slight jitter for organic matrix feel
-      const jitterX = (Math.random() - 0.5) * 6
-      const jitterY = (Math.random() - 0.5) * 6
-      const x = offsetX + c * spacing + jitterX
-      const y = offsetY + r * spacing + jitterY
-      particles.push(new Particle(x, y))
+  for (let i = 0; i < cols; i++) {
+    for (let j = 0; j < rows; j++) {
+      const x = offsetX + i * spacing
+      const y = offsetY + j * spacing
+      particles.push(new MatrixDot(x, y, currentProfile.value))
     }
   }
 }
 
-const handleResize = () => {
-  if (!containerRef.value || !canvasRef.value) return
-  const rect = containerRef.value.getBoundingClientRect()
-  const dpr = Math.min(window.devicePixelRatio || 1, 2)
-  
-  width = rect.width
-  height = rect.height
-
-  canvasRef.value.width = width * dpr
-  canvasRef.value.height = height * dpr
-  canvasRef.value.style.width = `${width}px`
-  canvasRef.value.style.height = `${height}px`
-
-  ctx = canvasRef.value.getContext('2d')
-  ctx.scale(dpr, dpr)
-
+watch(currentProfile, () => {
   initGrid()
-}
+})
 
-const onMouseMove = (e) => {
-  if (!containerRef.value) return
-  const rect = containerRef.value.getBoundingClientRect()
+const handleMouseMove = (e) => {
+  if (!canvasRef.value) return
+  const rect = canvasRef.value.getBoundingClientRect()
   mouse.x = e.clientX - rect.left
   mouse.y = e.clientY - rect.top
   mouse.isHovered = true
 }
 
-const onMouseEnter = () => {
+const handleMouseEnter = () => {
   mouse.isHovered = true
 }
 
-const onMouseLeave = () => {
+const handleMouseLeave = () => {
   mouse.isHovered = false
   mouse.x = -1000
   mouse.y = -1000
 }
 
-let startTime = null
-const render = (time) => {
-  if (!startTime) startTime = time
-  const elapsed = time - startTime
+const handleResize = () => {
+  if (!canvasRef.value) return
+  const rect = canvasRef.value.getBoundingClientRect()
+  width = Math.ceil(rect.width)
+  height = Math.ceil(rect.height)
 
-  if (ctx && width && height) {
-    ctx.clearRect(0, 0, width, height)
+  canvasRef.value.width = width
+  canvasRef.value.height = height
 
-    // Render particles
-    for (let i = 0; i < particles.length; i++) {
-      particles[i].update(elapsed)
-      particles[i].draw(ctx, elapsed)
-    }
-
-    // Connect close neighbors near mouse cursor with glowing filaments
-    if (mouse.isHovered) {
-      for (let i = 0; i < particles.length; i += 3) {
-        const p1 = particles[i]
-        const dMouse = Math.hypot(p1.x - mouse.x, p1.y - mouse.y)
-        if (dMouse < mouse.radius) {
-          for (let j = i + 1; j < Math.min(particles.length, i + 8); j++) {
-            const p2 = particles[j]
-            const d = Math.hypot(p1.x - p2.x, p1.y - p2.y)
-            if (d < 30) {
-              const alpha = (1 - d / 30) * (1 - dMouse / mouse.radius) * 0.4
-              ctx.beginPath()
-              ctx.moveTo(p1.x, p1.y)
-              ctx.lineTo(p2.x, p2.y)
-              ctx.strokeStyle = `rgba(158, 4, 2, ${alpha})`
-              ctx.lineWidth = 0.8
-              ctx.stroke()
-            }
-          }
-        }
-      }
-    }
-  }
-
-  animationFrameId = requestAnimationFrame(render)
+  initGrid()
 }
 
 onMounted(() => {
+  const canvas = canvasRef.value
+  if (!canvas) return
+
   handleResize()
   window.addEventListener('resize', handleResize)
-  animationFrameId = requestAnimationFrame(render)
+
+  let startTime = performance.now()
+
+  const loop = (currentTime) => {
+    const time = (currentTime - startTime) * 0.05
+    const ctx = canvas.getContext('2d')
+    ctx.clearRect(0, 0, width, height)
+
+    // Render connection filaments between close particles
+    ctx.lineWidth = 0.5
+    for (let i = 0; i < particles.length; i += 3) {
+      const p1 = particles[i]
+      const dx = mouse.x - p1.x
+      const dy = mouse.y - p1.y
+      const dist = Math.sqrt(dx * dx + dy * dy)
+
+      if (dist < 90 && mouse.isHovered) {
+        ctx.beginPath()
+        ctx.moveTo(p1.x, p1.y)
+        ctx.lineTo(mouse.x, mouse.y)
+        ctx.strokeStyle = currentProfile.value === 'raqwan' 
+          ? `rgba(4, 120, 87, ${Math.max(0, (1 - dist / 90) * 0.4)})`
+          : `rgba(158, 4, 2, ${Math.max(0, (1 - dist / 90) * 0.4)})`
+        ctx.stroke()
+      }
+    }
+
+    // Render particles
+    for (let i = 0; i < particles.length; i++) {
+      particles[i].update(time)
+      particles[i].draw(ctx, time)
+    }
+
+    animationFrameId = requestAnimationFrame(loop)
+  }
+
+  animationFrameId = requestAnimationFrame(loop)
 })
 
 onUnmounted(() => {
   window.removeEventListener('resize', handleResize)
-  if (animationFrameId) {
-    cancelAnimationFrame(animationFrameId)
-  }
+  if (animationFrameId) cancelAnimationFrame(animationFrameId)
 })
 </script>
 
 <template>
   <div 
-    ref="containerRef"
-    @mousemove="onMouseMove"
-    @mouseenter="onMouseEnter"
-    @mouseleave="onMouseLeave"
-    class="relative w-full overflow-hidden bg-[#07080A] rounded-[32px] sm:rounded-[40px] border border-white/10 shadow-2xl py-16 sm:py-24 lg:py-28 px-4 sm:px-8 select-none group cursor-crosshair"
+    class="relative w-full rounded-[36px] sm:rounded-[48px] bg-[#07080A] border border-white/10 overflow-hidden py-12 sm:py-20 px-4 sm:px-8 select-none group"
+    @mousemove="handleMouseMove"
+    @mouseenter="handleMouseEnter"
+    @mouseleave="handleMouseLeave"
   >
-    <!-- Background Interactive Particle Matrix Canvas -->
+    <!-- Background Canvas covering 100% full width and height -->
     <canvas 
       ref="canvasRef" 
-      class="absolute inset-0 pointer-events-none z-0"
+      class="absolute inset-0 w-full h-full pointer-events-none z-0"
     ></canvas>
 
-    <!-- Top & Radial Atmosphere Glows matching Brand Identity -->
+    <!-- Top & Radial Atmosphere Glows -->
     <div class="absolute inset-0 pointer-events-none z-10 bg-gradient-to-b from-[#07080A] via-transparent to-[#07080A]/90"></div>
-    <div class="absolute top-0 left-1/2 -translate-x-1/2 w-3/4 h-32 bg-[#9E0402]/10 blur-[100px] pointer-events-none z-10"></div>
-    <div class="absolute bottom-0 right-1/4 w-72 h-32 bg-[#9FC2EA]/10 blur-[100px] pointer-events-none z-10"></div>
+    <div 
+      class="absolute top-0 left-1/2 -translate-x-1/2 w-3/4 h-32 blur-[100px] pointer-events-none z-10"
+      :class="currentProfile === 'raqwan' ? 'bg-[#047857]/15' : 'bg-[#9E0402]/10'"
+    ></div>
 
     <!-- Center Stage: Giant Typographic Monogram/Name -->
-    <div class="relative z-20 max-w-7xl mx-auto flex flex-col items-center justify-center text-center">
+    <div class="relative z-20 max-w-5xl mx-auto flex flex-col items-center justify-center text-center px-2">
       
       <!-- Top Small Monospace Badge -->
-      <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-white/5 border border-white/10 backdrop-blur-md mb-3 sm:mb-4 shadow-sm">
-        <span class="w-2 h-2 rounded-full bg-[#9E0402] animate-pulse"></span>
+      <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-white/5 border border-white/10 backdrop-blur-md mb-4 sm:mb-6 shadow-sm">
+        <span 
+          class="w-2 h-2 rounded-full animate-pulse"
+          :class="currentProfile === 'raqwan' ? 'bg-[#047857]' : 'bg-[#9E0402]'"
+        ></span>
         <span class="text-[11px] font-mono-tag tracking-widest text-zinc-300 uppercase font-bold">
-          Product Manager • UI/UX Designer
+          {{ portfolioInfo.title }}
         </span>
       </div>
 
-      <!-- Giant Bold Typography (Matching Screenshot) -->
+      <!-- Clean 2-Line Bold Typography -->
       <h2 
-        class="text-[11vw] sm:text-[12.5vw] lg:text-[13vw] font-black tracking-tighter text-white uppercase leading-[0.88] drop-shadow-2xl transition-transform duration-500 ease-out group-hover:scale-[1.01]"
-        style="font-family: 'Syne', 'Space Grotesk', system-ui, sans-serif; text-shadow: 0 10px 40px rgba(0, 0, 0, 0.8), 0 0 50px rgba(158, 4, 2, 0.2);"
+        class="text-4xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl font-black tracking-tight text-white uppercase leading-[0.92] sm:leading-[0.88] drop-shadow-2xl transition-transform duration-500 ease-out group-hover:scale-[1.01]"
+        style="font-family: 'Syne', 'Space Grotesk', system-ui, sans-serif; text-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);"
       >
-        Nadya Najelina
+        <span class="block">{{ currentProfile === 'raqwan' ? 'Muhammad' : 'Nadya' }}</span>
+        <span class="block">{{ currentProfile === 'raqwan' ? 'Raqwan' : 'Najelina' }}</span>
       </h2>
 
       <!-- Bottom Subtitle / Tagline -->
       <p class="mt-4 sm:mt-6 text-xs sm:text-sm md:text-base font-mono-tag text-zinc-400 max-w-2xl px-4 leading-relaxed">
-        Bridging high-impact product strategy with pixel-crafted digital experiences.
+        {{ portfolioInfo.tagline }}
       </p>
     </div>
 
-    <!-- Bottom Metadata Details (Exact match with reference screenshot) -->
-    <div class="relative z-20 max-w-7xl mx-auto mt-10 sm:mt-14 pt-4 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-2 text-[11px] font-mono-tag text-zinc-400">
+    <!-- Bottom Metadata Details -->
+    <div class="relative z-20 max-w-7xl mx-auto mt-8 sm:mt-12 pt-4 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-2 text-[11px] font-mono-tag text-zinc-400">
       <div class="flex items-center gap-2">
-        <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
-        <span>Jakarta & Worldwide • Open for collaboration</span>
+        <span class="w-1.5 h-1.5 rounded-full" :class="currentProfile === 'raqwan' ? 'bg-[#047857]' : 'bg-[#9E0402]'"></span>
+        <span>Indonesia & Worldwide • Open for collaboration</span>
       </div>
 
       <div class="text-center sm:text-right text-[10px] text-zinc-400 leading-tight">
-        <p>©{{ currentYear }} All rights reserved. Nadya Najelina Salsabillah.</p>
+        <p>©{{ currentYear }} All rights reserved. {{ portfolioInfo.name }}.</p>
         <p class="text-zinc-400">Crafted with precision & code. Unauthorised reproduction prohibited.</p>
       </div>
     </div>
   </div>
 </template>
-
-<style scoped>
-/* Smooth rendering */
-canvas {
-  image-rendering: -webkit-optimize-contrast;
-  image-rendering: crisp-edges;
-}
-</style>

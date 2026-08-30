@@ -1,20 +1,13 @@
 <script setup>
+import { computed } from 'vue'
+import { usePortfolioStore } from '@/composables/usePortfolioStore'
+
+const { currentProfile } = usePortfolioStore()
+
 const props = defineProps({
   items: {
     type: Array,
-    default: () => [
-      'Product Strategy',
-      'User Research',
-      'UI/UX Design',
-      'Figma Prototyping',
-      'Design Systems',
-      'PRD & User Stories',
-      'Usability Testing',
-      'A/B Testing',
-      'Interaction Design',
-      'Agile / Scrum',
-      'Data-Driven Decision'
-    ]
+    default: null
   },
   speed: {
     type: String,
@@ -24,6 +17,42 @@ const props = defineProps({
     type: Boolean,
     default: false
   }
+})
+
+const marqueeItems = computed(() => {
+  if (props.items && props.items.length) {
+    return props.items
+  }
+
+  if (currentProfile.value === 'raqwan') {
+    return [
+      'Computer Vision',
+      'Object Detection (YOLO)',
+      'NLP & Transformers',
+      'Autonomous Agentic AI',
+      'LangGraph Multi-Agent',
+      'GANs & Generative Modeling',
+      'PyTorch & CUDA',
+      'RAG & Vector DBs',
+      'TensorRT & FP16/INT8',
+      'MLOps & Model Serving',
+      'Deep Learning Pipelines'
+    ]
+  }
+
+  return [
+    'Product Strategy',
+    'User Research',
+    'UI/UX Design',
+    'Figma Prototyping',
+    'Design Systems',
+    'PRD & User Stories',
+    'Usability Testing',
+    'A/B Testing',
+    'Interaction Design',
+    'Agile / Scrum',
+    'Data-Driven Decision'
+  ]
 })
 </script>
 
@@ -43,12 +72,21 @@ const props = defineProps({
       <!-- Batch 1 -->
       <div class="flex items-center gap-3.5 shrink-0">
         <div
-          v-for="(item, idx) in items"
+          v-for="(item, idx) in marqueeItems"
           :key="'b1-' + idx"
-          class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white dark:bg-[#1A1C24] border border-[#EEDCDC] dark:border-white/10 shadow-xs hover:border-[#9E0402] dark:hover:border-[#ff4d4d] hover:scale-102 transition-all duration-200 group"
+          class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white dark:bg-[#1A1C24] border border-[#EEDCDC] dark:border-white/10 shadow-xs hover:scale-102 transition-all duration-200 group"
+          :class="currentProfile === 'raqwan' ? 'hover:border-emerald-500' : 'hover:border-[#9E0402] dark:hover:border-[#ff4d4d]'"
         >
-          <span class="text-[#9E0402] dark:text-[#ff4d4d] text-xs font-bold group-hover:rotate-45 transition-transform">✦</span>
-          <span class="text-xs sm:text-sm font-bold text-[#1C1313] dark:text-zinc-200 group-hover:text-[#9E0402] dark:group-hover:text-[#ff4d4d] tracking-wide uppercase font-mono-tag">
+          <span 
+            class="text-xs font-bold group-hover:rotate-45 transition-transform"
+            :class="currentProfile === 'raqwan' ? 'text-emerald-400' : 'text-[#9E0402] dark:text-[#ff4d4d]'"
+          >
+            ✦
+          </span>
+          <span 
+            class="text-xs sm:text-sm font-bold text-[#1C1313] dark:text-zinc-200 tracking-wide uppercase font-mono-tag transition-colors"
+            :class="currentProfile === 'raqwan' ? 'group-hover:text-emerald-300' : 'group-hover:text-[#9E0402] dark:group-hover:text-[#ff4d4d]'"
+          >
             {{ item }}
           </span>
         </div>
@@ -57,12 +95,21 @@ const props = defineProps({
       <!-- Batch 2 -->
       <div class="flex items-center gap-3.5 shrink-0" aria-hidden="true">
         <div
-          v-for="(item, idx) in items"
+          v-for="(item, idx) in marqueeItems"
           :key="'b2-' + idx"
-          class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white dark:bg-[#1A1C24] border border-[#EEDCDC] dark:border-white/10 shadow-xs hover:border-[#9E0402] dark:hover:border-[#ff4d4d] hover:scale-102 transition-all duration-200 group"
+          class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white dark:bg-[#1A1C24] border border-[#EEDCDC] dark:border-white/10 shadow-xs hover:scale-102 transition-all duration-200 group"
+          :class="currentProfile === 'raqwan' ? 'hover:border-emerald-500' : 'hover:border-[#9E0402] dark:hover:border-[#ff4d4d]'"
         >
-          <span class="text-[#9E0402] dark:text-[#ff4d4d] text-xs font-bold group-hover:rotate-45 transition-transform">✦</span>
-          <span class="text-xs sm:text-sm font-bold text-[#1C1313] dark:text-zinc-200 group-hover:text-[#9E0402] dark:group-hover:text-[#ff4d4d] tracking-wide uppercase font-mono-tag">
+          <span 
+            class="text-xs font-bold group-hover:rotate-45 transition-transform"
+            :class="currentProfile === 'raqwan' ? 'text-emerald-400' : 'text-[#9E0402] dark:text-[#ff4d4d]'"
+          >
+            ✦
+          </span>
+          <span 
+            class="text-xs sm:text-sm font-bold text-[#1C1313] dark:text-zinc-200 tracking-wide uppercase font-mono-tag transition-colors"
+            :class="currentProfile === 'raqwan' ? 'group-hover:text-emerald-300' : 'group-hover:text-[#9E0402] dark:group-hover:text-[#ff4d4d]'"
+          >
             {{ item }}
           </span>
         </div>

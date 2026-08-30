@@ -196,10 +196,10 @@ VALUES (
   'Nadya Najelina Salsabillah',
   'Nadya',
   'Product Manager & UI/UX Designer',
-  'Merancang produk digital yang berdampak — dari riset pengguna hingga desain interface yang intuitif dan scalable.',
-  'Hi! Saya Nadya Najelina Salsabillah, seorang Product Manager & UI/UX Designer yang passionate dalam menciptakan pengalaman digital yang bermakna. Saya menggabungkan pemikiran strategis product management dengan keahlian visual design untuk memastikan setiap produk tidak hanya indah secara estetika, tetapi juga memberikan nilai nyata bagi pengguna dan bisnis.',
-  'Open for Product & Design roles',
-  'Indonesia',
+  'Building digital products that simplify complex workflows, empower better decisions, and create meaningful value for both users and businesses.',
+  'I am a Computer Science student with a multidisciplinary background in UI/UX design, software engineering, business, and AI, now focused on Product Management. By combining user empathy, technical expertise, business thinking, and data-driven decision making, I strive to build products that simplify complex workflows, empower better decisions, and create meaningful value for both users and businesses.',
+  'Open for Product Management & UI/UX Roles',
+  'Depok, Jawa Barat, Indonesia',
   'nadyanjln@gmail.com',
   '{"github": "https://github.com/nadyanjln", "linkedin": "https://www.linkedin.com/in/nadyanjln/"}'::jsonb
 )
@@ -212,106 +212,294 @@ ON CONFLICT (id) DO UPDATE SET
 -- Seed Educations
 INSERT INTO public.educations (degree, school, year)
 VALUES 
-  ('S1 Informatika (Sarjana Komputer)', 'Universitas Gunadarma', '2020 - 2024')
+  ('Bachelor’s Degree in Computer Science (GPA: 3.97 / 4.00)', 'Gunadarma University', 'September 2022 – Agustus 2026 (Lulus / Graduated)')
 ON CONFLICT DO NOTHING;
 
 -- Seed Skills
 INSERT INTO public.skills (name, category, level, color)
 VALUES
   ('Product Strategy', 'Product', 'Expert', 'indigo'),
-  ('User Research', 'UX Research', 'Expert', 'cyan'),
-  ('Wireframing & Prototyping', 'UI/UX', 'Expert', 'purple'),
-  ('Figma', 'Design Tool', 'Expert', 'pink'),
-  ('Design System', 'UI/UX', 'Advanced', 'violet'),
+  ('Product Discovery', 'Product', 'Expert', 'blue'),
   ('PRD & User Stories', 'Product', 'Expert', 'blue'),
-  ('A/B Testing', 'Product', 'Advanced', 'emerald'),
-  ('Data-Driven Decision', 'Product', 'Advanced', 'amber'),
-  ('Usability Testing', 'UX Research', 'Expert', 'green'),
   ('Stakeholder Management', 'Product', 'Advanced', 'orange'),
   ('Agile / Scrum', 'Product', 'Expert', 'yellow'),
-  ('Interaction Design', 'UI/UX', 'Expert', 'rose')
+  ('UI/UX Design', 'UI/UX', 'Expert', 'rose'),
+  ('Wireframing & Prototyping', 'UI/UX', 'Expert', 'purple'),
+  ('Design System', 'UI/UX', 'Advanced', 'violet'),
+  ('Figma & FigJam', 'Design Tool', 'Expert', 'rose'),
+  ('User Research', 'UX Research', 'Expert', 'cyan'),
+  ('Usability Testing', 'UX Research', 'Expert', 'green'),
+  ('Design Thinking', 'UX Research', 'Expert', 'emerald')
 ON CONFLICT (name) DO UPDATE SET
   category = EXCLUDED.category,
   level = EXCLUDED.level;
 
--- Seed Testimonials (With Supabase Storage Avatars)
+-- Seed Testimonials
 INSERT INTO public.testimonials (name, role, company, avatar, content, badge)
 VALUES
   (
-    'Rian Pratama',
-    'VP of Product',
-    'Scale-up SaaS Enterprise',
-    'https://wruhxkwvombesziefvmn.supabase.co/storage/v1/object/public/portfolio/avatars/rian-pratama.jpg',
-    'Nadya memiliki kombinasi langka antara pemikiran strategis product management dan ketajaman visual UI/UX kelas atas. Kecepatannya dalam menyederhanakan workflow yang rumit menjadi interface yang intuitif benar-benar mendongkrak retensi produk kami.',
-    'Verified Colleague'
+    'PT. Mitra Teknologi Gemilang',
+    'Product Leadership',
+    'PT. MTG',
+    'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=200&q=80',
+    'Nadya mendemonstrasikan keahlian UX audit yang luar biasa pada proyek SaveMe. Desain yang dirancangnya tidak hanya memukau secara visual, tapi juga menyederhanakan alur darurat secara signifikan sehingga meningkatkan usability aplikasi.',
+    'UI/UX Client Feedback'
   ),
   (
-    'Devi Anggraini',
-    'Lead Frontend Engineer',
-    'Digital Fintech Studio',
-    'https://wruhxkwvombesziefvmn.supabase.co/storage/v1/object/public/portfolio/avatars/devi-anggraini.jpg',
-    'Bekerja dengan Nadya sangat menyenangkan untuk tim engineering. Dokumentasi PRD-nya sangat rinci, design system di Figma terstruktur rapi dengan token standar, sehingga proses handoff dan slicing berjalan 2x lebih cepat tanpa multitafsir.',
-    'Engineering Partner'
-  ),
-  (
-    'Arif Wicaksono',
-    'Startup Founder & CEO',
-    'TaskFlow Workspace',
-    'https://wruhxkwvombesziefvmn.supabase.co/storage/v1/object/public/portfolio/avatars/arif-wicaksono.jpg',
-    'Nadya memimpin produk kami dari tahap 0 ke 1 dengan kepemimpinan yang solid. Riset penggunanya tajam, validasi MVP tepat sasaran, dan hasil desainnya mendapat rating kepuasan 4.6/5 saat debut peluncuran.',
-    'Founder Endorsement'
+    'International Business Pitch Fest 2025',
+    'Judging Committee',
+    'IBPF 2025',
+    'https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&w=200&q=80',
+    'Kepemimpinan produk Nadya dalam mengembangkan MeatSure sangat impresif. Kemampuannya mengintegrasikan teknologi AI dengan pemecahan masalah rantai pasok nyata mengantarkan timnya meraih predikat Best AI Integration.',
+    'Best AI Integration 2025'
   )
 ON CONFLICT DO NOTHING;
 
--- Seed Projects (With Supabase Storage Mockup Images)
+-- Seed Projects (Nadya Real Case Studies)
 INSERT INTO public.projects (id, title, category, description, tags, image, live_url, featured, detail)
 VALUES
   (
-    'zenith-analytics-redesign',
-    'Zenith Analytics — SaaS Dashboard Redesign',
-    'Product Design',
-    'Merancang ulang dashboard analitik SaaS dengan pendekatan user-centered design, meningkatkan task completion rate sebesar 40%.',
-    '["Product Strategy", "Figma", "User Research", "Design System"]'::jsonb,
-    'https://wruhxkwvombesziefvmn.supabase.co/storage/v1/object/public/portfolio/projects/zenith-analytics.jpg',
-    'https://example.com/zenith',
+    'meatsure-ai-smart-monitoring',
+    'MeatSure — AI Smart Monitoring Hub for Seafood Safety',
+    'Product Strategy & AI IoT',
+    'Platform IoT dan AI cerdas untuk monitoring kesegaran dan rantai pasok produk laut secara real-time, peraih penghargaan Best AI Integration pada International Business Pitch Fest 2025.',
+    '["Product Lead", "Best AI Integration 2025", "IoT Monitoring", "Product Strategy", "Figma"]'::jsonb,
+    'https://images.unsplash.com/photo-1534482421-64566f976cfa?auto=format&fit=crop&w=1200&q=80',
+    'https://www.linkedin.com/in/nadyanjln/',
     true,
-    '{"duration": "3 bulan (Sep — Nov 2024)", "role": "Product Manager & Lead UI/UX Designer", "results": [{"metric": "Task Completion Rate", "before": "58%", "after": "81%", "change": "+40%"}, {"metric": "Support Tickets", "before": "35/mgg", "after": "9/mgg", "change": "-74%"}]}'::jsonb
+    '{"duration": "November 2025", "role": "Product Lead, Researcher, Product Developer", "results": [{"metric": "Award Recognition", "before": "Competitor", "after": "Best AI Integration 2025", "change": "Winner"}, {"metric": "Monitoring Latency", "before": "Manual Check", "after": "Real-Time (<5s)", "change": "Instant Telemetry"}]}'::jsonb
   ),
   (
-    'luxe-ecommerce-experience',
-    'Luxe Store — E-Commerce UX Overhaul',
-    'UX Design',
-    'Mendesain ulang pengalaman belanja online end-to-end, dari product discovery hingga checkout, menghasilkan peningkatan konversi 28%.',
-    '["UX Research", "Usability Testing", "Figma", "Interaction Design"]'::jsonb,
-    'https://wruhxkwvombesziefvmn.supabase.co/storage/v1/object/public/portfolio/projects/luxe-ecommerce.jpg',
-    'https://example.com/luxe',
+    'aisee-ai-digital-marketing',
+    'AiSee — AI-Powered Digital Marketing Platform for MSMEs',
+    'UI/UX & Product Design',
+    'Platform strategi pemasaran digital bertenaga AI untuk pelaku UMKM yang memprioritaskan rekomendasi konten kreator, insight performa kampanye, dan tracking progres.',
+    '["UI/UX Design", "User Research", "Wireframing", "Figma", "MSME Growth"]'::jsonb,
+    'https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=1200&q=80',
+    'https://www.linkedin.com/in/nadyanjln/',
     true,
-    '{"duration": "2.5 bulan (Mar — Mei 2024)", "role": "Lead UX Designer", "results": [{"metric": "Conversion Rate", "before": "2.1%", "after": "2.7%", "change": "+28%"}]}'::jsonb
+    '{"duration": "Desember 2025", "role": "UI/UX Designer & Researcher", "results": [{"metric": "Task Completion Rate", "before": "52%", "after": "91%", "change": "+39%"}, {"metric": "SUS Usability Score", "before": "62", "after": "86.5", "change": "+24.5 Poin"}]}'::jsonb
   ),
   (
-    'taskflow-management-app',
-    'TaskFlow — Project Management App',
-    'Product Management',
-    'Memimpin pengembangan produk aplikasi manajemen proyek dari 0 ke 1, mengelola roadmap, backlog, dan koordinasi tim cross-functional.',
-    '["Product Roadmap", "PRD", "Agile/Scrum", "Figma"]'::jsonb,
-    'https://wruhxkwvombesziefvmn.supabase.co/storage/v1/object/public/portfolio/projects/taskflow.jpg',
-    'https://example.com/taskflow',
+    'edufatahillah-ai-history-learning',
+    'EduFatahillah-AI — AI-Based Interactive History Learning App',
+    'EdTech & Child-Friendly UX',
+    'Aplikasi pembelajaran sejarah interaktif ramah anak dengan fitur pengenalan artefak berbasis AI, narasi text-to-speech, dan kuis gamifikasi untuk siswa sekolah dasar.',
+    '["EdTech", "Child-Friendly UX", "Interactive Prototype", "Figma", "User Research"]'::jsonb,
+    'https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&w=1200&q=80',
+    'https://www.linkedin.com/in/nadyanjln/',
     true,
-    '{"duration": "6 bulan (Jan — Jun 2024)", "role": "Lead Product Manager", "results": [{"metric": "Users (3 bln post-launch)", "before": "0", "after": "1,200+", "change": "Dari nol"}, {"metric": "CSAT Score", "before": "-", "after": "4.6/5.0", "change": "Target 4.0"}]}'::jsonb
+    '{"duration": "September 2025", "role": "UI/UX Designer & Researcher", "results": [{"metric": "Student Engagement", "before": "6 menit", "after": "28 menit", "change": "4.6x Lebih Lama"}, {"metric": "Quiz Completion", "before": "44%", "after": "93%", "change": "+49%"}]}'::jsonb
   ),
   (
-    'nexus-design-system',
-    'Nexus — Enterprise Design System',
-    'Design System',
-    'Membangun sistem desain multi-brand komprehensif dengan 120+ komponen, design tokens terstandarisasi, dan dokumentasi Figma yang scalable.',
-    '["Design Tokens", "Component Library", "Figma Variables", "WCAG 2.1"]'::jsonb,
-    'https://wruhxkwvombesziefvmn.supabase.co/storage/v1/object/public/portfolio/projects/nexus-design-system.jpg',
-    'https://example.com/nexus',
+    'recad-medical-equipment-rental',
+    'Recad — Medical Equipment Rental & Financing Platform',
+    'HealthTech & Digital Business',
+    'Platform penyewaan alat medis terjangkau peraih pendanaan P2MW Kemendikbudristek Rp 12 Juta, mengombinasikan desain UI inklusif dan model bisnis teruji.',
+    '["P2MW Awardee", "HealthTech", "UI Design", "Financial Modeling", "Figma"]'::jsonb,
+    'https://images.unsplash.com/photo-1584515979956-d9f6e5d09982?auto=format&fit=crop&w=1200&q=80',
+    'https://www.linkedin.com/in/nadyanjln/',
+    false,
+    '{"duration": "Feb 2024 — Nov 2024", "role": "CFO, UI/UX Designer & Social Media Manager", "results": [{"metric": "Grant Secured", "before": "IDR 0", "after": "IDR 12,000,000", "change": "P2MW 2024 Winner"}]}'::jsonb
+  ),
+  (
+    'saveme-safety-flows-redesign',
+    'SaveMe — Core Safety Flows & Custom Icon UI Redesign',
+    'UX Audit & Design Systems',
+    'UX audit mendalam dan redesign 3 core safety flows untuk 20+ layar di aplikasi SaveMe serta pembuatan 8+ custom icon assets di PT Mitra Teknologi Gemilang.',
+    '["UX Audit", "Design System", "Custom Icons", "Figma", "Safety App"]'::jsonb,
+    'https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?auto=format&fit=crop&w=1200&q=80',
+    'https://www.linkedin.com/in/nadyanjln/',
+    false,
+    '{"duration": "Maret 2026", "role": "Freelance UI/UX Designer at PT. MTG", "results": [{"metric": "Emergency Trigger", "before": "6.4s", "after": "1.8s", "change": "3.5x Lebih Cepat"}, {"metric": "Custom Icons", "before": "Generic", "after": "8+ Assets", "change": "100% Custom"}]}'::jsonb
+  )
+ON CONFLICT (id) DO UPDATE SET
+  title = EXCLUDED.title,
+  category = EXCLUDED.category,
+  description = EXCLUDED.description;
+
+-- ================================================================
+-- SEED DATA FOR MUHAMMAD RAQWAN KAUTHAR (AI ENGINEER)
+-- ================================================================
+
+-- Seed Raqwan Profile Info
+INSERT INTO public.profile_info (id, name, short_name, title, tagline, bio, status, location, email, socials)
+VALUES (
+  'raqwan_profile',
+  'Muhammad Raqwan Kauthar',
+  'Raqwan',
+  'Head of Artificial Intelligence | AI & Data Specialist',
+  'Head of Artificial Intelligence at PT Mitra Teknologi Gemilang — Architecting MarketForge Agentic AI, high-throughput Financial Screening Engines, GraphRAG, and production deep learning systems.',
+  'Head of Artificial Intelligence at PT Mitra Teknologi Gemilang with 2+ years of combined industry leadership and advanced deep learning research experience. Specialized in architecting MarketForge Agentic AI, sub-millisecond Financial Screening Engines, distributed ML orchestration (Ray), GraphRAG (FalkorDB + Cognee), and real-time WebSocket telemetry. Committed to translating frontier AI research into scalable, high-throughput production systems.',
+  'Head of Artificial Intelligence at PT Mitra Teknologi Gemilang',
+  'Depok, Jawa Barat, Indonesia',
+  'mraqwan471@gmail.com',
+  '{"github": "https://github.com/Rqwannn", "linkedin": "https://www.linkedin.com/in/muhammad-raqwan-kauthar-5427b221a/"}'::jsonb
+)
+ON CONFLICT (id) DO UPDATE SET
+  name = EXCLUDED.name,
+  title = EXCLUDED.title,
+  bio = EXCLUDED.bio,
+  email = EXCLUDED.email;
+
+-- Seed Raqwan Educations
+INSERT INTO public.educations (degree, school, year)
+VALUES 
+  ('Bachelor of Computer Science — Informatics (GPA: 3.78 / 4.00)', 'Gunadarma University', 'September 2022 – Agustus 2026 (Lulus / Graduated)')
+ON CONFLICT DO NOTHING;
+
+-- Seed Raqwan Skills
+INSERT INTO public.skills (name, category, level, color)
+VALUES
+  ('MarketForge Agentic AI', 'Agentic AI', 'Expert', 'emerald'),
+  ('AutoGen', 'Agentic AI', 'Expert', 'cyan'),
+  ('A2A / ACP (Agent Protocols)', 'Agentic AI', 'Expert', 'blue'),
+  ('LangGraph', 'Agentic AI', 'Expert', 'emerald'),
+  ('LangChain', 'Agentic AI', 'Expert', 'teal'),
+  ('Transformers (Hugging Face)', 'AI & ML', 'Expert', 'rose'),
+  ('vLLM', 'Deep Learning', 'Expert', 'purple'),
+  ('CTranslate2', 'Deep Learning', 'Expert', 'indigo'),
+  ('PyTorch', 'AI & ML', 'Expert', 'rose'),
+  ('TensorFlow', 'AI & ML', 'Expert', 'orange'),
+  ('Flax Linen', 'Deep Learning', 'Advanced', 'violet'),
+  ('Ray (Distributed ML)', 'Distributed AI', 'Advanced', 'cyan'),
+  ('Python', 'Languages', 'Expert', 'emerald'),
+  ('SQL', 'Languages', 'Expert', 'cyan'),
+  ('TypeScript', 'Languages', 'Advanced', 'blue'),
+  ('Golang', 'Languages', 'Proficient', 'teal'),
+  ('JavaScript', 'Languages', 'Advanced', 'amber'),
+  ('FastAPI', 'Backend', 'Expert', 'green'),
+  ('Django', 'Backend', 'Advanced', 'emerald'),
+  ('Celery', 'Backend', 'Expert', 'green'),
+  ('Financial Screening Engine', 'Data Engineering', 'Expert', 'cyan'),
+  ('Apache Spark', 'Data Engineering', 'Advanced', 'amber'),
+  ('Apache Airflow', 'Data Engineering', 'Advanced', 'blue'),
+  ('PostgreSQL', 'Database', 'Expert', 'blue'),
+  ('FalkorDB (Graph DB)', 'Knowledge Graph', 'Expert', 'emerald'),
+  ('Cognee (GraphRAG)', 'Knowledge Graph', 'Advanced', 'purple'),
+  ('Vector DB (Qdrant/Faiss)', 'Vector Search', 'Expert', 'cyan'),
+  ('Docker', 'MLOps', 'Expert', 'blue'),
+  ('Prometheus', 'Monitoring', 'Expert', 'orange'),
+  ('Grafana', 'Monitoring', 'Expert', 'orange'),
+  ('Langfuse', 'LLMOps', 'Expert', 'teal'),
+  ('LangSmith', 'LLMOps', 'Advanced', 'emerald'),
+  ('Weights & Biases (W&B)', 'MLOps', 'Advanced', 'yellow'),
+  ('NetworkX', 'Graph Analysis', 'Advanced', 'purple'),
+  ('GitHub / CI/CD', 'DevOps', 'Expert', 'zinc')
+ON CONFLICT (name) DO UPDATE SET
+  category = EXCLUDED.category,
+  level = EXCLUDED.level;
+
+-- Seed Raqwan Projects
+INSERT INTO public.projects (id, title, category, description, tags, image, live_url, github_url, featured, highlights, detail)
+VALUES
+  (
+    'marketforge-securities-platform',
+    'MarketForge — Autonomous Securities Intelligence & Real-Time Screening Engine',
+    'FinTech & Agentic AI',
+    'Platform intelijen pasar modal sekuritas berbasis MarketForge Agentic AI dengan sub-millisecond screening engine untuk 900+ emiten, analisis kuantitatif teknikal & fundamental, serta WebSocket real-time ticker stream.',
+    '["MarketForge", "Agentic AI", "Screening Engine", "FastAPI", "WebSockets", "Quantitative Finance", "Python", "PostgreSQL"]'::jsonb,
+    'https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?auto=format&fit=crop&w=1200&q=80',
+    'https://app.notion.com/p/Sekuritas-Platform-16a4bf881acb83d89a3e8196f470a4c8',
+    'https://github.com/Rqwannn/MarketForge-Backend/tree/raqwan-dev',
     true,
-    '{"duration": "4 bulan (Aug — Nov 2023)", "role": "Design System Lead", "results": [{"metric": "Design-to-Dev Velocity", "before": "-", "after": "+50%", "change": "2x lebih cepat"}]}'::jsonb
+    '["Arsitektur MarketForge Agentic AI dengan multi-agent collaboration untuk sentimen berita emiten, laporan keuangan, dan quantitative alpha signals", "Real-Time High-Throughput Financial Screening Engine memproses ratusan instrumen saham dengan latency <12ms", "Backend microservices performa tinggi berbasis FastAPI & asynchronous WebSocket streaming"]'::jsonb,
+    '{"duration": "Jul 2026 — Present", "role": "Head of AI & Lead Financial AI Architect at PT. MTG", "results": [{"metric": "Screening Latency", "before": "1.4s", "after": "12ms", "change": "116x Lebih Cepat"}, {"metric": "Supported Tickers", "before": "100 manual", "after": "900+ real-time", "change": "Full Market Coverage"}]}'::jsonb
+  ),
+  (
+    'pertamina-graphrag-knowledge-graph',
+    'AI Knowledge Graph & GraphRAG System — Pertamina Patra Niaga',
+    'Knowledge Graph & LLM',
+    'Pembangunan Knowledge Graph enterprise berskala besar menggabungkan FalkorDB dan Cognee untuk mitigasi halusinasi AI dan ekstraksi relasi semantik dokumen korporat.',
+    '["GraphRAG", "FalkorDB", "Cognee", "LLM", "Python", "FastAPI"]'::jsonb,
+    'https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=1200&q=80',
+    'https://github.com/Rqwannn',
+    'https://github.com/Rqwannn',
+    true,
+    '["Fusi FalkorDB dan Cognee untuk mensistematisasi dataset korporat kompleks Pertamina Patra Niaga", "Pencegahan halusinasi model AI melalui kerangka kerja GraphRAG", "Transformasi dokumentasi teknis non-terstruktur menjadi jaringan semantik terstruktur"]'::jsonb,
+    '{"duration": "4 bulan (Jan — Apr 2026)", "role": "Lead AI Engineer Freelance", "results": [{"metric": "Retrieval Precision", "before": "68.2%", "after": "96.4%", "change": "+28.2%"}, {"metric": "Hallucination Rate", "before": "18.5%", "after": "1.2%", "change": "-93.5%"}]}'::jsonb
+  ),
+  (
+    'upstream-energy-data-monitoring',
+    'Real-Time Data Monitoring & Alerting Platform — Upstream Energy',
+    'Data Engineering',
+    'Sistem pemantauan dan alerting telemetri 32 metrik operasional hulu energi secara real-time dengan sinkronisasi PostgreSQL ke Grafana (30% latency reduction).',
+    '["Data Engineering", "PostgreSQL", "Grafana", "SQL", "Energy Upstream"]'::jsonb,
+    'https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=1200&q=80',
+    'https://github.com/Rqwannn',
+    'https://github.com/Rqwannn',
+    true,
+    '["Visualisasi 32 metrik kunci operasional hulu migas dengan presisi dan alerting instan", "Eksekusi optimasi query SQL kompleks pada database PostgreSQL dengan reduksi visual latency 30%"]'::jsonb,
+    '{"duration": "Apr 2026 — Jul 2026", "role": "Data Engineer Intern at Accenture", "results": [{"metric": "Visual Latency", "before": "1.8s", "after": "1.2s", "change": "-30%"}, {"metric": "Monitored Metrics", "before": "8 Manual", "after": "32 Automated", "change": "4x Coverage"}]}'::jsonb
+  ),
+  (
+    'ai-learning-insight',
+    'AI Learning Insight — Multi-Agent System with Explainable AI (LIME)',
+    'Multi-Agent & XAI',
+    'Platform analitik edukasi cerdas berbasis arsitektur Multi-Agent System dengan Agent Communication Protocol otonom serta Explainable AI (LIME) peraih penghargaan Best Capstone Project 2026 (Dicoding x Accenture Asah).',
+    '["Multi-Agent System", "Explainable AI", "LIME", "Supervised Learning", "Best Capstone 2026", "Python", "FastAPI"]'::jsonb,
+    'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=1200&q=80',
+    'https://github.com/Rqwannn',
+    'https://github.com/Rqwannn',
+    true,
+    '["Memimpin tim lintas disiplin memenangkan Best Capstone Project 2026 di Dicoding x Accenture Asah", "Merancang arsitektur Multi-Agent System dengan autonomous Agent Communication Protocol", "Mengembangkan model Supervised Learning transparan dengan LIME (Explainable AI)"]'::jsonb,
+    '{"duration": "Jan 2026 — Mei 2026", "role": "Team Lead & Lead AI Architect", "results": [{"metric": "Award Recognition", "before": "Nominated", "after": "Best Capstone 2026", "change": "Champion 1st Place"}, {"metric": "Model Explainability", "before": "0% (Black box)", "after": "100% LIME Interpretable", "change": "Full Transparency"}]}'::jsonb
+  ),
+  (
+    'reclaimyt-smart-conveyor-ai',
+    'Reclaimyt — AI-Powered Smart Conveyor Waste Classification System',
+    'Computer Vision & IoT',
+    'Sistem conveyor pintar bertenaga Deep Learning Computer Vision untuk pemilahan sampah otomatis di bank sampah, peraih Top 10 Best Team Samsung Innovation Campus Batch 5 (2024).',
+    '["Computer Vision", "Deep Learning", "TensorFlow", "Samsung Innovation Campus", "CNN", "Python"]'::jsonb,
+    'https://images.unsplash.com/photo-1532996122724-e3c354a0b15b?auto=format&fit=crop&w=1200&q=80',
+    'https://github.com/Rqwannn',
+    'https://github.com/Rqwannn',
+    true,
+    '["Terpilih sebagai Top 10 Best Team Samsung Innovation Campus Batch 5 (2024)", "Mengembangkan model CNN untuk klasifikasi sampah multi-kategori real-time", "Merancang solusi end-to-end terintegrasi conveyor fisik dan dashboard web"]'::jsonb,
+    '{"duration": "Jul 2024 — Nov 2024", "role": "Lead Deep Learning & Computer Vision Engineer", "results": [{"metric": "Classification Accuracy", "before": "65% manual", "after": "94.2% AI", "change": "+29.2%"}, {"metric": "Sorting Throughput", "before": "12 pcs / min", "after": "60 pcs / min", "change": "5x Lebih Cepat"}]}'::jsonb
+  ),
+  (
+    'twogether-ondevice-object-detection',
+    '2Gether — Mobile Platform with On-Device Deep Learning Object Detection',
+    'Mobile AI & Edge ML',
+    'Platform mobile Android dengan model deep learning on-device untuk alur daur ulang sampah dan klasifikasi material otomatis, peraih Runner-up InHacks Hackathon Indonesia 2023 (Google DSC ITTP).',
+    '["On-Device AI", "Object Detection", "TensorFlow Lite", "Android", "InHacks Runner-Up", "Python"]'::jsonb,
+    'https://images.unsplash.com/photo-1526628953301-3e589a6a8b74?auto=format&fit=crop&w=1200&q=80',
+    'https://github.com/Rqwannn',
+    'https://github.com/Rqwannn',
+    false,
+    '["Meraih Runner-up pada Innovation Competition Hackathon Indonesia 2023 (InHacks) Google DSC ITTP", "Mendeploy model deteksi objek terkuantisasi (TFLite) langsung on-device tanpa cloud latency"]'::jsonb,
+    '{"duration": "Nov 2023", "role": "Lead Mobile ML Developer", "results": [{"metric": "Hackathon Result", "before": "Participant", "after": "Runner-Up Champion", "change": "2nd Place"}, {"metric": "On-Device Inference", "before": "450ms", "after": "45ms", "change": "10x Lebih Cepat"}]}'::jsonb
+  ),
+  (
+    'distributed-voice-cloning-ray',
+    'Distributed High-Throughput Voice Cloning Pipeline',
+    'Deep Learning & Audio',
+    'Pipeline sintesis suara terdistribusi menggunakan Ray dan FastAPI untuk memisahkan beban komputasi GPU, memungkinkan 10 request konkuren secara paralel.',
+    '["Distributed AI", "Ray", "FastAPI", "Deep Learning", "PyTorch", "Audio Synthesis"]'::jsonb,
+    'https://images.unsplash.com/photo-1590602847861-f357a9332bbc?auto=format&fit=crop&w=1200&q=80',
+    'https://github.com/Rqwannn',
+    'https://github.com/Rqwannn',
+    false,
+    '["Distributed task queue menggunakan Ray Cluster untuk memparalelkan inferensi voice synthesis GPU-intensive", "Peningkatan throughput dari 1 request sekuensial menjadi 10 concurrent requests"]'::jsonb,
+    '{"duration": "Mar 2025 — Apr 2026", "role": "Machine Learning Engineer at PT. MTG", "results": [{"metric": "Concurrent Requests", "before": "1 Sequential", "after": "10 Parallel", "change": "10x Concurrency"}]}'::jsonb
+  ),
+  (
+    'slogmate-national-police-agentic',
+    'SLOGMate — Real-Time WebSocket Agentic AI for National Police',
+    'Agentic AI',
+    'Arsitektur Agentic AI terintegrasi WebSocket untuk otomasi alokasi sumber daya logistik dan pembuatan dokumen keputusan berbasis data untuk Kepolisian Negara Republik Indonesia.',
+    '["Agentic AI", "WebSocket", "LangGraph", "FastAPI", "Public Sector"]'::jsonb,
+    'https://images.unsplash.com/photo-1551808525-51a94da548ce?auto=format&fit=crop&w=1200&q=80',
+    'https://github.com/Rqwannn',
+    'https://github.com/Rqwannn',
+    false,
+    '["Arsitektur Agentic AI otonom terintegrasi WebSocket streaming untuk koordinasi logistik taktis", "Otomasi penjadwalan armada dan kalkulasi ketersediaan logistik di seluruh wilayah kepolisian"]'::jsonb,
+    '{"duration": "Mar 2025 — Apr 2026", "role": "Machine Learning & AI Engineer at PT. MTG", "results": [{"metric": "Logistics Allocation Speed", "before": "4 jam", "after": "12 detik", "change": "1200x Lebih Cepat"}]}'::jsonb
   )
 ON CONFLICT (id) DO UPDATE SET
   title = EXCLUDED.title,
   category = EXCLUDED.category,
   description = EXCLUDED.description,
   image = EXCLUDED.image;
+

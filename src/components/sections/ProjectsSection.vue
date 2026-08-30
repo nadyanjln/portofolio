@@ -3,7 +3,7 @@ import { ref, computed, onMounted } from 'vue'
 import { RouterLink, useRouter } from 'vue-router'
 import { 
   ArrowUpRight, 
-  ArrowRight,
+  ArrowRight, 
   Sparkles, 
   LayoutGrid, 
   Columns,
@@ -16,14 +16,17 @@ import ProjectCard from '@/components/ui/ProjectCard.vue'
 import { useScrollReveal } from '@/composables/useAnimations'
 
 const router = useRouter()
-const { projects } = usePortfolioStore()
+const { projects, currentProfile } = usePortfolioStore()
 
 // View Mode: 'showcase' (Interactive Split Stage) | 'grid' (Classic Cards)
 const viewMode = ref('showcase')
 
 // Selected Category Filter
 const selectedCategory = ref('All')
-const categories = ['All', 'Product Design', 'UX Design', 'Product Management', 'Design System']
+const categories = computed(() => {
+  const cats = Array.from(new Set((projects.value || []).map(p => p.category).filter(Boolean)))
+  return ['All', ...cats]
+})
 
 const filteredProjects = computed(() => {
   const list = projects.value || []
@@ -46,7 +49,7 @@ const selectProject = (idx) => {
 }
 
 const navigateToProject = (id) => {
-  router.push(`/projects/${id}`)
+  router.push(`/${currentProfile.value}/projects/${id}`)
 }
 
 // 3D Tilt & Mouse Parallax on Stage
@@ -99,14 +102,20 @@ onMounted(() => {
       <!-- ═══════════════════════════════════════════ -->
       <div data-reveal="fade-up" class="flex flex-col lg:flex-row lg:items-end justify-between gap-6 pb-2">
         <div class="space-y-3 max-w-2xl">
-          <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-white dark:bg-[#1A1C24] border border-[#EEDCDC] dark:border-white/10 text-xs font-mono-tag font-bold uppercase text-[#9E0402] dark:text-[#ff4d4d] shadow-xs">
-            <Sparkles class="w-3.5 h-3.5 text-[#9E0402] dark:text-[#ff4d4d]" />
+          <div 
+            class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-white dark:bg-[#1A1C24] border text-xs font-mono-tag font-bold uppercase shadow-xs"
+            :class="currentProfile === 'raqwan' ? 'text-emerald-400 border-[#047857]/40 bg-[#047857]/10' : 'text-[#9E0402] dark:text-[#ff4d4d] border-[#EEDCDC] dark:border-white/10'"
+          >
+            <Sparkles class="w-3.5 h-3.5" />
             <span>Selected Case Studies /2026/</span>
           </div>
           <h2 class="text-3xl sm:text-5xl lg:text-6xl font-extrabold tracking-tighter leading-tight text-[#1C1313] dark:text-white">
-            Featured Works & <span class="text-[#9E0402] dark:text-[#ff3b38]">Craft</span>
+            Featured Works & <span :class="currentProfile === 'raqwan' ? 'text-emerald-400' : 'text-[#9E0402] dark:text-[#ff3b38]'">Craft</span>
           </h2>
-          <p class="text-sm sm:text-base text-[#5C4848] dark:text-zinc-300 leading-relaxed max-w-xl">
+          <p class="text-sm sm:text-base text-[#5C4848] dark:text-zinc-300 leading-relaxed max-w-xl" v-if="currentProfile === 'raqwan'">
+            Sistem kecerdasan buatan end-to-end — dari Computer Vision dan NLP canggih hingga Autonomous Agentic AI & Generative Modeling.
+          </p>
+          <p class="text-sm sm:text-base text-[#5C4848] dark:text-zinc-300 leading-relaxed max-w-xl" v-else>
             Riset pengguna mendalam, strategi produk end-to-end, dan antarmuka terukur yang mengubah insight menjadi produk bernilai tinggi.
           </p>
         </div>
@@ -119,8 +128,8 @@ onMounted(() => {
               class="px-4 py-2 rounded-xl text-xs font-mono-tag font-bold uppercase flex items-center gap-1.5 transition-all cursor-pointer"
               :class="[
                 viewMode === 'showcase' 
-                  ? 'bg-[#9E0402] text-white shadow-xs' 
-                  : 'text-[#5C4848] dark:text-zinc-400 hover:text-[#9E0402] dark:hover:text-white'
+                  ? (currentProfile === 'raqwan' ? 'bg-[#047857] text-white shadow-xs' : 'bg-[#9E0402] text-white shadow-xs')
+                  : 'text-[#5C4848] dark:text-zinc-400 hover:text-white'
               ]"
             >
               <Columns class="w-3.5 h-3.5" />
@@ -132,8 +141,8 @@ onMounted(() => {
               class="px-4 py-2 rounded-xl text-xs font-mono-tag font-bold uppercase flex items-center gap-1.5 transition-all cursor-pointer"
               :class="[
                 viewMode === 'grid' 
-                  ? 'bg-[#9E0402] text-white shadow-xs' 
-                  : 'text-[#5C4848] dark:text-zinc-400 hover:text-[#9E0402] dark:hover:text-white'
+                  ? (currentProfile === 'raqwan' ? 'bg-[#047857] text-white shadow-xs' : 'bg-[#9E0402] text-white shadow-xs')
+                  : 'text-[#5C4848] dark:text-zinc-400 hover:text-white'
               ]"
             >
               <LayoutGrid class="w-3.5 h-3.5" />
@@ -142,8 +151,9 @@ onMounted(() => {
           </div>
 
           <RouterLink
-            to="/projects"
-            class="px-5 py-2.5 rounded-2xl bg-white dark:bg-[#14161D] border border-[#EEDCDC] dark:border-white/10 hover:border-[#9E0402]/40 text-[#9E0402] dark:text-[#ff4d4d] text-xs font-mono-tag font-bold uppercase tracking-wider flex items-center gap-1.5 shadow-xs transition-colors"
+            :to="'/' + currentProfile + '/projects'"
+            class="px-5 py-2.5 rounded-2xl bg-white dark:bg-[#14161D] border border-[#EEDCDC] dark:border-white/10 text-xs font-mono-tag font-bold uppercase tracking-wider flex items-center gap-1.5 shadow-xs transition-colors"
+            :class="currentProfile === 'raqwan' ? 'text-emerald-400 hover:border-[#047857]/60' : 'text-[#9E0402] dark:text-[#ff4d4d] hover:border-[#9E0402]/40'"
           >
             <span>All Works ({{ projects.length }})</span>
             <ArrowUpRight class="w-3.5 h-3.5" />
@@ -161,8 +171,8 @@ onMounted(() => {
             class="px-4 py-1.5 rounded-full text-xs font-mono-tag uppercase tracking-wider transition-all duration-200 cursor-pointer whitespace-nowrap font-bold"
             :class="[
               selectedCategory === cat 
-                ? 'bg-[#9E0402] text-white shadow-md shadow-[#9E0402]/25' 
-                : 'bg-white dark:bg-[#15161B] text-[#5C4848] dark:text-zinc-300 hover:text-[#9E0402] dark:hover:text-white hover:border-[#9E0402]/40 border border-[#EEDCDC] dark:border-white/10'
+                ? (currentProfile === 'raqwan' ? 'bg-[#047857] text-white shadow-md shadow-[#047857]/30' : 'bg-[#9E0402] text-white shadow-md shadow-[#9E0402]/25')
+                : 'bg-white dark:bg-[#15161B] text-[#5C4848] dark:text-zinc-300 hover:text-white border border-[#EEDCDC] dark:border-white/10'
             ]"
           >
             {{ cat }}
@@ -176,7 +186,6 @@ onMounted(() => {
 
       <!-- ═══════════════════════════════════════════ -->
       <!-- VIEW 1: INTERACTIVE SPLIT STAGE             -->
-      <!-- Clean, Spacious, Benjamin Creative Vibe     -->
       <!-- ═══════════════════════════════════════════ -->
       <transition name="view-fade" mode="out-in">
         
@@ -203,14 +212,17 @@ onMounted(() => {
                 class="p-4 sm:p-5 rounded-3xl border transition-all duration-300 cursor-pointer flex flex-col justify-between group relative overflow-hidden shrink-0"
                 :class="[
                   activeIndex === idx
-                    ? 'bg-white dark:bg-[#14161D] border-[#9E0402] dark:border-[#ff4d4d]/60 shadow-lg shadow-[#9E0402]/5 -translate-y-0.5'
-                    : 'bg-white/70 dark:bg-[#14161D]/50 border-[#EEDCDC] dark:border-white/10 hover:border-[#9E0402]/30 hover:bg-white dark:hover:bg-[#14161D]'
+                    ? (currentProfile === 'raqwan'
+                        ? 'bg-white dark:bg-[#14161D] border-[#047857] dark:border-[#047857]/90 shadow-lg shadow-[#047857]/15 -translate-y-0.5'
+                        : 'bg-white dark:bg-[#14161D] border-[#9E0402] dark:border-[#ff4d4d]/60 shadow-lg shadow-[#9E0402]/5 -translate-y-0.5')
+                    : 'bg-white/70 dark:bg-[#14161D]/50 border-[#EEDCDC] dark:border-white/10 hover:bg-white dark:hover:bg-[#14161D]'
                 ]"
               >
                 <!-- Active Indicator Line on Left -->
                 <div 
                   v-if="activeIndex === idx"
-                  class="absolute left-0 top-3 bottom-3 w-1.5 bg-[#9E0402] dark:bg-[#ff4d4d] rounded-r-full"
+                  class="absolute left-0 top-3 bottom-3 w-1.5 rounded-r-full"
+                  :class="currentProfile === 'raqwan' ? 'bg-[#047857]' : 'bg-[#9E0402] dark:bg-[#ff4d4d]'"
                 ></div>
 
                 <!-- Top Row: Index & Category -->
@@ -218,7 +230,7 @@ onMounted(() => {
                   <div class="flex items-center gap-2">
                     <span 
                       class="text-xs font-mono-tag font-bold"
-                      :class="activeIndex === idx ? 'text-[#9E0402] dark:text-[#ff4d4d]' : 'text-[#5C4848] dark:text-zinc-400'"
+                      :class="activeIndex === idx ? (currentProfile === 'raqwan' ? 'text-emerald-400' : 'text-[#9E0402] dark:text-[#ff4d4d]') : 'text-[#5C4848] dark:text-zinc-400'"
                     >
                       ({{ String(idx + 1).padStart(2, '0') }})
                     </span>
@@ -241,8 +253,8 @@ onMounted(() => {
                     class="text-base sm:text-lg font-bold leading-snug transition-colors"
                     :class="[
                       activeIndex === idx 
-                        ? 'text-[#9E0402] dark:text-[#ff4d4d]' 
-                        : 'text-[#1C1313] dark:text-white group-hover:text-[#9E0402] dark:group-hover:text-[#ff4d4d]'
+                        ? (currentProfile === 'raqwan' ? 'text-emerald-400' : 'text-[#9E0402] dark:text-[#ff4d4d]') 
+                        : (currentProfile === 'raqwan' ? 'text-[#1C1313] dark:text-white group-hover:text-emerald-400' : 'text-[#1C1313] dark:text-white group-hover:text-[#9E0402] dark:group-hover:text-[#ff4d4d]')
                     ]"
                   >
                     {{ p.title }}
@@ -259,7 +271,8 @@ onMounted(() => {
                       <span 
                         v-for="tag in p.tags" 
                         :key="tag"
-                        class="px-2 py-0.5 text-[10px] font-bold font-mono-tag rounded-md bg-[#9FC2EA]/20 dark:bg-[#9FC2EA]/15 text-[#1E3A60] dark:text-[#9FC2EA] border border-[#9FC2EA]/40"
+                        class="px-2 py-0.5 text-[10px] font-bold font-mono-tag rounded-md"
+                        :class="currentProfile === 'raqwan' ? 'bg-[#047857]/20 text-emerald-300 border border-[#047857]/40' : 'bg-[#9FC2EA]/20 dark:bg-[#9FC2EA]/15 text-[#1E3A60] dark:text-[#9FC2EA] border border-[#9FC2EA]/40'"
                       >
                         {{ tag }}
                       </span>
@@ -270,16 +283,19 @@ onMounted(() => {
                 <!-- Bottom CTA Link for Active Item -->
                 <div v-if="activeIndex === idx" class="pt-2.5 mt-1.5 border-t border-[#EEDCDC] dark:border-white/10 flex items-center justify-between">
                   <RouterLink
-                    :to="'/projects/' + p.id"
-                    class="text-xs font-bold font-mono-tag uppercase text-[#9E0402] dark:text-[#ff4d4d] flex items-center gap-1.5 hover:underline"
+                    :to="'/' + currentProfile + '/projects/' + p.id"
+                    class="text-xs font-bold font-mono-tag uppercase flex items-center gap-1.5 hover:underline"
+                    :class="currentProfile === 'raqwan' ? 'text-emerald-400' : 'text-[#9E0402] dark:text-[#ff4d4d]'"
                   >
                     <span>Read Full Case Study</span>
                     <ArrowRight class="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
                   </RouterLink>
 
-                  <span class="text-xs font-mono-tag text-[#1E3A60] dark:text-[#9FC2EA] font-semibold">
-                    Live Preview ↗
-                  </span>
+                  <div class="flex items-center gap-1">
+                    <span class="text-xs font-mono-tag text-[#5C4848] dark:text-zinc-400 font-semibold">
+                      Live Preview ↗
+                    </span>
+                  </div>
                 </div>
               </div>
             </div>
@@ -287,11 +303,11 @@ onMounted(() => {
             <!-- Scroll Indicator Helper when > 4 projects -->
             <div v-if="filteredProjects.length > 4" class="pt-1.5 text-center text-xs font-mono-tag text-[#5C4848] dark:text-zinc-400 flex items-center justify-center gap-1.5">
               <span>Scroll untuk melihat {{ filteredProjects.length - 4 }} proyek lainnya</span>
-              <span class="animate-bounce text-[#9E0402] dark:text-[#ff4d4d]">↓</span>
+              <span class="animate-bounce" :class="currentProfile === 'raqwan' ? 'text-emerald-400' : 'text-[#9E0402] dark:text-[#ff4d4d]'">↓</span>
             </div>
           </div>
 
-          <!-- RIGHT: Large Cinematic Mockup Stage (Matching Height) -->
+          <!-- RIGHT: Large Cinematic Mockup Stage -->
           <div class="lg:col-span-7 flex flex-col h-full">
             <div 
               ref="stageRef"
@@ -306,7 +322,9 @@ onMounted(() => {
                 class="absolute inset-0 pointer-events-none z-20 transition-opacity duration-300 rounded-[36px]"
                 :style="{
                   opacity: isStageHovered ? 1 : 0,
-                  background: `radial-gradient(circle at ${shineX}% ${shineY}%, rgba(255, 255, 255, 0.2) 0%, rgba(158, 4, 2, 0.08) 45%, transparent 70%)`
+                  background: currentProfile === 'raqwan'
+                    ? `radial-gradient(circle at ${shineX}% ${shineY}%, rgba(255, 255, 255, 0.2) 0%, rgba(4, 120, 87, 0.12) 45%, transparent 70%)`
+                    : `radial-gradient(circle at ${shineX}% ${shineY}%, rgba(255, 255, 255, 0.2) 0%, rgba(158, 4, 2, 0.08) 45%, transparent 70%)`
                 }"
               ></div>
 
@@ -329,7 +347,8 @@ onMounted(() => {
                   <!-- Metric badge if available -->
                   <span 
                     v-if="activeProject.detail?.results?.length" 
-                    class="px-3.5 py-1 text-xs font-bold font-mono-tag uppercase rounded-xl bg-[#9E0402] text-white border border-white/20 backdrop-blur-md shadow-md flex items-center gap-1.5"
+                    class="px-3.5 py-1 text-xs font-bold font-mono-tag uppercase rounded-xl text-white border border-white/20 backdrop-blur-md shadow-md flex items-center gap-1.5"
+                    :class="currentProfile === 'raqwan' ? 'bg-[#047857]' : 'bg-[#9E0402]'"
                   >
                     <TrendingUp class="w-3.5 h-3.5" />
                     <span>{{ activeProject.detail.results[0].metric }}: {{ activeProject.detail.results[0].after }}</span>
@@ -338,7 +357,10 @@ onMounted(() => {
 
                 <!-- Hover Center Explore Pill -->
                 <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 z-30">
-                  <span class="px-7 py-3.5 rounded-full bg-[#9E0402] hover:bg-[#B80604] text-white font-mono-tag font-bold text-xs uppercase tracking-widest shadow-2xl flex items-center gap-2 transform group-hover:scale-105 transition-transform">
+                  <span 
+                    class="px-7 py-3.5 rounded-full text-white font-mono-tag font-bold text-xs uppercase tracking-widest shadow-2xl flex items-center gap-2 transform group-hover:scale-105 transition-transform"
+                    :class="currentProfile === 'raqwan' ? 'bg-[#047857] hover:bg-[#065F46]' : 'bg-[#9E0402] hover:bg-[#B80604]'"
+                  >
                     <span>Explore Case Study</span>
                     <ArrowUpRight class="w-4 h-4" />
                   </span>
@@ -352,9 +374,10 @@ onMounted(() => {
                   </div>
 
                   <RouterLink
-                    :to="'/projects/' + activeProject.id"
+                    :to="'/' + currentProfile + '/projects/' + activeProject.id"
                     @click.stop
-                    class="px-4 py-2 rounded-xl bg-white text-[#9E0402] hover:bg-[#FFF9F9] font-mono-tag text-xs font-extrabold uppercase tracking-wider flex items-center gap-1.5 shrink-0 shadow-md hover:scale-103 transition-all"
+                    class="px-4 py-2 rounded-xl bg-white font-mono-tag text-xs font-extrabold uppercase tracking-wider flex items-center gap-1.5 shrink-0 shadow-md hover:scale-103 transition-all cursor-pointer"
+                    :class="currentProfile === 'raqwan' ? 'text-[#047857] hover:bg-emerald-50' : 'text-[#9E0402] hover:bg-[#FFF9F9]'"
                   >
                     <span>Read Study</span>
                     <ArrowRight class="w-3.5 h-3.5" />

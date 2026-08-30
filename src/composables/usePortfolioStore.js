@@ -1,155 +1,200 @@
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import { 
-  portfolioInfo as defaultInfo, 
-  skills as defaultSkills, 
-  projects as defaultProjects,
-  testimonials as defaultTestimonials,
-  educations as defaultEducations
+  portfolioInfo as defaultNadyaInfo, 
+  skills as defaultNadyaSkills, 
+  projects as defaultNadyaProjects,
+  testimonials as defaultNadyaTestimonials,
+  educations as defaultNadyaEducations,
+  workflows as defaultNadyaWorkflows,
+  experiences as defaultNadyaExperiences,
+  milestones as defaultNadyaMilestones,
+  certifications as defaultNadyaCertifications
 } from '@/data/portfolioData'
+import {
+  raqwanInfo as defaultRaqwanInfo,
+  raqwanSkills as defaultRaqwanSkills,
+  raqwanProjects as defaultRaqwanProjects,
+  raqwanTestimonials as defaultRaqwanTestimonials,
+  raqwanEducations as defaultRaqwanEducations,
+  raqwanWorkflows as defaultRaqwanWorkflows,
+  raqwanExperiences as defaultRaqwanExperiences,
+  raqwanMilestones as defaultRaqwanMilestones,
+  raqwanCertifications as defaultRaqwanCertifications
+} from '@/data/raqwanData'
 import { 
   supabase, 
   isSupabaseConfigured,
   fetchProjectsFromSupabase,
   fetchSkillsFromSupabase,
   fetchTestimonialsFromSupabase,
-  fetchProfileFromSupabase,
-  seedAllDataToSupabase
+  fetchProfileFromSupabase
 } from '@/lib/supabase'
 
-const STORE_STORAGE_KEY = 'nadya_portfolio_cms_data'
-const MESSAGES_STORAGE_KEY = 'nadya_portfolio_messages'
-const SUPABASE_CACHE_KEY = 'nadya_portfolio_supabase_cache'
-
-// 1 Day Cache TTL (24 hours in milliseconds)
+// 1 Day Cache TTL (24 hours)
 export const CACHE_TTL_MS = 24 * 60 * 60 * 1000
 
-// Reactive state
-const infoState = ref(JSON.parse(JSON.stringify(defaultInfo)))
-const skillsState = ref(JSON.parse(JSON.stringify(defaultSkills)))
-const projectsState = ref(JSON.parse(JSON.stringify(defaultProjects)))
-const testimonialsState = ref(JSON.parse(JSON.stringify(defaultTestimonials)))
-const educationsState = ref(JSON.parse(JSON.stringify(defaultEducations)))
-const messagesState = ref([])
+// Active profile global state ('nadya' | 'raqwan')
+const activeProfileKey = ref('nadya')
+
+// Reactive states for NADYA
+const nadyaInfoState = ref(JSON.parse(JSON.stringify(defaultNadyaInfo)))
+const nadyaSkillsState = ref(JSON.parse(JSON.stringify(defaultNadyaSkills)))
+const nadyaProjectsState = ref(JSON.parse(JSON.stringify(defaultNadyaProjects)))
+const nadyaTestimonialsState = ref(JSON.parse(JSON.stringify(defaultNadyaTestimonials)))
+const nadyaEducationsState = ref(JSON.parse(JSON.stringify(defaultNadyaEducations)))
+const nadyaMessagesState = ref([])
+
+// Reactive states for RAQWAN
+const raqwanInfoState = ref(JSON.parse(JSON.stringify(defaultRaqwanInfo)))
+const raqwanSkillsState = ref(JSON.parse(JSON.stringify(defaultRaqwanSkills)))
+const raqwanProjectsState = ref(JSON.parse(JSON.stringify(defaultRaqwanProjects)))
+const raqwanTestimonialsState = ref(JSON.parse(JSON.stringify(defaultRaqwanTestimonials)))
+const raqwanEducationsState = ref(JSON.parse(JSON.stringify(defaultRaqwanEducations)))
+const raqwanMessagesState = ref([])
+
+// Status
 const isSupabaseLoaded = ref(false)
 const isLoadingSupabase = ref(false)
 const isLoadedFromCache = ref(false)
 const cacheExpiryTime = ref(null)
 
 // -------------------------------------------------------------
-// CACHE HELPER FUNCTIONS
+// LOCALSTORAGE & CACHE PER PROFILE
 // -------------------------------------------------------------
-const getCachedData = () => {
+const getStorageKey = (profile, suffix) => `portfolio_${profile}_${suffix}`
+
+const initProfileFromLocal = (profileKey) => {
   try {
-    const raw = localStorage.getItem(SUPABASE_CACHE_KEY)
-    if (!raw) return null
+    const saved = localStorage.getItem(getStorageKey(profileKey, 'data'))
+    if (saved) {
+      const parsed = JSON.parse(saved)
+      if (profileKey === 'nadya') {
+        nadyaInfoState.value = { ...defaultNadyaInfo, ...parsed.portfolioInfo }
+        if (parsed.projects && parsed.projects.length > 0) {
+          const existingIds = new Set(parsed.projects.map(p => p.id))
+          const missingProjects = defaultNadyaProjects.filter(p => !existingIds.has(p.id))
+          nadyaProjectsState.value = [...missingProjects, ...parsed.projects]
+        } else {
+          nadyaProjectsState.value = JSON.parse(JSON.stringify(defaultNadyaProjects))
+        }
+        if (parsed.skills && parsed.skills.length > 0) {
+          const existingSkillNames = new Set(parsed.skills.map(s => s.name))
+          const missingSkills = defaultNadyaSkills.filter(s => !existingSkillNames.has(s.name))
+          nadyaSkillsState.value = [...missingSkills, ...parsed.skills]
+        } else {
+          nadyaSkillsState.value = JSON.parse(JSON.stringify(defaultNadyaSkills))
+        }
+        if (parsed.testimonials && parsed.testimonials.length > 0) nadyaTestimonialsState.value = parsed.testimonials
+        if (parsed.educations && parsed.educations.length > 0) nadyaEducationsState.value = parsed.educations
+      } else {
+        // Always ensure updated default data and projects if newly added
+        raqwanInfoState.value = { 
+          ...parsed.portfolioInfo,
+          ...defaultRaqwanInfo
+        }
+        
+        if (parsed.projects && parsed.projects.length > 0) {
+          const existingIds = new Set(parsed.projects.map(p => p.id))
+          const missingProjects = defaultRaqwanProjects.filter(p => !existingIds.has(p.id))
+          raqwanProjectsState.value = [...missingProjects, ...parsed.projects]
+        } else {
+          raqwanProjectsState.value = JSON.parse(JSON.stringify(defaultRaqwanProjects))
+        }
 
-    const parsed = JSON.parse(raw)
-    const now = Date.now()
+        if (parsed.skills && parsed.skills.length > 0) {
+          const existingSkillNames = new Set(parsed.skills.map(s => s.name))
+          const missingSkills = defaultRaqwanSkills.filter(s => !existingSkillNames.has(s.name))
+          raqwanSkillsState.value = [...missingSkills, ...parsed.skills]
+        } else {
+          raqwanSkillsState.value = JSON.parse(JSON.stringify(defaultRaqwanSkills))
+        }
 
-    // Check if cache is still valid (< 24 hours)
-    if (parsed.expiresAt && now < parsed.expiresAt) {
-      return parsed
-    }
-    
-    console.log('[Supabase Cache] Cache 1 hari telah kedaluwarsa. Mengambil data baru dari backend...')
-    return null
-  } catch (e) {
-    console.error('[Supabase Cache] Error membaca cache:', e)
-    return null
-  }
-}
-
-const saveCacheData = (dataPayload) => {
-  try {
-    const now = Date.now()
-    const expiresAt = now + CACHE_TTL_MS
-    const cachePayload = {
-      cachedAt: new Date(now).toISOString(),
-      expiresAt: expiresAt,
-      expiresAtReadable: new Date(expiresAt).toLocaleString('id-ID'),
-      data: dataPayload
-    }
-    localStorage.setItem(SUPABASE_CACHE_KEY, JSON.stringify(cachePayload))
-    cacheExpiryTime.value = new Date(expiresAt)
-    console.log(`[Supabase Cache] Data berhasil dicache untuk 1 hari (berlaku hingga ${cachePayload.expiresAtReadable})`)
-  } catch (e) {
-    console.error('[Supabase Cache] Error menyimpan cache:', e)
-  }
-}
-
-// Invalidate Cache
-const clearSupabaseCache = () => {
-  localStorage.removeItem(SUPABASE_CACHE_KEY)
-  cacheExpiryTime.value = null
-  isLoadedFromCache.value = false
-}
-
-// -------------------------------------------------------------
-// STORE INITIALIZATION & BACKEND SYNC
-// -------------------------------------------------------------
-const initStoreFromLocal = () => {
-  try {
-    const savedData = localStorage.getItem(STORE_STORAGE_KEY)
-    if (savedData) {
-      const parsed = JSON.parse(savedData)
-      if (parsed.portfolioInfo) infoState.value = parsed.portfolioInfo
-      if (parsed.skills) skillsState.value = parsed.skills
-      if (parsed.projects) projectsState.value = parsed.projects
-      if (parsed.testimonials) testimonialsState.value = parsed.testimonials
-      if (parsed.educations) educationsState.value = parsed.educations
+        if (parsed.testimonials && parsed.testimonials.length > 0) {
+          raqwanTestimonialsState.value = parsed.testimonials
+        }
+        if (parsed.educations && parsed.educations.length > 0) {
+          raqwanEducationsState.value = parsed.educations
+        }
+      }
     }
   } catch (e) {
-    console.error('Error loading portfolio store data:', e)
+    console.error(`Error loading local data for ${profileKey}:`, e)
   }
 
   try {
-    const savedMessages = localStorage.getItem(MESSAGES_STORAGE_KEY)
-    if (savedMessages) {
-      messagesState.value = JSON.parse(savedMessages)
+    const savedMsgs = localStorage.getItem(getStorageKey(profileKey, 'messages'))
+    if (savedMsgs) {
+      const parsed = JSON.parse(savedMsgs)
+      if (profileKey === 'nadya') nadyaMessagesState.value = parsed
+      else raqwanMessagesState.value = parsed
     } else {
-      messagesState.value = [
+      const defaultMsg = [
         {
           id: 'msg-1',
           name: 'Sarah Anderson',
           email: 'sarah.anderson@techventures.co',
-          category: 'Product Management Role',
-          message: 'Halo Nadya, kami sangat terkesan dengan case study TaskFlow Anda. Kami sedang mencari Lead Product Manager untuk produk SaaS kami di Q3. Apakah ada waktu untuk diskusi singkat minggu depan?',
+          category: profileKey === 'nadya' ? 'Product Management Role' : 'AI Engineering Role',
+          message: profileKey === 'nadya'
+            ? 'Halo Nadya, kami sangat terkesan dengan case study TaskFlow Anda. Kami sedang mencari Lead Product Manager di Q3.'
+            : 'Halo Raqwan, kami sangat tertarik dengan sistem GraphRAG dan arsitektur distributed ML Anda. Kami sedang mencari AI Specialist untuk tim kami.',
           date: new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString(),
           read: false
         }
       ]
+      if (profileKey === 'nadya') nadyaMessagesState.value = defaultMsg
+      else raqwanMessagesState.value = defaultMsg
     }
   } catch (e) {
-    console.error('Error loading messages:', e)
+    console.error(`Error loading messages for ${profileKey}:`, e)
   }
 }
 
-// Fetch live data from Supabase with 1-Day Cache check
+// Initialize both profiles
+initProfileFromLocal('nadya')
+initProfileFromLocal('raqwan')
+
+// Persist single profile to localStorage
+const persistProfile = (profileKey) => {
+  try {
+    const payload = profileKey === 'nadya' 
+      ? {
+          portfolioInfo: nadyaInfoState.value,
+          skills: nadyaSkillsState.value,
+          projects: nadyaProjectsState.value,
+          testimonials: nadyaTestimonialsState.value,
+          educations: nadyaEducationsState.value
+        }
+      : {
+          portfolioInfo: raqwanInfoState.value,
+          skills: raqwanSkillsState.value,
+          projects: raqwanProjectsState.value,
+          testimonials: raqwanTestimonialsState.value,
+          educations: raqwanEducationsState.value
+        }
+
+    localStorage.setItem(getStorageKey(profileKey, 'data'), JSON.stringify(payload))
+  } catch (e) {
+    console.error(`Error saving ${profileKey} data:`, e)
+  }
+}
+
+const persistMessages = (profileKey) => {
+  try {
+    const msgs = profileKey === 'nadya' ? nadyaMessagesState.value : raqwanMessagesState.value
+    localStorage.setItem(getStorageKey(profileKey, 'messages'), JSON.stringify(msgs))
+  } catch (e) {
+    console.error(`Error saving messages for ${profileKey}:`, e)
+  }
+}
+
+// -------------------------------------------------------------
+// CACHED SUPABASE LOADER
+// -------------------------------------------------------------
 const loadFromSupabase = async (forceRefresh = false) => {
   if (!isSupabaseConfigured() || !supabase) return
 
-  // 1. Check if 1-day cache exists and forceRefresh is false
-  if (!forceRefresh) {
-    const cached = getCachedData()
-    if (cached && cached.data) {
-      console.log(`⚡ [Supabase Cache] Menggunakan data cache lokal (Valid hingga: ${cached.expiresAtReadable}). Tidak merequest backend.`)
-      if (cached.data.projects?.length) projectsState.value = cached.data.projects
-      if (cached.data.skills?.length) skillsState.value = cached.data.skills
-      if (cached.data.testimonials?.length) testimonialsState.value = cached.data.testimonials
-      if (cached.data.profile) infoState.value = { ...infoState.value, ...cached.data.profile }
-      
-      isLoadedFromCache.value = true
-      isSupabaseLoaded.value = true
-      cacheExpiryTime.value = new Date(cached.expiresAt)
-      return
-    }
-  }
-
-  // 2. Fetch fresh data from backend
   isLoadingSupabase.value = true
-  isLoadedFromCache.value = false
   try {
-    console.log('🌐 [Supabase] Mengambil data terbaru dari backend...')
     const [pRes, sRes, tRes, profRes] = await Promise.all([
       fetchProjectsFromSupabase(),
       fetchSkillsFromSupabase(),
@@ -158,261 +203,249 @@ const loadFromSupabase = async (forceRefresh = false) => {
     ])
 
     if (pRes.data && pRes.data.length > 0) {
-      projectsState.value = pRes.data
+      nadyaProjectsState.value = pRes.data
     }
     if (sRes.data && sRes.data.length > 0) {
-      skillsState.value = sRes.data
+      nadyaSkillsState.value = sRes.data
     }
     if (tRes.data && tRes.data.length > 0) {
-      testimonialsState.value = tRes.data
+      nadyaTestimonialsState.value = tRes.data
     }
     if (profRes.data) {
-      infoState.value = { ...infoState.value, ...profRes.data }
+      nadyaInfoState.value = { ...nadyaInfoState.value, ...profRes.data }
     }
-
-    // 3. Save to 24-Hour Cache
-    saveCacheData({
-      projects: projectsState.value,
-      skills: skillsState.value,
-      testimonials: testimonialsState.value,
-      profile: infoState.value
-    })
 
     isSupabaseLoaded.value = true
   } catch (err) {
-    console.warn('[Supabase Store] Error loading data from Supabase, using local state:', err)
+    console.warn('[Supabase Store] Error loading Supabase data:', err)
   } finally {
     isLoadingSupabase.value = false
   }
 }
 
-// Initialize on load
-initStoreFromLocal()
+// Load Supabase for Nadya on startup
 loadFromSupabase()
 
-// Auto-save changes to localStorage
-const persistStore = () => {
-  try {
-    const payload = {
-      portfolioInfo: infoState.value,
-      skills: skillsState.value,
-      projects: projectsState.value,
-      testimonials: testimonialsState.value,
-      educations: educationsState.value
+// -------------------------------------------------------------
+// MAIN COMPOSABLE
+// -------------------------------------------------------------
+export function usePortfolioStore(profileExplicit = null) {
+  // Determine current active profile: explicit parameter or global state
+  const currentProfile = computed(() => {
+    if (profileExplicit) return profileExplicit
+    return activeProfileKey.value || 'nadya'
+  })
+
+  // Dynamic getters according to active profile
+  const portfolioInfo = computed(() => {
+    return currentProfile.value === 'nadya' ? nadyaInfoState.value : raqwanInfoState.value
+  })
+
+  const skills = computed(() => {
+    return currentProfile.value === 'nadya' ? nadyaSkillsState.value : raqwanSkillsState.value
+  })
+
+  const projects = computed(() => {
+    return currentProfile.value === 'nadya' ? nadyaProjectsState.value : raqwanProjectsState.value
+  })
+
+  const testimonials = computed(() => {
+    return currentProfile.value === 'nadya' ? nadyaTestimonialsState.value : raqwanTestimonialsState.value
+  })
+
+  const educations = computed(() => {
+    return currentProfile.value === 'nadya' ? nadyaEducationsState.value : raqwanEducationsState.value
+  })
+
+  const experiences = computed(() => {
+    return currentProfile.value === 'nadya' ? defaultNadyaExperiences : defaultRaqwanExperiences
+  })
+
+  const milestones = computed(() => {
+    return currentProfile.value === 'nadya' ? defaultNadyaMilestones : defaultRaqwanMilestones
+  })
+
+  const workflows = computed(() => {
+    return currentProfile.value === 'nadya' ? defaultNadyaWorkflows : defaultRaqwanWorkflows
+  })
+
+  const certifications = computed(() => {
+    return currentProfile.value === 'nadya' ? defaultNadyaCertifications : defaultRaqwanCertifications
+  })
+
+  const messages = computed(() => {
+    return currentProfile.value === 'nadya' ? nadyaMessagesState.value : raqwanMessagesState.value
+  })
+
+  // Profile setter
+  const setActiveProfile = (profile) => {
+    if (profile === 'nadya' || profile === 'raqwan') {
+      activeProfileKey.value = profile
     }
-    localStorage.setItem(STORE_STORAGE_KEY, JSON.stringify(payload))
-    // Also update cache with new edits
-    saveCacheData({
-      projects: projectsState.value,
-      skills: skillsState.value,
-      testimonials: testimonialsState.value,
-      profile: infoState.value
-    })
-  } catch (e) {
-    console.error('Failed to persist portfolio store:', e)
   }
-}
 
-const persistMessages = () => {
-  try {
-    localStorage.setItem(MESSAGES_STORAGE_KEY, JSON.stringify(messagesState.value))
-  } catch (e) {
-    console.error('Failed to persist messages:', e)
-  }
-}
-
-export function usePortfolioStore() {
-  // Update Profile Info
-  const updateInfo = async (newInfo) => {
-    infoState.value = { ...infoState.value, ...newInfo }
-    persistStore()
-
-    if (supabase) {
-      try {
-        await supabase.from('profile_info').upsert({
-          id: 'nadya_profile',
-          name: newInfo.name,
-          short_name: newInfo.shortName,
-          title: newInfo.title,
-          tagline: newInfo.tagline,
-          bio: newInfo.bio,
-          status: newInfo.status,
-          location: newInfo.location,
-          email: newInfo.email,
-          socials: newInfo.socials
-        }, { onConflict: 'id' })
-      } catch (e) {
-        console.warn('[Supabase Sync] Profile update:', e)
-      }
+  // Profile Updates
+  const updateInfo = (newInfo, targetProfile = currentProfile.value) => {
+    if (targetProfile === 'nadya') {
+      nadyaInfoState.value = { ...nadyaInfoState.value, ...newInfo }
+    } else {
+      raqwanInfoState.value = { ...raqwanInfoState.value, ...newInfo }
     }
+    persistProfile(targetProfile)
   }
 
   // Projects CRUD
-  const addProject = async (project) => {
+  const addProject = (project, targetProfile = currentProfile.value) => {
     const newProj = {
       ...project,
       id: project.id || 'proj-' + Date.now(),
       featured: project.featured ?? true
     }
-    projectsState.value.unshift(newProj)
-    persistStore()
-
-    if (supabase) {
-      try {
-        await supabase.from('projects').insert([{
-          id: newProj.id,
-          title: newProj.title,
-          category: newProj.category,
-          description: newProj.description,
-          tags: newProj.tags,
-          image: newProj.image,
-          live_url: newProj.liveUrl || '',
-          featured: newProj.featured,
-          highlights: newProj.highlights || [],
-          detail: newProj.detail || {}
-        }])
-      } catch (e) {
-        console.warn('[Supabase Sync] Add project:', e)
-      }
+    if (targetProfile === 'nadya') {
+      nadyaProjectsState.value.unshift(newProj)
+    } else {
+      raqwanProjectsState.value.unshift(newProj)
     }
-
+    persistProfile(targetProfile)
     return newProj
   }
 
-  const updateProject = async (id, updatedData) => {
-    const index = projectsState.value.findIndex(p => p.id === id)
+  const updateProject = (id, updatedData, targetProfile = currentProfile.value) => {
+    const list = targetProfile === 'nadya' ? nadyaProjectsState : raqwanProjectsState
+    const index = list.value.findIndex(p => p.id === id)
     if (index !== -1) {
-      projectsState.value[index] = { ...projectsState.value[index], ...updatedData }
-      persistStore()
-
-      if (supabase) {
-        try {
-          await supabase.from('projects').update({
-            title: updatedData.title,
-            category: updatedData.category,
-            description: updatedData.description,
-            tags: updatedData.tags,
-            image: updatedData.image,
-            live_url: updatedData.liveUrl || '',
-            featured: updatedData.featured,
-            detail: updatedData.detail || {}
-          }).eq('id', id)
-        } catch (e) {
-          console.warn('[Supabase Sync] Update project:', e)
-        }
-      }
+      list.value[index] = { ...list.value[index], ...updatedData }
+      persistProfile(targetProfile)
     }
   }
 
-  const deleteProject = async (id) => {
-    projectsState.value = projectsState.value.filter(p => p.id !== id)
-    persistStore()
-
-    if (supabase) {
-      try {
-        await supabase.from('projects').delete().eq('id', id)
-      } catch (e) {
-        console.warn('[Supabase Sync] Delete project:', e)
-      }
+  const deleteProject = (id, targetProfile = currentProfile.value) => {
+    if (targetProfile === 'nadya') {
+      nadyaProjectsState.value = nadyaProjectsState.value.filter(p => p.id !== id)
+    } else {
+      raqwanProjectsState.value = raqwanProjectsState.value.filter(p => p.id !== id)
     }
+    persistProfile(targetProfile)
   }
 
   // Skills CRUD
-  const addSkill = async (skill) => {
-    skillsState.value.push(skill)
-    persistStore()
-
-    if (supabase) {
-      try {
-        await supabase.from('skills').insert([skill])
-      } catch (e) {
-        console.warn('[Supabase Sync] Add skill:', e)
-      }
+  const addSkill = (skill, targetProfile = currentProfile.value) => {
+    if (targetProfile === 'nadya') {
+      nadyaSkillsState.value.push(skill)
+    } else {
+      raqwanSkillsState.value.push(skill)
     }
+    persistProfile(targetProfile)
   }
 
-  const deleteSkill = async (name) => {
-    skillsState.value = skillsState.value.filter(s => s.name !== name)
-    persistStore()
-
-    if (supabase) {
-      try {
-        await supabase.from('skills').delete().eq('name', name)
-      } catch (e) {
-        console.warn('[Supabase Sync] Delete skill:', e)
-      }
+  const deleteSkill = (name, targetProfile = currentProfile.value) => {
+    if (targetProfile === 'nadya') {
+      nadyaSkillsState.value = nadyaSkillsState.value.filter(s => s.name !== name)
+    } else {
+      raqwanSkillsState.value = raqwanSkillsState.value.filter(s => s.name !== name)
     }
+    persistProfile(targetProfile)
   }
 
-  // Education CRUD
-  const updateEducations = (newEducations) => {
-    educationsState.value = newEducations
-    persistStore()
+  // Educations CRUD
+  const updateEducations = (newEducations, targetProfile = currentProfile.value) => {
+    if (targetProfile === 'nadya') {
+      nadyaEducationsState.value = newEducations
+    } else {
+      raqwanEducationsState.value = newEducations
+    }
+    persistProfile(targetProfile)
   }
 
-  // Messages / Inquiries
-  const addMessage = (messageData) => {
+  // Messages CRUD
+  const addMessage = (msgData, targetProfile = currentProfile.value) => {
     const newMsg = {
       id: 'msg-' + Date.now(),
       date: new Date().toISOString(),
       read: false,
-      ...messageData
+      ...msgData
     }
-    messagesState.value.unshift(newMsg)
-    persistMessages()
+    if (targetProfile === 'nadya') {
+      nadyaMessagesState.value.unshift(newMsg)
+    } else {
+      raqwanMessagesState.value.unshift(newMsg)
+    }
+    persistMessages(targetProfile)
     return newMsg
   }
 
-  const markMessageRead = (id) => {
-    const msg = messagesState.value.find(m => m.id === id)
+  const markMessageRead = (id, targetProfile = currentProfile.value) => {
+    const list = targetProfile === 'nadya' ? nadyaMessagesState.value : raqwanMessagesState.value
+    const msg = list.find(m => m.id === id)
     if (msg) {
       msg.read = true
-      persistMessages()
+      persistMessages(targetProfile)
     }
   }
 
-  const deleteMessage = (id) => {
-    messagesState.value = messagesState.value.filter(m => m.id !== id)
-    persistMessages()
+  const deleteMessage = (id, targetProfile = currentProfile.value) => {
+    if (targetProfile === 'nadya') {
+      nadyaMessagesState.value = nadyaMessagesState.value.filter(m => m.id !== id)
+    } else {
+      raqwanMessagesState.value = raqwanMessagesState.value.filter(m => m.id !== id)
+    }
+    persistMessages(targetProfile)
   }
 
   // Reset to default
-  const resetToDefault = () => {
-    infoState.value = JSON.parse(JSON.stringify(defaultInfo))
-    skillsState.value = JSON.parse(JSON.stringify(defaultSkills))
-    projectsState.value = JSON.parse(JSON.stringify(defaultProjects))
-    testimonialsState.value = JSON.parse(JSON.stringify(defaultTestimonials))
-    educationsState.value = JSON.parse(JSON.stringify(defaultEducations))
-    localStorage.removeItem(STORE_STORAGE_KEY)
-    clearSupabaseCache()
-  }
-
-  // Seed / Push default data to Supabase
-  const pushDataToSupabase = async () => {
-    clearSupabaseCache()
-    return await seedAllDataToSupabase()
-  }
-
-  // Force refresh cache
-  const refreshCacheFromBackend = async () => {
-    await loadFromSupabase(true)
+  const resetToDefault = (targetProfile = currentProfile.value) => {
+    if (targetProfile === 'nadya') {
+      nadyaInfoState.value = JSON.parse(JSON.stringify(defaultNadyaInfo))
+      nadyaSkillsState.value = JSON.parse(JSON.stringify(defaultNadyaSkills))
+      nadyaProjectsState.value = JSON.parse(JSON.stringify(defaultNadyaProjects))
+      nadyaTestimonialsState.value = JSON.parse(JSON.stringify(defaultNadyaTestimonials))
+      nadyaEducationsState.value = JSON.parse(JSON.stringify(defaultNadyaEducations))
+    } else {
+      raqwanInfoState.value = JSON.parse(JSON.stringify(defaultRaqwanInfo))
+      raqwanSkillsState.value = JSON.parse(JSON.stringify(defaultRaqwanSkills))
+      raqwanProjectsState.value = JSON.parse(JSON.stringify(defaultRaqwanProjects))
+      raqwanTestimonialsState.value = JSON.parse(JSON.stringify(defaultRaqwanTestimonials))
+      raqwanEducationsState.value = JSON.parse(JSON.stringify(defaultRaqwanEducations))
+    }
+    localStorage.removeItem(getStorageKey(targetProfile, 'data'))
   }
 
   return {
-    portfolioInfo: infoState,
-    skills: skillsState,
-    projects: projectsState,
-    testimonials: testimonialsState,
-    educations: educationsState,
-    messages: messagesState,
+    activeProfileKey,
+    currentProfile,
+    setActiveProfile,
+    portfolioInfo,
+    skills,
+    projects,
+    testimonials,
+    educations,
+    experiences,
+    milestones,
+    workflows,
+    certifications,
+    messages,
+    // Raw profile states for admin
+    nadyaState: {
+      info: nadyaInfoState,
+      skills: nadyaSkillsState,
+      projects: nadyaProjectsState,
+      testimonials: nadyaTestimonialsState,
+      educations: nadyaEducationsState,
+      messages: nadyaMessagesState
+    },
+    raqwanState: {
+      info: raqwanInfoState,
+      skills: raqwanSkillsState,
+      projects: raqwanProjectsState,
+      testimonials: raqwanTestimonialsState,
+      educations: raqwanEducationsState,
+      messages: raqwanMessagesState
+    },
     isSupabaseLoaded,
     isLoadingSupabase,
     isLoadedFromCache,
     cacheExpiryTime,
     loadFromSupabase,
-    refreshCacheFromBackend,
-    clearSupabaseCache,
-    pushDataToSupabase,
     updateInfo,
     addProject,
     updateProject,

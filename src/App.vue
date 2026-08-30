@@ -11,9 +11,15 @@ import { useTheme } from '@/composables/useTheme'
 const route = useRoute()
 const { initTheme } = useTheme()
 
-// Hide public Navbar, Footer, and ScrollProgress on Admin & Login routes
+// Hide public Navbar, Footer, and ScrollProgress on Admin, Login, and Gateway routes
 const isPublicRoute = computed(() => {
-  return route.name !== 'admin-dashboard' && route.name !== 'login' && !route.path.startsWith('/admin')
+  return (
+    route.name !== 'admin-dashboard' && 
+    route.name !== 'login' && 
+    route.name !== 'gateway-portal' &&
+    route.path !== '/' &&
+    !route.path.startsWith('/admin')
+  )
 })
 
 onMounted(() => {

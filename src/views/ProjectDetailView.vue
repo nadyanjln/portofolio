@@ -27,7 +27,7 @@ import {
 import { usePortfolioStore } from '@/composables/usePortfolioStore'
 import { useScrollReveal } from '@/composables/useAnimations'
 
-const { projects } = usePortfolioStore()
+const { projects, currentProfile } = usePortfolioStore()
 const route = useRoute()
 
 const project = computed(() => {
@@ -53,15 +53,27 @@ const nextProject = computed(() => {
 
 // Sticky Sub-navigation Table of Contents
 const activeSection = ref('overview')
-const tocSections = [
-  { id: 'overview', label: '01. Overview' },
-  { id: 'problem', label: '02. Challenge' },
-  { id: 'process', label: '03. Process' },
-  { id: 'system', label: '04. Design System' },
-  { id: 'impact', label: '05. Impact' },
-  { id: 'gallery', label: '06. Gallery' },
-  { id: 'learnings', label: '07. Takeaways' }
-]
+const tocSections = computed(() => {
+  if (currentProfile.value === 'raqwan') {
+    return [
+      { id: 'overview', label: '01. Overview' },
+      { id: 'problem', label: '02. Challenge' },
+      { id: 'process', label: '03. Architecture & Solution' },
+      { id: 'impact', label: '04. Impact & Results' },
+      { id: 'gallery', label: '05. Artifacts' },
+      { id: 'learnings', label: '06. Takeaways' }
+    ]
+  }
+  return [
+    { id: 'overview', label: '01. Overview' },
+    { id: 'problem', label: '02. Challenge' },
+    { id: 'process', label: '03. Process' },
+    { id: 'system', label: '04. Design System' },
+    { id: 'impact', label: '05. Impact' },
+    { id: 'gallery', label: '06. Gallery' },
+    { id: 'learnings', label: '07. Takeaways' }
+  ]
+})
 
 const scrollTo = (id) => {
   const el = document.getElementById(id)
@@ -98,597 +110,578 @@ const activeDesignTab = ref('colors')
 const sectionRef = ref(null)
 const { observeAll } = useScrollReveal()
 
+const handleScrollSpy = () => {
+  const scrollPos = window.scrollY + 200
+  for (const s of tocSections.value) {
+    const el = document.getElementById(s.id)
+    if (el) {
+      const top = el.offsetTop
+      const height = el.offsetHeight
+      if (scrollPos >= top && scrollPos < top + height) {
+        activeSection.value = s.id
+        break
+      }
+    }
+  }
+}
+
 onMounted(() => {
   observeAll(sectionRef.value)
+  window.addEventListener('scroll', handleScrollSpy, { passive: true })
+})
 
-  // Scroll spy for TOC
-  const handleScroll = () => {
-    const scrollPos = window.scrollY + 140
-    tocSections.forEach(section => {
-      const el = document.getElementById(section.id)
-      if (el) {
-        const top = el.offsetTop
-        const height = el.offsetHeight
-        if (scrollPos >= top && scrollPos < top + height) {
-          activeSection.value = section.id
-        }
-      }
-    })
-  }
-  window.addEventListener('scroll', handleScroll, { passive: true })
-
-  onUnmounted(() => {
-    window.removeEventListener('scroll', handleScroll)
-  })
+onUnmounted(() => {
+  window.removeEventListener('scroll', handleScrollSpy)
 })
 </script>
 
 <template>
-  <div ref="sectionRef" class="pt-24 pb-16 sm:pt-28 sm:pb-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+  <div ref="sectionRef" class="pt-24 pb-16 sm:pt-28 sm:pb-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12 sm:space-y-16">
     
-    <!-- Top Return Bar -->
-    <div class="flex items-center justify-between gap-4 mb-6">
-      <RouterLink
-        to="/projects"
-        class="inline-flex items-center gap-2 text-xs sm:text-sm font-bold font-mono-tag text-[#5C4848] dark:text-zinc-400 hover:text-[#9E0402] dark:hover:text-[#ff4d4d] transition-colors group uppercase tracking-wider"
-      >
-        <ArrowLeft class="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
-        <span>Back to All Works</span>
-      </RouterLink>
-
-      <span class="text-xs font-mono-tag text-[#5C4848] dark:text-zinc-400 hidden sm:inline-block">
-        Project /{{ project?.id || '01' }}/
-      </span>
-    </div>
-
     <div v-if="project" class="space-y-12 sm:space-y-16">
+      
+      <!-- ═══════════════════════════════════════════ -->
+      <!-- TOP NAVIGATION BREADCRUMB & BACK BUTTON     -->
+      <!-- ═══════════════════════════════════════════ -->
+      <div class="flex items-center justify-between gap-4 border-b border-[#EEDCDC] dark:border-white/10 pb-4">
+        <RouterLink 
+          :to="'/' + currentProfile + '/projects'"
+          class="inline-flex items-center gap-2 text-xs sm:text-sm font-bold font-mono-tag transition-colors group uppercase tracking-wider"
+          :class="currentProfile === 'raqwan' ? 'text-zinc-400 hover:text-emerald-400' : 'text-[#5C4848] dark:text-zinc-400 hover:text-[#9E0402] dark:hover:text-[#ff4d4d]'"
+        >
+          <ArrowLeft class="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
+          <span>Kembali ke Semua Case Studies</span>
+        </RouterLink>
+
+        <!-- Live Prototype Link if available -->
+        <a 
+          v-if="project.liveUrl" 
+          :href="project.liveUrl" 
+          target="_blank" 
+          rel="noopener noreferrer"
+          class="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-mono-tag font-bold uppercase transition-all shadow-xs"
+          :class="currentProfile === 'raqwan' ? 'bg-[#047857] hover:bg-[#065F46] text-white shadow-[#047857]/30' : 'bg-[#9E0402] hover:bg-[#B80604] text-white shadow-[#9E0402]/20'"
+        >
+          <span>Live Prototype ↗</span>
+          <ExternalLink class="w-3.5 h-3.5" />
+        </a>
+      </div>
 
       <!-- ═══════════════════════════════════════════ -->
-      <!-- SECTION 1: Editorial Hero Header            -->
-      <!-- Inspired by Abhaysingh x Appsmith           -->
+      <!-- HERO HEADER                                 -->
       <!-- ═══════════════════════════════════════════ -->
-      <header data-reveal="fade-up" class="space-y-6">
-        
-        <!-- Category & Year Tags -->
-        <div class="flex flex-wrap items-center gap-2">
-          <span class="px-3.5 py-1 text-xs font-extrabold font-mono-tag uppercase rounded-full bg-[#9E0402] text-white shadow-xs">
+      <div data-reveal="fade-up" class="space-y-6">
+        <div class="flex flex-wrap items-center gap-2.5">
+          <span 
+            class="px-3.5 py-1 text-xs font-extrabold font-mono-tag uppercase rounded-full text-white shadow-xs"
+            :class="currentProfile === 'raqwan' ? 'bg-[#047857]' : 'bg-[#9E0402]'"
+          >
             {{ project.category }}
           </span>
-          <span v-if="detail" class="px-3.5 py-1 text-xs font-bold font-mono-tag rounded-full bg-[#9FC2EA]/30 dark:bg-[#9FC2EA]/15 text-[#1E3A60] dark:text-[#9FC2EA] border border-[#9FC2EA]/50 dark:border-[#9FC2EA]/30">
-            {{ detail.duration }}
-          </span>
-          <span class="px-3.5 py-1 text-xs font-mono-tag rounded-full bg-white dark:bg-[#15161B] text-[#5C4848] dark:text-zinc-400 border border-[#EEDCDC] dark:border-white/10">
-            Tech & Product Suite /2026/
+          <span class="text-xs font-mono-tag text-[#5C4848] dark:text-zinc-400">
+            Case Study • /2026/
           </span>
         </div>
 
-        <!-- Big Editorial Headline -->
-        <h1 class="text-4xl sm:text-6xl md:text-7xl font-extrabold text-[#1C1313] dark:text-[#F4F4F6] tracking-tight leading-[1.05]">
+        <h1 class="text-3xl sm:text-5xl lg:text-6xl font-extrabold text-[#1C1313] dark:text-white tracking-tight leading-tight max-w-4xl">
           {{ project.title }}
         </h1>
 
-        <!-- High-Impact Tagline / Executive Summary -->
-        <p class="text-base sm:text-lg md:text-xl text-[#5C4848] dark:text-zinc-300 leading-relaxed max-w-4xl font-medium">
+        <p class="text-base sm:text-xl text-[#5C4848] dark:text-zinc-300 leading-relaxed max-w-4xl">
           {{ project.description }}
         </p>
 
-        <!-- Meta Specification Strip (Role, Timeline, Team, Platform) -->
-        <div v-if="detail" class="grid grid-cols-2 sm:grid-cols-4 gap-3.5 pt-2">
-          <div class="p-4 rounded-2xl bg-white dark:bg-[#14161D] border border-[#EEDCDC] dark:border-white/10 space-y-1 shadow-xs">
-            <span class="text-[10px] font-bold font-mono-tag uppercase text-[#9E0402] dark:text-[#ff4d4d] tracking-wider block">Role</span>
-            <p class="text-xs sm:text-sm font-bold text-[#1C1313] dark:text-white truncate">{{ detail.role }}</p>
+        <!-- Project Meta Strip Bento -->
+        <div v-if="detail" class="grid grid-cols-2 md:grid-cols-4 gap-3.5 pt-4">
+          <div class="p-4 sm:p-5 rounded-2xl bg-white dark:bg-[#14161D] border border-[#EEDCDC] dark:border-white/10 space-y-1">
+            <span class="text-[10px] font-bold font-mono-tag uppercase tracking-wider block" :class="currentProfile === 'raqwan' ? 'text-emerald-400' : 'text-[#9E0402] dark:text-[#ff4d4d]'">Role</span>
+            <p class="text-xs sm:text-sm font-bold text-[#1C1313] dark:text-white">{{ detail.role }}</p>
           </div>
-          <div class="p-4 rounded-2xl bg-white dark:bg-[#14161D] border border-[#EEDCDC] dark:border-white/10 space-y-1 shadow-xs">
-            <span class="text-[10px] font-bold font-mono-tag uppercase text-[#9E0402] dark:text-[#ff4d4d] tracking-wider block">Timeline</span>
-            <p class="text-xs sm:text-sm font-bold text-[#1C1313] dark:text-white truncate">{{ detail.duration }}</p>
+          <div class="p-4 sm:p-5 rounded-2xl bg-white dark:bg-[#14161D] border border-[#EEDCDC] dark:border-white/10 space-y-1">
+            <span class="text-[10px] font-bold font-mono-tag uppercase tracking-wider block" :class="currentProfile === 'raqwan' ? 'text-emerald-400' : 'text-[#9E0402] dark:text-[#ff4d4d]'">Timeline</span>
+            <p class="text-xs sm:text-sm font-bold text-[#1C1313] dark:text-white">{{ detail.duration }}</p>
           </div>
-          <div class="p-4 rounded-2xl bg-white dark:bg-[#14161D] border border-[#EEDCDC] dark:border-white/10 space-y-1 shadow-xs">
-            <span class="text-[10px] font-bold font-mono-tag uppercase text-[#9E0402] dark:text-[#ff4d4d] tracking-wider block">Team</span>
-            <p class="text-xs sm:text-sm font-bold text-[#1C1313] dark:text-white truncate">{{ detail.team.length }} Cross-Functional</p>
+          <div class="p-4 sm:p-5 rounded-2xl bg-white dark:bg-[#14161D] border border-[#EEDCDC] dark:border-white/10 space-y-1">
+            <span class="text-[10px] font-bold font-mono-tag uppercase tracking-wider block" :class="currentProfile === 'raqwan' ? 'text-emerald-400' : 'text-[#9E0402] dark:text-[#ff4d4d]'">Team</span>
+            <p class="text-xs sm:text-sm font-bold text-[#1C1313] dark:text-white">
+              {{ Array.isArray(detail.team) ? detail.team.join(', ') : detail.team }}
+            </p>
           </div>
-          <div class="p-4 rounded-2xl bg-white dark:bg-[#14161D] border border-[#EEDCDC] dark:border-white/10 space-y-1 shadow-xs">
-            <span class="text-[10px] font-bold font-mono-tag uppercase text-[#9E0402] dark:text-[#ff4d4d] tracking-wider block">Deliverables</span>
-            <p class="text-xs sm:text-sm font-bold text-[#1C1313] dark:text-white truncate">PRD & High-Fi Figma</p>
-          </div>
-        </div>
-
-        <!-- Main Banner Image with Interactive Zoom Preview -->
-        <div class="relative group p-2.5 sm:p-3.5 rounded-[36px] bg-white dark:bg-[#14161D] border border-[#EEDCDC] dark:border-white/10 overflow-hidden shadow-sm">
-          <div class="relative overflow-hidden rounded-[26px] aspect-video md:aspect-[21/9] bg-[#FDF6F6] dark:bg-[#1C1E24]">
-            <img 
-              :src="project.image" 
-              :alt="project.title"
-              class="w-full h-full object-cover group-hover:scale-103 transition-transform duration-700 ease-out"
-              loading="lazy"
-            />
-            <div class="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent"></div>
-            
-            <button
-              @click="openLightbox({ image: project.image, caption: project.title })"
-              class="absolute bottom-4 right-4 p-3 rounded-2xl bg-black/70 hover:bg-[#9E0402] text-white backdrop-blur-md transition-all duration-300 opacity-0 group-hover:opacity-100 flex items-center gap-2 text-xs font-mono-tag font-bold uppercase shadow-lg"
-            >
-              <Maximize2 class="w-4 h-4" />
-              <span>Fullscreen Preview</span>
-            </button>
+          <div class="p-4 sm:p-5 rounded-2xl bg-white dark:bg-[#14161D] border border-[#EEDCDC] dark:border-white/10 space-y-1">
+            <span class="text-[10px] font-bold font-mono-tag uppercase tracking-wider block" :class="currentProfile === 'raqwan' ? 'text-emerald-400' : 'text-[#9E0402] dark:text-[#ff4d4d]'">Deliverables / Tech</span>
+            <p class="text-xs sm:text-sm font-bold text-[#1C1313] dark:text-white truncate">
+              {{ Array.isArray(detail.tools) ? detail.tools.join(', ') : (Array.isArray(detail.deliverables) ? detail.deliverables.join(', ') : (detail.tools || detail.deliverables || 'Production Architecture')) }}
+            </p>
           </div>
         </div>
 
-      </header>
+        <!-- Featured Banner Hero Image -->
+        <div class="rounded-3xl sm:rounded-[36px] overflow-hidden border border-[#EEDCDC] dark:border-white/10 shadow-2xl relative group cursor-pointer aspect-video sm:aspect-21/9 bg-[#14161D]">
+          <img 
+            :src="project.image" 
+            :alt="project.title" 
+            class="w-full h-full object-cover group-hover:scale-103 transition-transform duration-700 ease-out"
+            @click="openLightbox(project.image)"
+          />
+          <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent pointer-events-none"></div>
+          
+          <button 
+            @click="openLightbox(project.image)"
+            class="absolute bottom-4 right-4 p-3 rounded-2xl bg-black/70 text-white backdrop-blur-md transition-all duration-300 opacity-0 group-hover:opacity-100 flex items-center gap-2 text-xs font-mono-tag font-bold uppercase shadow-lg"
+            :class="currentProfile === 'raqwan' ? 'hover:bg-[#047857]' : 'hover:bg-[#9E0402]'"
+          >
+            <Maximize2 class="w-4 h-4" />
+            <span>Lihat Ukuran Penuh</span>
+          </button>
+        </div>
+      </div>
 
       <!-- ═══════════════════════════════════════════ -->
       <!-- STICKY TABLE OF CONTENTS SUB-NAV            -->
-      <!-- Inspired by Abhaysingh section jumper       -->
       <!-- ═══════════════════════════════════════════ -->
-      <div class="sticky top-20 z-40 py-2.5 bg-[#FFF9F9]/85 dark:bg-[#0B0C0E]/85 backdrop-blur-xl border-y border-[#EEDCDC] dark:border-white/10 -mx-4 sm:-mx-6 lg:-mx-8 px-4 sm:px-6 lg:px-8 flex items-center gap-2 overflow-x-auto custom-scroll">
+      <div class="sticky top-20 z-40 py-2 bg-[#FFF9F9]/90 dark:bg-[#0B0C0E]/90 backdrop-blur-md border-y border-[#EEDCDC] dark:border-white/10 overflow-x-auto custom-scroll flex items-center gap-2">
         <button
-          v-for="item in tocSections"
-          :key="item.id"
-          @click="scrollTo(item.id)"
-          class="px-3.5 py-1.5 rounded-full text-xs font-mono-tag font-bold uppercase whitespace-nowrap transition-all duration-200 cursor-pointer"
+          v-for="sec in tocSections"
+          :key="sec.id"
+          @click="scrollTo(sec.id)"
+          class="px-4 py-1.5 rounded-full text-xs font-mono-tag font-bold uppercase tracking-wider whitespace-nowrap transition-all cursor-pointer"
           :class="[
-            activeSection === item.id 
-              ? 'bg-[#9E0402] text-white shadow-xs' 
-              : 'bg-white dark:bg-[#15161B] text-[#5C4848] dark:text-zinc-400 hover:text-[#9E0402] dark:hover:text-white border border-[#EEDCDC] dark:border-white/10'
+            activeSection === sec.id
+              ? (currentProfile === 'raqwan' ? 'bg-[#047857] text-white shadow-xs' : 'bg-[#9E0402] text-white shadow-xs')
+              : 'bg-white dark:bg-[#15161B] text-[#5C4848] dark:text-zinc-400 hover:text-white border border-[#EEDCDC] dark:border-white/10'
           ]"
         >
-          {{ item.label }}
+          {{ sec.label }}
         </button>
       </div>
 
       <!-- ═══════════════════════════════════════════ -->
-      <!-- SECTION 2: Overview & Executive Context     -->
+      <!-- MAIN CASE STUDY SECTIONS                    -->
       <!-- ═══════════════════════════════════════════ -->
-      <section id="overview" data-reveal="fade-up" class="space-y-6 scroll-mt-28">
-        <div class="flex items-center gap-2.5">
-          <div class="w-8 h-8 rounded-xl bg-[#9FC2EA]/30 dark:bg-[#9FC2EA]/15 text-[#1E3A60] dark:text-[#9FC2EA] flex items-center justify-center shrink-0">
-            <BookOpen class="w-4 h-4" />
+      <div v-if="detail" class="space-y-16 sm:space-y-20">
+        
+        <!-- 01. OVERVIEW & BACKGROUND -->
+        <section id="overview" data-reveal="fade-up" class="space-y-5 scroll-mt-28">
+          <div class="flex items-center gap-3">
+            <span class="w-8 h-8 rounded-xl flex items-center justify-center font-mono-tag font-bold text-xs" :class="currentProfile === 'raqwan' ? 'bg-[#047857]/20 text-emerald-400' : 'bg-[#9E0402]/15 text-[#9E0402] dark:text-[#ff4d4d]'">01</span>
+            <h2 class="text-2xl sm:text-3xl font-extrabold text-[#1C1313] dark:text-white">Project Overview & Background</h2>
           </div>
-          <h2 class="text-2xl sm:text-3xl font-extrabold text-[#1C1313] dark:text-white tracking-tight">Executive Overview</h2>
-        </div>
-
-        <div class="p-6 sm:p-8 rounded-3xl bg-white dark:bg-[#14161D] border border-[#EEDCDC] dark:border-white/10 space-y-5 shadow-xs">
-          <p class="text-sm sm:text-base md:text-lg text-[#5C4848] dark:text-zinc-300 leading-relaxed font-normal">
-            {{ detail?.overview }}
+          <p class="text-sm sm:text-base text-[#5C4848] dark:text-zinc-300 leading-relaxed max-w-4xl">
+            {{ typeof detail.overview === 'string' ? detail.overview : (detail.overview?.description || detail.overview?.summary || '') }}
           </p>
 
-          <!-- Highlight Callout Box (Appsmith style) -->
-          <div class="p-5 rounded-2xl bg-[#FFF9F9] dark:bg-[#1A1C24] border-l-4 border-[#9E0402] space-y-1.5">
-            <span class="text-xs font-extrabold font-mono-tag uppercase tracking-wider text-[#9E0402] dark:text-[#ff4d4d] flex items-center gap-1.5">
+          <div 
+            class="p-5 rounded-2xl bg-[#FFF9F9] dark:bg-[#1A1C24] border-l-4 space-y-1.5"
+            :class="currentProfile === 'raqwan' ? 'border-[#047857]' : 'border-[#9E0402]'"
+          >
+            <span class="text-xs font-extrabold font-mono-tag uppercase tracking-wider flex items-center gap-1.5" :class="currentProfile === 'raqwan' ? 'text-emerald-400' : 'text-[#9E0402] dark:text-[#ff4d4d]'">
               <Sparkles class="w-3.5 h-3.5" />
-              <span>Core Strategic Focus</span>
+              <span>Core Strategic Objective:</span>
             </span>
-            <p class="text-xs sm:text-sm text-[#1C1313] dark:text-zinc-200 font-semibold leading-relaxed">
-              Membangun fondasi pengalaman pengguna terpadu dengan integrasi riset kuantitatif dan kualitatif, memastikan adopsi pengguna meningkat dan time-to-value berkurang secara signifikan.
+            <p class="text-xs sm:text-sm text-[#1C1313] dark:text-white font-medium">
+              Transforming complex technical parameters into scalable, high-throughput architectures without compromising precision and real-time reliability.
             </p>
           </div>
-        </div>
-      </section>
+        </section>
 
-      <!-- ═══════════════════════════════════════════ -->
-      <!-- SECTION 3: The Challenge & Problem Space   -->
-      <!-- ═══════════════════════════════════════════ -->
-      <section v-if="detail?.problem" id="problem" data-reveal="fade-up" class="space-y-6 scroll-mt-28">
-        <div class="flex items-center gap-2.5">
-          <div class="w-8 h-8 rounded-xl bg-[#9E0402]/15 text-[#9E0402] dark:text-[#ff4d4d] flex items-center justify-center shrink-0">
-            <AlertTriangle class="w-4 h-4" />
-          </div>
-          <h2 class="text-2xl sm:text-3xl font-extrabold text-[#1C1313] dark:text-white tracking-tight">
-            {{ detail.problem.title }}
-          </h2>
-        </div>
-
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
-          <div 
-            v-for="(point, idx) in detail.problem.points" 
-            :key="idx"
-            class="p-6 rounded-3xl bg-white dark:bg-[#14161D] border border-[#EEDCDC] dark:border-white/10 flex items-start gap-4 shadow-xs hover:border-[#9E0402]/40 transition-colors"
-          >
-            <div class="w-9 h-9 rounded-2xl bg-[#9E0402]/10 text-[#9E0402] dark:text-[#ff4d4d] flex items-center justify-center font-mono-tag font-bold text-sm shrink-0 border border-[#9E0402]/20">
-              {{ String(idx + 1).padStart(2, '0') }}
-            </div>
-            <div class="space-y-1">
-              <span class="text-xs font-bold font-mono-tag uppercase text-[#5C4848] dark:text-zinc-400">Pain Point /0{{ idx + 1 }}/</span>
-              <p class="text-xs sm:text-sm text-[#1C1313] dark:text-zinc-200 leading-relaxed font-medium">{{ point }}</p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- ═══════════════════════════════════════════ -->
-      <!-- SECTION 4: Execution Process & Phases       -->
-      <!-- ═══════════════════════════════════════════ -->
-      <section v-if="detail?.process" id="process" data-reveal="fade-up" class="space-y-6 scroll-mt-28">
-        <div class="flex items-center gap-2.5">
-          <div class="w-8 h-8 rounded-xl bg-[#9FC2EA]/30 dark:bg-[#9FC2EA]/15 text-[#1E3A60] dark:text-[#9FC2EA] flex items-center justify-center shrink-0">
-            <ChevronRight class="w-4 h-4" />
-          </div>
-          <h2 class="text-2xl sm:text-3xl font-extrabold text-[#1C1313] dark:text-white tracking-tight">
-            Proses & Tahapan Eksekusi
-          </h2>
-        </div>
-
-        <div class="space-y-4">
-          <div 
-            v-for="(step, idx) in detail.process" 
-            :key="idx"
-            class="p-6 sm:p-8 rounded-3xl bg-white dark:bg-[#14161D] border border-[#EEDCDC] dark:border-white/10 space-y-4 shadow-xs hover:border-[#9E0402]/40 transition-all duration-300"
-          >
-            <!-- Phase Header -->
-            <div class="flex items-start gap-4">
-              <div class="w-10 h-10 rounded-2xl bg-[#9E0402] text-white flex items-center justify-center font-mono-tag font-extrabold text-sm shrink-0 shadow-md shadow-[#9E0402]/25">
-                {{ String(idx + 1).padStart(2, '0') }}
-              </div>
-              <div class="space-y-1">
-                <div class="flex items-center gap-2">
-                  <span class="text-[10px] font-mono-tag font-bold uppercase tracking-wider text-[#9E0402] dark:text-[#ff4d4d]">Phase /0{{ idx + 1 }}/</span>
-                </div>
-                <h3 class="text-lg sm:text-xl font-bold text-[#1C1313] dark:text-white">{{ step.phase }}</h3>
-                <p class="text-xs sm:text-sm text-[#5C4848] dark:text-zinc-300 leading-relaxed">{{ step.description }}</p>
-              </div>
-            </div>
-
-            <!-- Deliverables Output Grid -->
-            <div v-if="step.deliverables?.length" class="sm:ml-14 space-y-2 pt-2 border-t border-[#EEDCDC] dark:border-white/10">
-              <span class="text-xs font-bold font-mono-tag uppercase tracking-wider text-[#1E3A60] dark:text-[#9FC2EA] block">
-                Deliverables & Tangible Outputs:
-              </span>
-              <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                <div 
-                  v-for="(del, dIdx) in step.deliverables" 
-                  :key="dIdx"
-                  class="flex items-center gap-2.5 text-xs text-[#1C1313] dark:text-zinc-200 bg-[#FFF9F9] dark:bg-[#1A1C24] px-3.5 py-2.5 rounded-xl border border-[#EEDCDC] dark:border-white/10 font-semibold"
-                >
-                  <CheckCircle2 class="w-4 h-4 text-[#9E0402] dark:text-[#ff4d4d] shrink-0" />
-                  <span>{{ del }}</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- ═══════════════════════════════════════════ -->
-      <!-- SECTION 5: Design System & Interactive Craft-->
-      <!-- Inspired by Abhaysingh x Appsmith tokens     -->
-      <!-- ═══════════════════════════════════════════ -->
-      <section id="system" data-reveal="fade-up" class="space-y-6 scroll-mt-28">
-        <div class="flex items-center justify-between gap-4 flex-wrap">
-          <div class="flex items-center gap-2.5">
-            <div class="w-8 h-8 rounded-xl bg-[#9FC2EA]/30 dark:bg-[#9FC2EA]/15 text-[#1E3A60] dark:text-[#9FC2EA] flex items-center justify-center shrink-0">
-              <Layers class="w-4 h-4" />
-            </div>
-            <h2 class="text-2xl sm:text-3xl font-extrabold text-[#1C1313] dark:text-white tracking-tight">
-              Design System & Component Specs
+        <!-- 02. THE CHALLENGE & PROBLEM STATEMENT -->
+        <section id="problem" data-reveal="fade-up" class="space-y-6 scroll-mt-28">
+          <div class="flex items-center gap-3">
+            <span class="w-8 h-8 rounded-xl flex items-center justify-center font-mono-tag font-bold text-xs" :class="currentProfile === 'raqwan' ? 'bg-[#047857]/20 text-emerald-400' : 'bg-[#9E0402]/15 text-[#9E0402] dark:text-[#ff4d4d]'">02</span>
+            <h2 class="text-2xl sm:text-3xl font-extrabold text-[#1C1313] dark:text-white">
+              {{ (typeof detail.problem === 'object' && detail.problem?.title) ? detail.problem.title : 'The Core Challenge' }}
             </h2>
           </div>
 
-          <!-- Tab Switches -->
-          <div class="flex items-center gap-1.5 p-1 rounded-2xl bg-white dark:bg-[#14161D] border border-[#EEDCDC] dark:border-white/10 shadow-xs">
-            <button
-              @click="activeDesignTab = 'colors'"
-              class="px-3.5 py-1.5 rounded-xl text-xs font-mono-tag font-bold uppercase transition-all"
-              :class="activeDesignTab === 'colors' ? 'bg-[#9E0402] text-white shadow-xs' : 'text-[#5C4848] dark:text-zinc-400 hover:text-[#9E0402]'"
-            >
-              Color Tokens
-            </button>
-            <button
-              @click="activeDesignTab = 'typography'"
-              class="px-3.5 py-1.5 rounded-xl text-xs font-mono-tag font-bold uppercase transition-all"
-              :class="activeDesignTab === 'typography' ? 'bg-[#9E0402] text-white shadow-xs' : 'text-[#5C4848] dark:text-zinc-400 hover:text-[#9E0402]'"
-            >
-              Type Scale
-            </button>
-            <button
-              @click="activeDesignTab = 'components'"
-              class="px-3.5 py-1.5 rounded-xl text-xs font-mono-tag font-bold uppercase transition-all"
-              :class="activeDesignTab === 'components' ? 'bg-[#9E0402] text-white shadow-xs' : 'text-[#5C4848] dark:text-zinc-400 hover:text-[#9E0402]'"
-            >
-              UI States
-            </button>
-          </div>
-        </div>
+          <!-- Problem description if string -->
+          <p v-if="typeof detail.problem === 'string'" class="text-sm sm:text-base text-[#5C4848] dark:text-zinc-300 leading-relaxed max-w-4xl">
+            {{ detail.problem }}
+          </p>
 
-        <div class="p-6 sm:p-8 rounded-3xl bg-white dark:bg-[#14161D] border border-[#EEDCDC] dark:border-white/10 shadow-xs">
-          
-          <!-- Tab 1: Color Tokens -->
-          <div v-if="activeDesignTab === 'colors'" class="space-y-4">
-            <div class="flex items-center justify-between">
-              <span class="text-xs font-mono-tag text-[#5C4848] dark:text-zinc-400 font-bold uppercase">Click to Copy Hex Token</span>
-              <span v-if="copiedToken" class="text-xs font-mono-tag text-emerald-500 font-bold flex items-center gap-1">
+          <!-- Problem description if object with description field -->
+          <p v-else-if="detail.problem && detail.problem.description" class="text-sm sm:text-base text-[#5C4848] dark:text-zinc-300 leading-relaxed max-w-4xl">
+            {{ detail.problem.description }}
+          </p>
+
+          <!-- Problem points grid if object with points array -->
+          <div v-if="detail.problem && detail.problem.points && detail.problem.points.length" class="grid grid-cols-1 md:grid-cols-3 gap-5 pt-2">
+            <div 
+              v-for="(point, idx) in detail.problem.points" 
+              :key="idx"
+              class="p-6 rounded-3xl bg-white dark:bg-[#14161D] border border-[#EEDCDC] dark:border-white/10 flex items-start gap-4 shadow-xs transition-all duration-300 hover:-translate-y-0.5"
+              :class="currentProfile === 'raqwan' ? 'hover:border-[#047857]/60' : 'hover:border-[#9E0402]/40'"
+            >
+              <div class="w-9 h-9 rounded-2xl flex items-center justify-center font-mono-tag font-bold text-sm shrink-0 border" :class="currentProfile === 'raqwan' ? 'bg-[#047857]/15 text-emerald-400 border-[#047857]/30' : 'bg-[#9E0402]/10 text-[#9E0402] dark:text-[#ff4d4d] border-[#9E0402]/20'">
+                0{{ idx + 1 }}
+              </div>
+              <div class="space-y-1">
+                <h4 class="font-bold text-sm text-[#1C1313] dark:text-white">Tantangan 0{{ idx + 1 }}</h4>
+                <p class="text-xs text-[#5C4848] dark:text-zinc-300 leading-relaxed">{{ point }}</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Friction Points Grid (if separate challenges array) -->
+          <div v-if="detail.challenges && detail.challenges.length" class="grid grid-cols-1 md:grid-cols-3 gap-4 pt-2">
+            <div 
+              v-for="(item, idx) in detail.challenges" 
+              :key="idx"
+              class="p-6 rounded-3xl bg-white dark:bg-[#14161D] border border-[#EEDCDC] dark:border-white/10 flex items-start gap-4 shadow-xs transition-colors"
+              :class="currentProfile === 'raqwan' ? 'hover:border-[#047857]/60' : 'hover:border-[#9E0402]/40'"
+            >
+              <div class="w-9 h-9 rounded-2xl flex items-center justify-center font-mono-tag font-bold text-sm shrink-0 border" :class="currentProfile === 'raqwan' ? 'bg-[#047857]/15 text-emerald-400 border-[#047857]/30' : 'bg-[#9E0402]/10 text-[#9E0402] dark:text-[#ff4d4d] border-[#9E0402]/20'">
+                !
+              </div>
+              <div class="space-y-1">
+                <h4 class="font-bold text-sm text-[#1C1313] dark:text-white">{{ item.title || `Friction Point 0${idx + 1}` }}</h4>
+                <p class="text-xs text-[#5C4848] dark:text-zinc-400 leading-relaxed">{{ item.description || item }}</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 03. SOLUTION & WORKFLOW PROCESS -->
+        <section id="process" data-reveal="fade-up" class="space-y-6 scroll-mt-28">
+          <div class="flex items-center gap-3">
+            <span class="w-8 h-8 rounded-xl flex items-center justify-center font-mono-tag font-bold text-xs" :class="currentProfile === 'raqwan' ? 'bg-[#047857]/20 text-emerald-400' : 'bg-[#9E0402]/15 text-[#9E0402] dark:text-[#ff4d4d]'">03</span>
+            <h2 class="text-2xl sm:text-3xl font-extrabold text-[#1C1313] dark:text-white">Process & Engineering Solution</h2>
+          </div>
+          <p v-if="typeof detail.solution === 'string'" class="text-sm sm:text-base text-[#5C4848] dark:text-zinc-300 leading-relaxed max-w-4xl">
+            {{ detail.solution }}
+          </p>
+          <p v-else-if="detail.solution && detail.solution.description" class="text-sm sm:text-base text-[#5C4848] dark:text-zinc-300 leading-relaxed max-w-4xl">
+            {{ detail.solution.description }}
+          </p>
+          <p v-else class="text-sm sm:text-base text-[#5C4848] dark:text-zinc-300 leading-relaxed max-w-4xl">
+            Penerapan arsitektur komputasi terdistribusi, optimasi query berlatensi rendah, serta integrasi multi-agent reasoning untuk memecahkan hambatan performa sistem secara menyeluruh.
+          </p>
+
+          <!-- Phases Grid -->
+          <div v-if="detail.process && detail.process.length" class="grid grid-cols-1 md:grid-cols-2 gap-5 pt-2">
+            <div
+              v-for="(phase, idx) in detail.process"
+              :key="idx"
+              class="p-6 sm:p-8 rounded-3xl bg-white dark:bg-[#14161D] border border-[#EEDCDC] dark:border-white/10 space-y-4 shadow-xs transition-all duration-300"
+              :class="currentProfile === 'raqwan' ? 'hover:border-[#047857]/60' : 'hover:border-[#9E0402]/40'"
+            >
+              <div class="flex items-center gap-3">
+                <div 
+                  class="w-10 h-10 rounded-2xl text-white flex items-center justify-center font-mono-tag font-extrabold text-sm shrink-0 shadow-md"
+                  :class="currentProfile === 'raqwan' ? 'bg-[#047857] shadow-[#047857]/30' : 'bg-[#9E0402] shadow-[#9E0402]/25'"
+                >
+                  0{{ idx + 1 }}
+                </div>
+                <div>
+                  <span class="text-[10px] font-mono-tag font-bold uppercase tracking-wider block" :class="currentProfile === 'raqwan' ? 'text-emerald-400' : 'text-[#9E0402] dark:text-[#ff4d4d]'">Phase /0{{ idx + 1 }}/</span>
+                  <h4 class="text-base font-bold text-[#1C1313] dark:text-white">{{ phase.phase || phase.title }}</h4>
+                </div>
+              </div>
+
+              <p class="text-xs sm:text-sm text-[#5C4848] dark:text-zinc-300 leading-relaxed">
+                {{ phase.description }}
+              </p>
+
+              <div v-if="phase.deliverables" class="pt-3 border-t border-[#EEDCDC] dark:border-white/10 space-y-1.5">
+                <span class="text-[10px] font-mono-tag uppercase text-[#5C4848] dark:text-zinc-400 font-bold block">Key Outputs:</span>
+                <div class="space-y-1">
+                  <div 
+                    v-for="(d, dIdx) in phase.deliverables" 
+                    :key="dIdx"
+                    class="flex items-center gap-2 text-xs text-[#1C1313] dark:text-zinc-200"
+                  >
+                    <CheckCircle2 class="w-4 h-4 shrink-0" :class="currentProfile === 'raqwan' ? 'text-emerald-400' : 'text-[#9E0402] dark:text-[#ff4d4d]'" />
+                    <span>{{ d }}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 04. DESIGN SYSTEM & TOKENS (Only for UI/UX & Product Profiles) -->
+        <section v-if="currentProfile !== 'raqwan'" id="system" data-reveal="fade-up" class="space-y-6 scroll-mt-28">
+          <div class="flex items-center justify-between flex-wrap gap-4">
+            <div class="flex items-center gap-3">
+              <span class="w-8 h-8 rounded-xl flex items-center justify-center font-mono-tag font-bold text-xs bg-[#9E0402]/15 text-[#9E0402] dark:text-[#ff4d4d]">04</span>
+              <h2 class="text-2xl sm:text-3xl font-extrabold text-[#1C1313] dark:text-white">Design Tokens & Component Architecture</h2>
+            </div>
+
+            <!-- Tab selector -->
+            <div class="p-1 rounded-2xl bg-white dark:bg-[#14161D] border border-[#EEDCDC] dark:border-white/10 flex items-center gap-1 text-xs font-mono-tag font-bold uppercase">
+              <button 
+                @click="activeDesignTab = 'colors'" 
+                class="px-3.5 py-1.5 rounded-xl cursor-pointer transition-all"
+                :class="activeDesignTab === 'colors' ? 'bg-[#9E0402] text-white shadow-xs' : 'text-[#5C4848] dark:text-zinc-400 hover:text-white'"
+              >
+                Colors
+              </button>
+              <button 
+                @click="activeDesignTab = 'typography'" 
+                class="px-3.5 py-1.5 rounded-xl cursor-pointer transition-all"
+                :class="activeDesignTab === 'typography' ? 'bg-[#9E0402] text-white shadow-xs' : 'text-[#5C4848] dark:text-zinc-400 hover:text-white'"
+              >
+                Typography
+              </button>
+              <button 
+                @click="activeDesignTab = 'components'" 
+                class="px-3.5 py-1.5 rounded-xl cursor-pointer transition-all"
+                :class="activeDesignTab === 'components' ? 'bg-[#9E0402] text-white shadow-xs' : 'text-[#5C4848] dark:text-zinc-400 hover:text-white'"
+              >
+                Components
+              </button>
+            </div>
+          </div>
+
+          <div class="p-6 sm:p-8 rounded-3xl bg-white dark:bg-[#14161D] border border-[#EEDCDC] dark:border-white/10 shadow-sm space-y-6">
+            <!-- Colors Tab -->
+            <div v-if="activeDesignTab === 'colors'" class="space-y-4">
+              <div class="grid grid-cols-2 sm:grid-cols-4 gap-3.5">
+                <div 
+                  @click="copyToken('#9E0402')"
+                  class="p-3.5 rounded-2xl bg-[#FFF9F9] dark:bg-[#1A1C24] border border-[#EEDCDC] dark:border-white/10 space-y-2 cursor-pointer hover:scale-102 transition-transform group"
+                >
+                  <div class="w-full h-14 rounded-xl shadow-sm flex items-end justify-end p-2 bg-[#9E0402]">
+                    <Copy class="w-3.5 h-3.5 text-white opacity-0 group-hover:opacity-100 transition-opacity" />
+                  </div>
+                  <div>
+                    <span class="text-[10px] font-mono-tag text-zinc-400 uppercase block">Primary Core</span>
+                    <span class="text-[11px] font-mono-tag font-bold text-[#9E0402] dark:text-[#ff4d4d]">#9E0402</span>
+                  </div>
+                </div>
+
+                <div 
+                  @click="copyToken('#9FC2EA')"
+                  class="p-3.5 rounded-2xl bg-[#FFF9F9] dark:bg-[#1A1C24] border border-[#EEDCDC] dark:border-white/10 space-y-2 cursor-pointer hover:scale-102 transition-transform group"
+                >
+                  <div class="w-full h-14 rounded-xl shadow-sm flex items-end justify-end p-2 bg-[#9FC2EA]">
+                    <Copy class="w-3.5 h-3.5 text-white opacity-0 group-hover:opacity-100 transition-opacity" />
+                  </div>
+                  <div>
+                    <span class="text-[10px] font-mono-tag text-zinc-400 uppercase block">Secondary Tint</span>
+                    <span class="text-[11px] font-mono-tag font-bold text-cyan-400">#9FC2EA</span>
+                  </div>
+                </div>
+
+                <div 
+                  @click="copyToken('#0B0C0E')"
+                  class="p-3.5 rounded-2xl bg-[#FFF9F9] dark:bg-[#1A1C24] border border-[#EEDCDC] dark:border-white/10 space-y-2 cursor-pointer hover:scale-102 transition-transform group"
+                >
+                  <div class="w-full h-14 rounded-xl bg-[#0B0C0E] shadow-sm flex items-end justify-end p-2 border border-white/10">
+                    <Copy class="w-3.5 h-3.5 text-white opacity-0 group-hover:opacity-100 transition-opacity" />
+                  </div>
+                  <div>
+                    <span class="text-[10px] font-mono-tag text-zinc-400 uppercase block">Dark Obsidian</span>
+                    <span class="text-[11px] font-mono-tag text-zinc-400 font-bold">#0B0C0E</span>
+                  </div>
+                </div>
+
+                <div 
+                  @click="copyToken('#FFF9F9')"
+                  class="p-3.5 rounded-2xl bg-[#FFF9F9] dark:bg-[#1A1C24] border border-[#EEDCDC] dark:border-white/10 space-y-2 cursor-pointer hover:scale-102 transition-transform group"
+                >
+                  <div class="w-full h-14 rounded-xl bg-[#FFF9F9] border border-[#EEDCDC] shadow-sm flex items-end justify-end p-2">
+                    <Copy class="w-3.5 h-3.5 text-zinc-600 opacity-0 group-hover:opacity-100 transition-opacity" />
+                  </div>
+                  <div>
+                    <span class="text-[10px] font-mono-tag text-zinc-400 uppercase block">Light Alabaster</span>
+                    <span class="text-[11px] font-mono-tag text-zinc-500 font-bold">#FFF9F9</span>
+                  </div>
+                </div>
+              </div>
+              <p v-if="copiedToken" class="text-xs font-mono-tag text-emerald-400 flex items-center gap-1.5">
                 <Check class="w-3.5 h-3.5" />
-                <span>Copied {{ copiedToken }}</span>
-              </span>
-            </div>
-
-            <div class="grid grid-cols-2 sm:grid-cols-4 gap-3.5">
-              <div 
-                @click="copyToken('#9E0402')"
-                class="p-4 rounded-2xl bg-[#FFF9F9] dark:bg-[#1A1C24] border border-[#EEDCDC] dark:border-white/10 space-y-3 cursor-pointer hover:scale-103 transition-transform group"
-              >
-                <div class="w-full h-14 rounded-xl bg-[#9E0402] shadow-sm flex items-end justify-end p-2">
-                  <Copy class="w-3.5 h-3.5 text-white/70 group-hover:text-white" />
-                </div>
-                <div class="space-y-0.5">
-                  <span class="text-xs font-bold text-[#1C1313] dark:text-white block">Crimson Primary</span>
-                  <span class="text-[11px] font-mono-tag text-[#9E0402] dark:text-[#ff4d4d] font-bold">#9E0402</span>
-                </div>
-              </div>
-
-              <div 
-                @click="copyToken('#9FC2EA')"
-                class="p-4 rounded-2xl bg-[#FFF9F9] dark:bg-[#1A1C24] border border-[#EEDCDC] dark:border-white/10 space-y-3 cursor-pointer hover:scale-103 transition-transform group"
-              >
-                <div class="w-full h-14 rounded-xl bg-[#9FC2EA] shadow-sm flex items-end justify-end p-2">
-                  <Copy class="w-3.5 h-3.5 text-[#1E3A60]/70 group-hover:text-[#1E3A60]" />
-                </div>
-                <div class="space-y-0.5">
-                  <span class="text-xs font-bold text-[#1C1313] dark:text-white block">Soft Sky Blue</span>
-                  <span class="text-[11px] font-mono-tag text-[#1E3A60] dark:text-[#9FC2EA] font-bold">#9FC2EA</span>
-                </div>
-              </div>
-
-              <div 
-                @click="copyToken('#14161D')"
-                class="p-4 rounded-2xl bg-[#FFF9F9] dark:bg-[#1A1C24] border border-[#EEDCDC] dark:border-white/10 space-y-3 cursor-pointer hover:scale-103 transition-transform group"
-              >
-                <div class="w-full h-14 rounded-xl bg-[#14161D] border border-white/10 shadow-sm flex items-end justify-end p-2">
-                  <Copy class="w-3.5 h-3.5 text-zinc-400 group-hover:text-white" />
-                </div>
-                <div class="space-y-0.5">
-                  <span class="text-xs font-bold text-[#1C1313] dark:text-white block">Dark Surface Card</span>
-                  <span class="text-[11px] font-mono-tag text-zinc-400 font-bold">#14161D</span>
-                </div>
-              </div>
-
-              <div 
-                @click="copyToken('#FFF9F9')"
-                class="p-4 rounded-2xl bg-[#FFF9F9] dark:bg-[#1A1C24] border border-[#EEDCDC] dark:border-white/10 space-y-3 cursor-pointer hover:scale-103 transition-transform group"
-              >
-                <div class="w-full h-14 rounded-xl bg-[#FFF9F9] border border-[#EEDCDC] shadow-sm flex items-end justify-end p-2">
-                  <Copy class="w-3.5 h-3.5 text-[#5C4848]/70 group-hover:text-[#5C4848]" />
-                </div>
-                <div class="space-y-0.5">
-                  <span class="text-xs font-bold text-[#1C1313] dark:text-white block">Light Canvas Soft</span>
-                  <span class="text-[11px] font-mono-tag text-[#5C4848] font-bold">#FFF9F9</span>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Tab 2: Typography Scale -->
-          <div v-else-if="activeDesignTab === 'typography'" class="space-y-3">
-            <div class="p-4 rounded-2xl bg-[#FFF9F9] dark:bg-[#1A1C24] border border-[#EEDCDC] dark:border-white/10 flex items-baseline justify-between gap-4">
-              <span class="text-3xl font-extrabold text-[#1C1313] dark:text-white">Display H1 (Plus Jakarta Sans)</span>
-              <span class="text-xs font-mono-tag text-[#9E0402] dark:text-[#ff4d4d] font-bold">72px / Bold</span>
-            </div>
-            <div class="p-4 rounded-2xl bg-[#FFF9F9] dark:bg-[#1A1C24] border border-[#EEDCDC] dark:border-white/10 flex items-baseline justify-between gap-4">
-              <span class="text-xl font-bold text-[#1C1313] dark:text-white">Section Title H2</span>
-              <span class="text-xs font-mono-tag text-[#9E0402] dark:text-[#ff4d4d] font-bold">36px / Extrabold</span>
-            </div>
-            <div class="p-4 rounded-2xl bg-[#FFF9F9] dark:bg-[#1A1C24] border border-[#EEDCDC] dark:border-white/10 flex items-baseline justify-between gap-4">
-              <span class="text-sm font-semibold text-[#5C4848] dark:text-zinc-300">Body Editorial Text</span>
-              <span class="text-xs font-mono-tag text-[#9E0402] dark:text-[#ff4d4d] font-bold">16px / Regular</span>
-            </div>
-            <div class="p-4 rounded-2xl bg-[#FFF9F9] dark:bg-[#1A1C24] border border-[#EEDCDC] dark:border-white/10 flex items-baseline justify-between gap-4">
-              <span class="text-xs font-mono-tag font-bold text-[#9E0402] dark:text-[#ff4d4d]">TAGS & METRIC LABELS /2026/</span>
-              <span class="text-xs font-mono-tag text-[#1E3A60] dark:text-[#9FC2EA] font-bold">Fragment Mono 12px</span>
-            </div>
-          </div>
-
-          <!-- Tab 3: UI Component States -->
-          <div v-else-if="activeDesignTab === 'components'" class="space-y-4">
-            <span class="text-xs font-mono-tag text-[#5C4848] dark:text-zinc-400 font-bold uppercase">Interactive Button Matrix</span>
-            <div class="flex flex-wrap gap-4 items-center">
-              <button class="px-6 py-3 rounded-full bg-[#9E0402] text-white font-bold text-xs font-mono-tag uppercase shadow-md shadow-[#9E0402]/25 hover:scale-105 transition-transform">
-                Primary Action ↗
-              </button>
-              <button class="px-6 py-3 rounded-full bg-[#9FC2EA] text-[#1E3A60] font-bold text-xs font-mono-tag uppercase border border-[#9FC2EA] hover:scale-105 transition-transform">
-                Secondary Pill *
-              </button>
-              <button class="px-6 py-3 rounded-full bg-white dark:bg-[#1A1C24] text-[#1C1313] dark:text-white border border-[#EEDCDC] dark:border-white/10 text-xs font-mono-tag font-bold uppercase hover:border-[#9E0402]/40 transition-colors">
-                Outlined Ghost #
-              </button>
-            </div>
-          </div>
-
-        </div>
-      </section>
-
-      <!-- ═══════════════════════════════════════════ -->
-      <!-- SECTION 6: Results & Business Impact        -->
-      <!-- Inspired by Abhaysingh metric cards         -->
-      <!-- ═══════════════════════════════════════════ -->
-      <section v-if="detail?.results" id="impact" data-reveal="fade-up" class="space-y-6 scroll-mt-28">
-        <div class="flex items-center gap-2.5">
-          <div class="w-8 h-8 rounded-xl bg-[#9E0402]/15 text-[#9E0402] dark:text-[#ff4d4d] flex items-center justify-center shrink-0">
-            <TrendingUp class="w-4 h-4" />
-          </div>
-          <h2 class="text-2xl sm:text-3xl font-extrabold text-[#1C1313] dark:text-white tracking-tight">
-            Hasil & Dampak Terukur
-          </h2>
-        </div>
-
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          <div 
-            v-for="(res, idx) in detail.results" 
-            :key="idx"
-            class="p-6 rounded-3xl bg-white dark:bg-[#14161D] border border-[#EEDCDC] dark:border-white/10 space-y-4 flex flex-col justify-between hover:border-[#9E0402]/40 transition-all duration-300 shadow-xs hover:-translate-y-1"
-          >
-            <span class="text-xs font-bold font-mono-tag text-[#5C4848] dark:text-zinc-400 uppercase tracking-wider block">
-              {{ res.metric }}
-            </span>
-
-            <!-- Before → After Numbers -->
-            <div class="space-y-1">
-              <div v-if="res.before !== 'N/A' && res.before !== '0'" class="flex items-center gap-2 text-xs font-mono-tag text-[#5C4848] dark:text-zinc-500 line-through">
-                <span>Before: {{ res.before }}</span>
-              </div>
-              <p class="text-3xl sm:text-4xl font-extrabold text-[#9E0402] dark:text-[#ff4d4d] tracking-tight">
-                {{ res.after }}
+                <span>Copied {{ copiedToken }} to clipboard!</span>
               </p>
             </div>
 
-            <!-- Change Delta Badge -->
-            <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold font-mono-tag bg-[#9FC2EA]/30 dark:bg-[#9FC2EA]/15 text-[#1E3A60] dark:text-[#9FC2EA] border border-[#9FC2EA]/60 dark:border-[#9FC2EA]/30 w-fit">
-              <TrendingUp class="w-3.5 h-3.5 text-[#1E3A60] dark:text-[#9FC2EA]" />
-              <span>{{ res.change }}</span>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- ═══════════════════════════════════════════ -->
-      <!-- SECTION 7: Visual Gallery                   -->
-      <!-- ═══════════════════════════════════════════ -->
-      <section v-if="detail?.gallery?.length" id="gallery" data-reveal="fade-up" class="space-y-6 scroll-mt-28">
-        <div class="flex items-center gap-2.5">
-          <div class="w-8 h-8 rounded-xl bg-[#9FC2EA]/30 dark:bg-[#9FC2EA]/15 text-[#1E3A60] dark:text-[#9FC2EA] flex items-center justify-center shrink-0">
-            <ImageIcon class="w-4 h-4" />
-          </div>
-          <h2 class="text-2xl sm:text-3xl font-extrabold text-[#1C1313] dark:text-white tracking-tight">
-            Galeri Proses & Desain
-          </h2>
-        </div>
-
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-5 sm:gap-6">
-          <div 
-            v-for="(item, idx) in detail.gallery" 
-            :key="idx"
-            @click="openLightbox(item)"
-            class="group p-3 rounded-3xl bg-white dark:bg-[#14161D] border border-[#EEDCDC] dark:border-white/10 overflow-hidden hover:border-[#9E0402]/40 transition-all duration-300 flex flex-col justify-between shadow-xs cursor-pointer"
-          >
-            <div class="overflow-hidden rounded-2xl aspect-[4/3] bg-[#FDF6F6] dark:bg-[#1C1E24] relative">
-              <img 
-                :src="item.image" 
-                :alt="item.caption"
-                class="w-full h-full object-cover group-hover:scale-106 transition-transform duration-700 ease-out"
-                loading="lazy"
-              />
-              <div class="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                <span class="p-2.5 rounded-full bg-white text-[#9E0402] shadow-lg">
-                  <Maximize2 class="w-4 h-4" />
-                </span>
+            <!-- Typography Tab -->
+            <div v-if="activeDesignTab === 'typography'" class="space-y-4 font-mono-tag text-xs">
+              <div class="p-4 rounded-2xl bg-[#FFF9F9] dark:bg-[#1A1C24] border border-[#EEDCDC] dark:border-white/10 flex items-center justify-between">
+                <div>
+                  <span class="text-zinc-400 block text-[10px]">DISPLAY HERO</span>
+                  <span class="text-lg sm:text-2xl font-black text-[#1C1313] dark:text-white font-sans">Syne / Plus Jakarta Sans</span>
+                </div>
+                <span class="text-xs font-bold text-[#9E0402] dark:text-[#ff4d4d]">72px / Bold</span>
               </div>
             </div>
-            <p class="text-xs text-[#5C4848] dark:text-zinc-300 text-center mt-3 mb-1 px-2 font-semibold">{{ item.caption }}</p>
-          </div>
-        </div>
-      </section>
 
-      <!-- ═══════════════════════════════════════════ -->
-      <!-- SECTION 8: Key Learnings & Takeaways        -->
-      <!-- ═══════════════════════════════════════════ -->
-      <section v-if="detail?.learnings?.length" id="learnings" data-reveal="fade-up" class="space-y-6 scroll-mt-28">
-        <div class="flex items-center gap-2.5">
-          <div class="w-8 h-8 rounded-xl bg-[#9E0402]/15 text-[#9E0402] dark:text-[#ff4d4d] flex items-center justify-center shrink-0">
-            <Lightbulb class="w-4 h-4" />
-          </div>
-          <h2 class="text-2xl sm:text-3xl font-extrabold text-[#1C1313] dark:text-white tracking-tight">
-            Key Learnings & Takeaways
-          </h2>
-        </div>
-
-        <div class="space-y-3">
-          <div 
-            v-for="(learning, idx) in detail.learnings" 
-            :key="idx"
-            class="p-6 rounded-3xl bg-white dark:bg-[#14161D] border border-[#EEDCDC] dark:border-white/10 flex items-start gap-4 shadow-xs"
-          >
-            <div class="w-8 h-8 rounded-2xl bg-[#9E0402] text-white flex items-center justify-center text-xs font-bold font-mono-tag shrink-0 shadow-xs">
-              {{ String(idx + 1).padStart(2, '0') }}
+            <!-- Components Tab -->
+            <div v-if="activeDesignTab === 'components'" class="flex flex-wrap items-center gap-3">
+              <button 
+                class="px-6 py-3 rounded-full text-white font-bold text-xs font-mono-tag uppercase shadow-md hover:scale-105 transition-transform bg-[#9E0402] shadow-[#9E0402]/25"
+              >
+                Primary Button
+              </button>
             </div>
-            <p class="text-xs sm:text-sm text-[#5C4848] dark:text-zinc-300 leading-relaxed font-medium">{{ learning }}</p>
           </div>
-        </div>
-      </section>
+        </section>
+
+        <!-- 05. RESULTS & QUANTITATIVE IMPACT -->
+        <section id="impact" data-reveal="fade-up" class="space-y-6 scroll-mt-28">
+          <div class="flex items-center gap-3">
+            <span class="w-8 h-8 rounded-xl flex items-center justify-center font-mono-tag font-bold text-xs" :class="currentProfile === 'raqwan' ? 'bg-[#047857]/20 text-emerald-400' : 'bg-[#9E0402]/15 text-[#9E0402] dark:text-[#ff4d4d]'">
+              {{ currentProfile === 'raqwan' ? '04' : '05' }}
+            </span>
+            <h2 class="text-2xl sm:text-3xl font-extrabold text-[#1C1313] dark:text-white">Measured Impact & Key Results</h2>
+          </div>
+
+          <div v-if="detail.results && detail.results.length" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+            <div
+              v-for="(res, idx) in detail.results"
+              :key="idx"
+              class="p-6 rounded-3xl bg-white dark:bg-[#14161D] border border-[#EEDCDC] dark:border-white/10 space-y-4 flex flex-col justify-between transition-all duration-300 shadow-xs hover:-translate-y-1"
+              :class="currentProfile === 'raqwan' ? 'hover:border-[#047857]/60' : 'hover:border-[#9E0402]/40'"
+            >
+              <div class="space-y-1">
+                <span class="text-xs font-mono-tag text-[#5C4848] dark:text-zinc-400 uppercase font-bold">
+                  {{ res.metric || res.label }}
+                </span>
+                <p class="text-3xl sm:text-4xl font-extrabold tracking-tight" :class="currentProfile === 'raqwan' ? 'text-emerald-400' : 'text-[#9E0402] dark:text-[#ff4d4d]'">
+                  {{ res.after || res.value }}
+                </p>
+              </div>
+
+              <div v-if="res.before" class="pt-3 border-t border-[#EEDCDC] dark:border-white/10 flex items-center justify-between text-xs font-mono-tag">
+                <span class="text-zinc-400">Baseline Before:</span>
+                <span class="font-bold text-[#5C4848] dark:text-zinc-300">{{ res.before }}</span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 06. GALLERY & SCREENSHOTS -->
+        <section id="gallery" data-reveal="fade-up" class="space-y-6 scroll-mt-28" v-if="detail.gallery && detail.gallery.length">
+          <div class="flex items-center gap-3">
+            <span class="w-8 h-8 rounded-xl flex items-center justify-center font-mono-tag font-bold text-xs" :class="currentProfile === 'raqwan' ? 'bg-[#047857]/20 text-emerald-400' : 'bg-[#9E0402]/15 text-[#9E0402] dark:text-[#ff4d4d]'">
+              {{ currentProfile === 'raqwan' ? '05' : '06' }}
+            </span>
+            <h2 class="text-2xl sm:text-3xl font-extrabold text-[#1C1313] dark:text-white">Artifact Gallery & Architecture</h2>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div
+              v-for="(img, idx) in detail.gallery"
+              :key="idx"
+              @click="openLightbox(img.url || img)"
+              class="group p-3 rounded-3xl bg-white dark:bg-[#14161D] border border-[#EEDCDC] dark:border-white/10 overflow-hidden transition-all duration-300 flex flex-col justify-between shadow-xs cursor-pointer"
+              :class="currentProfile === 'raqwan' ? 'hover:border-[#047857]/60' : 'hover:border-[#9E0402]/40'"
+            >
+              <div class="relative overflow-hidden rounded-2xl aspect-video bg-[#0B0C0E]">
+                <img 
+                  :src="img.url || img" 
+                  :alt="img.caption || 'Project visual'"
+                  class="w-full h-full object-cover group-hover:scale-104 transition-transform duration-500"
+                  loading="lazy"
+                />
+                <div class="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                  <span class="p-2.5 rounded-full bg-white shadow-lg" :class="currentProfile === 'raqwan' ? 'text-[#047857]' : 'text-[#9E0402]'">
+                    <Maximize2 class="w-4 h-4" />
+                  </span>
+                </div>
+              </div>
+              <p v-if="img.caption" class="pt-3 px-1 text-xs font-mono-tag text-[#5C4848] dark:text-zinc-400">
+                {{ img.caption }}
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <!-- 07. KEY LEARNINGS & RETROSPECTIVE -->
+        <section id="learnings" data-reveal="fade-up" class="space-y-6 scroll-mt-28">
+          <div class="flex items-center gap-3">
+            <span class="w-8 h-8 rounded-xl flex items-center justify-center font-mono-tag font-bold text-xs" :class="currentProfile === 'raqwan' ? 'bg-[#047857]/20 text-emerald-400' : 'bg-[#9E0402]/15 text-[#9E0402] dark:text-[#ff4d4d]'">
+              {{ currentProfile === 'raqwan' ? '06' : '07' }}
+            </span>
+            <h2 class="text-2xl sm:text-3xl font-extrabold text-[#1C1313] dark:text-white">Key Learnings & Takeaways</h2>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+            <div 
+              v-for="(learning, idx) in (detail.learnings || ['Continuous iteration with cross-functional feedback is essential.', 'Rigorous benchmarking and telemetry prevent regression bugs in production.'])"
+              :key="idx"
+              class="p-6 rounded-3xl bg-white dark:bg-[#14161D] border border-[#EEDCDC] dark:border-white/10 flex items-start gap-3.5 shadow-xs"
+            >
+              <div 
+                class="w-8 h-8 rounded-2xl text-white flex items-center justify-center text-xs font-bold font-mono-tag shrink-0 shadow-xs"
+                :class="currentProfile === 'raqwan' ? 'bg-[#047857]' : 'bg-[#9E0402]'"
+              >
+                0{{ idx + 1 }}
+              </div>
+              <p class="text-xs sm:text-sm text-[#1C1313] dark:text-zinc-200 leading-relaxed font-medium">
+                {{ learning }}
+              </p>
+            </div>
+          </div>
+        </section>
+
+      </div>
 
       <!-- ═══════════════════════════════════════════ -->
-      <!-- SECTION 9: Next & Prev Project Teasers      -->
+      <!-- BOTTOM PREV / NEXT PROJECT NAVIGATION       -->
       <!-- ═══════════════════════════════════════════ -->
-      <div data-reveal="fade-up" class="border-t border-[#EEDCDC] dark:border-white/10 pt-10 grid grid-cols-1 sm:grid-cols-2 gap-4">
-        <!-- Prev Project -->
+      <div data-reveal="fade-up" class="pt-8 border-t border-[#EEDCDC] dark:border-white/10 grid grid-cols-1 sm:grid-cols-2 gap-4">
         <RouterLink
           v-if="prevProject"
-          :to="'/projects/' + prevProject.id"
-          class="p-6 rounded-3xl bg-white dark:bg-[#14161D] border border-[#EEDCDC] dark:border-white/10 hover:border-[#9E0402]/40 transition-all group flex items-center gap-4 shadow-xs"
+          :to="'/' + currentProfile + '/projects/' + prevProject.id"
+          class="p-6 rounded-3xl bg-white dark:bg-[#14161D] border border-[#EEDCDC] dark:border-white/10 transition-all group flex items-center gap-4 shadow-xs"
+          :class="currentProfile === 'raqwan' ? 'hover:border-[#047857]/60' : 'hover:border-[#9E0402]/40'"
         >
-          <div class="w-10 h-10 rounded-2xl bg-[#FFF9F9] dark:bg-[#1A1C24] flex items-center justify-center text-[#1C1313] dark:text-white group-hover:text-white group-hover:bg-[#9E0402] transition-colors shrink-0 shadow-xs">
+          <div 
+            class="w-10 h-10 rounded-2xl bg-[#FFF9F9] dark:bg-[#1A1C24] flex items-center justify-center text-[#1C1313] dark:text-white transition-colors shrink-0 shadow-xs"
+            :class="currentProfile === 'raqwan' ? 'group-hover:bg-[#047857] group-hover:text-white' : 'group-hover:bg-[#9E0402] group-hover:text-white'"
+          >
             <ArrowLeft class="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
           </div>
-          <div class="min-w-0">
-            <span class="text-[10px] font-mono-tag text-[#5C4848] dark:text-zinc-400 block uppercase font-bold tracking-wider">Previous Case Study</span>
-            <span class="text-sm font-bold text-[#1C1313] dark:text-white group-hover:text-[#9E0402] dark:group-hover:text-[#ff4d4d] transition-colors truncate block">
+          <div class="space-y-0.5 min-w-0">
+            <span class="text-[10px] font-mono-tag text-zinc-400 uppercase tracking-wider block">Previous Project</span>
+            <span class="text-sm font-bold text-[#1C1313] dark:text-white transition-colors truncate block" :class="currentProfile === 'raqwan' ? 'group-hover:text-emerald-400' : 'group-hover:text-[#9E0402] dark:group-hover:text-[#ff4d4d]'">
               {{ prevProject.title }}
             </span>
           </div>
         </RouterLink>
 
-        <!-- Next Project -->
         <RouterLink
           v-if="nextProject"
-          :to="'/projects/' + nextProject.id"
-          class="p-6 rounded-3xl bg-white dark:bg-[#14161D] border border-[#EEDCDC] dark:border-white/10 hover:border-[#9E0402]/40 transition-all group flex items-center justify-between gap-4 text-right shadow-xs"
+          :to="'/' + currentProfile + '/projects/' + nextProject.id"
+          class="p-6 rounded-3xl bg-white dark:bg-[#14161D] border border-[#EEDCDC] dark:border-white/10 transition-all group flex items-center justify-between gap-4 text-right shadow-xs"
+          :class="currentProfile === 'raqwan' ? 'hover:border-[#047857]/60' : 'hover:border-[#9E0402]/40'"
         >
-          <div class="min-w-0 flex-1">
-            <span class="text-[10px] font-mono-tag text-[#5C4848] dark:text-zinc-400 block uppercase font-bold tracking-wider">Next Case Study</span>
-            <span class="text-sm font-bold text-[#1C1313] dark:text-white group-hover:text-[#9E0402] dark:group-hover:text-[#ff4d4d] transition-colors truncate block">
+          <div class="space-y-0.5 min-w-0 flex-1">
+            <span class="text-[10px] font-mono-tag text-zinc-400 uppercase tracking-wider block">Next Project</span>
+            <span class="text-sm font-bold text-[#1C1313] dark:text-white transition-colors truncate block" :class="currentProfile === 'raqwan' ? 'group-hover:text-emerald-400' : 'group-hover:text-[#9E0402] dark:group-hover:text-[#ff4d4d]'">
               {{ nextProject.title }}
             </span>
           </div>
-          <div class="w-10 h-10 rounded-2xl bg-[#FFF9F9] dark:bg-[#1A1C24] flex items-center justify-center text-[#1C1313] dark:text-white group-hover:text-white group-hover:bg-[#9E0402] transition-colors shrink-0 shadow-xs">
-            <ArrowUpRight class="w-4 h-4 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+          <div 
+            class="w-10 h-10 rounded-2xl bg-[#FFF9F9] dark:bg-[#1A1C24] flex items-center justify-center text-[#1C1313] dark:text-white transition-colors shrink-0 shadow-xs"
+            :class="currentProfile === 'raqwan' ? 'group-hover:bg-[#047857] group-hover:text-white' : 'group-hover:bg-[#9E0402] group-hover:text-white'"
+          >
+            <ArrowRight class="w-4 h-4 group-hover:translate-x-1 transition-transform" />
           </div>
         </RouterLink>
       </div>
 
     </div>
 
-    <!-- 404 Case Study Not Found -->
-    <div v-else class="text-center py-20 space-y-4 p-8 rounded-3xl bg-white dark:bg-[#14161D] border border-[#EEDCDC] dark:border-white/10">
-      <Sparkles class="w-10 h-10 text-[#9E0402] dark:text-[#ff4d4d] mx-auto" />
-      <h2 class="text-2xl font-bold text-[#1C1313] dark:text-white">Case Study Tidak Ditemukan</h2>
-      <p class="text-xs sm:text-sm text-[#5C4848] dark:text-zinc-400">Kasus dengan ID "{{ route.params.id }}" tidak tersedia di arsip.</p>
-      <RouterLink 
-        to="/projects"
-        class="inline-block px-6 py-3 rounded-full bg-[#9E0402] text-white text-xs font-bold font-mono-tag uppercase hover:bg-[#B80604] transition-colors"
-      >
-        Kembali ke Semua Case Studies
-      </RouterLink>
-    </div>
-
-    <!-- Lightbox Zoom Modal -->
-    <transition
-      enter-active-class="transition duration-200 ease-out"
-      enter-from-class="opacity-0 scale-95"
-      enter-to-class="opacity-100 scale-100"
-      leave-active-class="transition duration-150 ease-in"
-      leave-from-class="opacity-100 scale-100"
-      leave-to-class="opacity-0 scale-95"
+    <!-- Lightbox Modal -->
+    <div 
+      v-if="lightboxImage" 
+      class="fixed inset-0 z-50 bg-black/90 backdrop-blur-xl flex items-center justify-center p-4 sm:p-8 select-none"
+      @click="closeLightbox"
     >
-      <div 
-        v-if="lightboxImage" 
-        @click="closeLightbox"
-        class="fixed inset-0 z-50 bg-black/90 backdrop-blur-md p-4 sm:p-10 flex flex-col items-center justify-center"
+      <button 
+        @click="closeLightbox" 
+        class="absolute top-6 right-6 p-3 rounded-full bg-white/10 text-white hover:bg-white/20 transition-colors"
       >
-        <button 
-          @click="closeLightbox"
-          class="absolute top-6 right-6 p-3 rounded-full bg-white/10 text-white hover:bg-white/20 transition-colors"
-        >
-          <X class="w-6 h-6" />
-        </button>
-
-        <div @click.stop class="max-w-5xl max-h-[85vh] overflow-hidden rounded-3xl bg-black border border-white/20 shadow-2xl space-y-3 p-2">
-          <img 
-            :src="lightboxImage.image" 
-            :alt="lightboxImage.caption" 
-            class="max-h-[75vh] w-auto mx-auto object-contain rounded-2xl"
-          />
-          <p class="text-xs sm:text-sm text-center text-white/80 font-mono-tag font-semibold pb-2">
-            {{ lightboxImage.caption }}
-          </p>
-        </div>
-      </div>
-    </transition>
+        <X class="w-6 h-6" />
+      </button>
+      <img 
+        :src="lightboxImage" 
+        alt="Full screen preview" 
+        class="max-w-full max-h-[88vh] rounded-2xl object-contain shadow-2xl" 
+        @click.stop
+      />
+    </div>
 
   </div>
 </template>

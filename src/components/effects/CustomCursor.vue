@@ -1,5 +1,8 @@
 <script setup>
-import { ref, onMounted, onUnmounted } from 'vue'
+import { ref, computed, onMounted, onUnmounted } from 'vue'
+import { usePortfolioStore } from '@/composables/usePortfolioStore'
+
+const { currentProfile } = usePortfolioStore()
 
 const cursorX = ref(-100)
 const cursorY = ref(-100)
@@ -97,7 +100,8 @@ onMounted(() => {
   >
     <!-- Center Precision Dot (Zero Latency - Instant Follow) -->
     <div
-      class="fixed top-0 left-0 rounded-full bg-[#9E0402] dark:bg-[#ff4d4d] pointer-events-none will-change-transform"
+      class="fixed top-0 left-0 rounded-full pointer-events-none will-change-transform"
+      :class="currentProfile === 'raqwan' ? 'bg-[#047857]' : 'bg-[#9E0402] dark:bg-[#ff4d4d]'"
       :style="{
         transform: `translate3d(${cursorX}px, ${cursorY}px, 0) translate(-50%, -50%) scale(${
           cursorType === 'text' ? 0 : cursorType === 'pointer' ? 0.6 : isClicking ? 0.7 : 1
@@ -109,15 +113,15 @@ onMounted(() => {
       }"
     ></div>
 
-    <!-- Outer Follower Hairline Ring (Clean, Transparent, Never Obscures Text) -->
+    <!-- Outer Follower Hairline Ring -->
     <div
       class="fixed top-0 left-0 rounded-full pointer-events-none will-change-transform flex items-center justify-center"
       :class="[
         cursorType === 'text'
           ? 'opacity-0 scale-50'
           : cursorType === 'pointer'
-            ? 'border-2 border-[#9E0402] dark:border-[#ff4d4d] bg-transparent opacity-90'
-            : 'border border-[#9E0402]/50 dark:border-[#ff4d4d]/50 bg-transparent opacity-60'
+            ? (currentProfile === 'raqwan' ? 'border-2 border-[#047857] bg-transparent opacity-90' : 'border-2 border-[#9E0402] dark:border-[#ff4d4d] bg-transparent opacity-90')
+            : (currentProfile === 'raqwan' ? 'border border-[#047857]/60 bg-transparent opacity-60' : 'border border-[#9E0402]/50 dark:border-[#ff4d4d]/50 bg-transparent opacity-60')
       ]"
       :style="{
         transform: `translate3d(${followerX}px, ${followerY}px, 0) translate(-50%, -50%) scale(${

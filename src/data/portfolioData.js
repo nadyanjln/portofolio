@@ -1,422 +1,318 @@
+// ================================================================
+// NADYA NAJELINA SALSABILLAH - PRODUCT MANAGER & UI/UX PORTFOLIO DATA
+// Sourced directly from CV & LinkedIn Profile
+// ================================================================
+
 export const portfolioInfo = {
   name: "Nadya Najelina Salsabillah",
   shortName: "Nadya",
   title: "Product Manager & UI/UX Designer",
-  tagline: "Merancang produk digital yang berdampak — dari riset pengguna hingga desain interface yang intuitif dan scalable.",
-  bio: "Hi! Saya Nadya Najelina Salsabillah, seorang Product Manager & UI/UX Designer yang passionate dalam menciptakan pengalaman digital yang bermakna. Saya menggabungkan pemikiran strategis product management dengan keahlian visual design untuk memastikan setiap produk tidak hanya indah secara estetika, tetapi juga memberikan nilai nyata bagi pengguna dan bisnis.",
-  status: "Open for Product & Design roles",
-  location: "Indonesia",
+  tagline: "Building digital products that simplify complex workflows, empower better decisions, and create meaningful value for both users and businesses.",
+  bio: "Computer Science Graduate (S1 Informatika, GPA: 3.97 / 4.00) from Gunadarma University with a multidisciplinary background in UI/UX design, software engineering, business, and AI, focused on Product Management. By combining user empathy, technical expertise, business thinking, and data-driven decision making, I strive to build products that simplify complex workflows, empower better decisions, and create meaningful value for both users and businesses.",
+  status: "Open for Product Management & UI/UX Roles",
+  location: "Depok, Jawa Barat, Indonesia",
+  phone: "+62 821 1146 4583",
   email: "nadyanjln@gmail.com",
   socials: {
     github: "https://github.com/nadyanjln",
     linkedin: "https://www.linkedin.com/in/nadyanjln/",
-    twitter: "https://twitter.com/",
-    instagram: "https://instagram.com/",
-    dribbble: "https://dribbble.com/",
-    behance: "https://behance.net/"
+    portfolio: "https://www.linkedin.com/in/nadyanjln/"
   }
 }
 
 export const educations = [
   {
-    degree: "S1 Informatika (Sarjana Komputer)",
-    school: "Universitas Gunadarma",
-    year: "2020 - 2024"
+    degree: "Bachelor’s Degree in Computer Science (GPA: 3.97 / 4.00)",
+    school: "Gunadarma University",
+    year: "September 2022 – Agustus 2026 (Lulus / Graduated)",
+    honors: "Graduated with Honors (IPK 3.97/4.00) & received 7 honors and awards across academic excellence, UI/UX, entrepreneurship, and national/international competitions."
+  }
+]
+
+export const certifications = [
+  "Team and Employee Management — Hacktiv8 Indonesia (2026)",
+  "Data Science Associate — National Professional Certification Agency (BNSP) (2026)",
+  "Flutter Developer Bootcamp (Score: 90/100) — Dicoding Indonesia (2025)",
+  "Go Language Programming — Gunadarma University (2024 - 2025)",
+  "Basic Data Science Specialization — Dicoding Indonesia (2024)",
+  "Fundamental Web Development — Gunadarma University (2023)"
+]
+
+export const experiences = [
+  {
+    role: "Freelance UI/UX Designer",
+    company: "PT. Mitra Teknologi Gemilang",
+    period: "March 2026",
+    description: "Led a comprehensive UX audit and redesigned 3 core safety flows for SaveMe across 20+ screens, improving navigation clarity and aligning design decisions with product goals. Created 8+ custom icons and UI assets using Figma and Canva to strengthen visual consistency and usability."
+  },
+  {
+    role: "Course Tutor, Assistant & Administrative Support",
+    company: "Gunadarma University Computerization Development Institute",
+    period: "January 2023 – August 2026",
+    description: "Analyzed recurring onboarding pain points from 100+ student inquiries and proposed process improvements to streamline student support, while assisting technical courses."
+  },
+  {
+    role: "New Assistant Recruitment Interviewer & Gathering Committee",
+    company: "Gunadarma University Computerization Development Institute",
+    period: "September 2024 – November 2025",
+    description: "Conducted structured interviews with 50+ candidates, evaluating technical and communication skills to support recruitment decisions for the new assistant cohort. Coordinated logistics operations for an event with 60+ participants."
+  },
+  {
+    role: "UI/UX Designer & Researcher",
+    company: "Student Executive Board (BEM) Gunadarma University",
+    period: "September 2023",
+    description: "Coordinated onboarding for 40 freshmen, identified engagement needs, and improved the first-year support experience."
+  }
+]
+
+export const milestones = [
+  {
+    title: "Best AI Integration — International Business Pitch Fest 2025",
+    issuer: "International Business Pitch Fest",
+    year: "November 2025",
+    badge: "Champion",
+    description: "Led product strategy and aligned a four-person team to deliver an AI-powered IoT monitoring MVP (MeatSure), earning Best AI Integration at an international business pitch competition."
+  },
+  {
+    title: "Finalist of ACTION (Academic Competition of Data Science)",
+    issuer: "ACTION Data Science Competition",
+    year: "December 2025",
+    badge: "Top 7 Finalist",
+    description: "Selected as one of the Top 7 teams in the UI/UX category, demonstrating strong user-centered design, research, and problem-solving skills."
+  },
+  {
+    title: "Top 10 Best Team — Hackvidia, Arkavidia ITB",
+    issuer: "Informatics Student Association ITB",
+    year: "May 2025",
+    badge: "Top 10 Finalist",
+    description: "Selected as one of the finalists in a prestigious national-scale hackathon organized by Institut Teknologi Bandung (ITB)."
+  },
+  {
+    title: "Awardee of P2MW 2024 – Digital Business Category",
+    issuer: "Kemendikbudristek (P2MW)",
+    year: "November 2024",
+    badge: "Grant Winner",
+    description: "Selected as recipient in national Program Pembinaan Mahasiswa Wirausaha 2024 for Recad platform, securing IDR 12 million in government funding."
+  },
+  {
+    title: "Top 10 Outstanding Students for Academic Excellence",
+    issuer: "Gunadarma University",
+    year: "2025",
+    badge: "Academic Honors",
+    description: "Awarded for outstanding academic performance (GPA 3.97 / 4.00) in the 2023/2024 academic year at Gunadarma University."
   }
 ]
 
 export const skills = [
+  // Product Strategy & Discovery
   { name: "Product Strategy", category: "Product", level: "Expert", color: "indigo" },
-  { name: "User Research", category: "UX Research", level: "Expert", color: "cyan" },
-  { name: "Wireframing & Prototyping", category: "UI/UX", level: "Expert", color: "purple" },
-  { name: "Figma", category: "Design Tool", level: "Expert", color: "pink" },
-  { name: "Design System", category: "UI/UX", level: "Advanced", color: "violet" },
+  { name: "Product Discovery", category: "Product", level: "Expert", color: "blue" },
   { name: "PRD & User Stories", category: "Product", level: "Expert", color: "blue" },
-  { name: "A/B Testing", category: "Product", level: "Advanced", color: "emerald" },
-  { name: "Data-Driven Decision", category: "Product", level: "Advanced", color: "amber" },
-  { name: "Usability Testing", category: "UX Research", level: "Expert", color: "green" },
   { name: "Stakeholder Management", category: "Product", level: "Advanced", color: "orange" },
   { name: "Agile / Scrum", category: "Product", level: "Expert", color: "yellow" },
-  { name: "Interaction Design", category: "UI/UX", level: "Expert", color: "rose" }
+  { name: "Problem Analysis", category: "Product", level: "Expert", color: "cyan" },
+  
+  // UI/UX & Design Systems
+  { name: "UI/UX Design", category: "UI/UX", level: "Expert", color: "rose" },
+  { name: "Wireframing & Prototyping", category: "UI/UX", level: "Expert", color: "purple" },
+  { name: "Design System", category: "UI/UX", level: "Advanced", color: "violet" },
+  { name: "Information Architecture", category: "UI/UX", level: "Expert", color: "indigo" },
+  { name: "Interaction Design", category: "UI/UX", level: "Expert", color: "pink" },
+  { name: "Figma & FigJam", category: "Design Tool", level: "Expert", color: "rose" },
+  { name: "Adobe Illustrator / PS", category: "Design Tool", level: "Advanced", color: "amber" },
+  { name: "Canva & Visual Assets", category: "Design Tool", level: "Expert", color: "teal" },
+  { name: "Flutter", category: "UI/UX", level: "Advanced", color: "cyan" },
+
+  // UX Research & Testing
+  { name: "User Research", category: "UX Research", level: "Expert", color: "cyan" },
+  { name: "Usability Testing", category: "UX Research", level: "Expert", color: "green" },
+  { name: "Design Thinking", category: "UX Research", level: "Expert", color: "emerald" },
+  { name: "Data-Driven Decision", category: "UX Research", level: "Advanced", color: "amber" }
 ]
 
 export const projects = [
   {
-    id: "zenith-analytics-redesign",
-    title: "Zenith Analytics — SaaS Dashboard Redesign",
-    category: "Product Design",
-    description: "Merancang ulang dashboard analitik SaaS dengan pendekatan user-centered design, meningkatkan task completion rate sebesar 40%.",
-    tags: ["Product Strategy", "Figma", "User Research", "Design System"],
-    image: "https://wruhxkwvombesziefvmn.supabase.co/storage/v1/object/public/portfolio/projects/zenith-analytics.jpg",
-    liveUrl: "https://example.com/zenith",
-    githubUrl: "",
+    id: "meatsure-ai-smart-monitoring",
+    title: "MeatSure — AI Smart Monitoring Hub for Seafood Safety",
+    category: "Product Strategy & AI IoT",
+    description: "Platform IoT dan AI cerdas untuk monitoring kesegaran dan rantai pasok produk laut secara real-time, peraih penghargaan Best AI Integration pada International Business Pitch Fest 2025.",
+    tags: ["Product Lead", "Best AI Integration 2025", "IoT Monitoring", "Product Strategy", "Figma", "User Research"],
+    image: "https://images.unsplash.com/photo-1534482421-64566f976cfa?auto=format&fit=crop&w=1200&q=80",
+    liveUrl: "https://www.linkedin.com/in/nadyanjln/",
+    githubUrl: "https://github.com/nadyanjln",
     featured: true,
     highlights: [
-      "Conducted 15+ user interviews & synthesized insights into actionable personas",
-      "Created comprehensive information architecture & user flows",
-      "Built a reusable design system with 60+ Figma components",
-      "Achieved 40% improvement in task completion rate post-launch"
+      "Memimpin perumusan visi produk, target persona, value proposition, dan scope MVP berdasarkan riset kompetitor & pasar",
+      "Mengorkestrasi tim lintas fungsi (4 orang) dalam merancang prototype dan business pitch hingga memenangkan Best AI Integration di International Business Pitch Fest 2025",
+      "Menyusun arsitektur alur monitoring sensor IoT cerdas dengan antarmuka dashboard prediktif",
+      "Memvalidasi product-market fit bersama stakeholder industri perikanan dan logistik cold-chain"
     ],
-
-    // ── Case Study Detail ──
     detail: {
-      duration: "3 bulan (Sep — Nov 2024)",
-      role: "Product Manager & Lead UI/UX Designer",
-      team: ["1 Product Manager (saya)", "2 UI/UX Designers", "4 Frontend Engineers", "1 QA Engineer"],
-      tools: ["Figma", "FigJam", "Maze", "Notion", "Jira", "Google Analytics"],
-
-      overview: "Zenith Analytics adalah platform SaaS analitik yang digunakan oleh 2.000+ pengguna B2B untuk monitoring metrik bisnis real-time. Dashboard lama mengalami penurunan engagement dan peningkatan support ticket terkait navigasi yang membingungkan. Saya ditugaskan memimpin redesign end-to-end dari fase discovery hingga delivery.",
-
+      duration: "November 2025",
+      role: "Product Lead, Researcher, Product Developer",
+      team: ["1 Product Lead (Nadya)", "1 AI/IoT Engineer", "1 Hardware Specialist", "1 Business Strategist"],
+      tools: ["Figma", "FigJam", "Notion", "Product Discovery", "Market Research", "Pitch Deck"],
+      overview: "MeatSure dirancang untuk menyelesaikan masalah pembusukan dan penurunan kualitas produk laut selama proses distribusi. Dengan integrasi sensor IoT dan algoritma AI deteksi kesegaran, MeatSure menyediakan dashboard terpusat bagi distributor untuk memantau kondisi produk secara langsung.",
       problem: {
-        title: "Masalah yang Ditemukan",
+        title: "Tantangan Kualitas & Rantai Pasok",
         points: [
-          "Task completion rate hanya 58% — pengguna kesulitan menemukan data yang relevan di antara terlalu banyak widget.",
-          "Rata-rata 35 support ticket/minggu terkait navigasi dan filter data yang tidak intuitif.",
-          "Bounce rate halaman dashboard naik 18% dalam 6 bulan terakhir, menunjukkan pengguna frustrasi.",
-          "Tidak ada design system konsisten — setiap fitur baru dibangun dengan styling ad-hoc."
+          "Tingginya angka kerugian finansial akibat pembusukan produk laut selama pengiriman rantai dingin.",
+          "Kurangnya transparansi data real-time mengenai suhu, kelembaban, dan gas amonia pada kontainer logistik.",
+          "Ketiadaan sistem peringatan dini (early warning system) yang mudah diakses oleh operator gudang dan manajer logistik."
         ]
       },
-
-      process: [
-        {
-          phase: "Discovery & Research",
-          description: "Melakukan 15 user interview mendalam (30-45 menit per sesi) dengan segmen pengguna utama: data analyst, marketing manager, dan C-level executive. Dilengkapi dengan heuristic evaluation terhadap dashboard existing dan competitive audit terhadap 4 produk kompetitor (Mixpanel, Amplitude, Metabase, Looker).",
-          deliverables: ["Interview transcripts & affinity map", "3 user personas", "Heuristic evaluation report", "Competitive analysis matrix"]
-        },
-        {
-          phase: "Define & Ideation",
-          description: "Mensintesis temuan riset menjadi problem statement yang jelas menggunakan framework How Might We. Menyelenggarakan design sprint 3 hari bersama tim cross-functional untuk menghasilkan solusi konseptual dan memprioritaskan fitur berdasarkan impact vs. effort matrix.",
-          deliverables: ["Problem statements (HMW)", "Impact vs. effort matrix", "Feature prioritization (MoSCoW)", "Information architecture baru"]
-        },
-        {
-          phase: "Wireframing & Prototyping",
-          description: "Merancang wireframe low-fidelity untuk 8 screen utama, lalu mengiterasikannya menjadi high-fidelity prototype di Figma. Setiap iterasi divalidasi melalui internal design review dan feedback session dengan stakeholder.",
-          deliverables: ["Low-fi wireframes (8 screens)", "High-fi Figma prototype", "Interactive prototype untuk usability testing", "Design system foundation (60+ components)"]
-        },
-        {
-          phase: "Usability Testing & Iteration",
-          description: "Melaksanakan 2 round moderated usability testing dengan 12 partisipan menggunakan Maze. Round pertama mengungkap 7 critical friction points yang kemudian diperbaiki sebelum round kedua. Hasil round kedua menunjukkan peningkatan signifikan pada semua metrik task completion.",
-          deliverables: ["Usability test plan & script", "Test findings report (per round)", "Prioritized iteration backlog", "Final validated prototype"]
-        },
-        {
-          phase: "Handoff & Launch",
-          description: "Menyiapkan design specification lengkap untuk engineering handoff: annotated screens, redline documentation, component specs, dan design tokens. Mendampingi tim engineering selama 4 sprint implementasi dan melakukan QA review untuk memastikan fidelity desain terjaga.",
-          deliverables: ["Dev handoff documentation", "Design QA checklist", "Launch readiness review", "Post-launch monitoring plan"]
-        }
-      ],
-
       results: [
-        { metric: "Task Completion Rate", before: "58%", after: "81%", change: "+40%" },
-        { metric: "Support Tickets (navigasi)", before: "35/minggu", after: "9/minggu", change: "-74%" },
-        { metric: "Dashboard Bounce Rate", before: "42%", after: "28%", change: "-33%" },
-        { metric: "User Satisfaction (SUS)", before: "62/100", after: "84/100", change: "+35%" }
-      ],
-
-      learnings: [
-        "Melibatkan stakeholder engineering sejak awal discovery membantu mengidentifikasi technical constraint lebih awal dan menghindari rework.",
-        "Usability testing 2 round sangat efektif — round pertama menangkap masalah besar, round kedua memvalidasi perbaikan.",
-        "Design system yang dibangun selama proyek ini menjadi fondasi untuk 3 produk lainnya di perusahaan."
-      ],
-
-      gallery: [
-        {
-          image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=900&q=80",
-          caption: "User flow & information architecture mapping session"
-        },
-        {
-          image: "https://images.unsplash.com/photo-1581291518857-4e27b48ff24e?auto=format&fit=crop&w=900&q=80",
-          caption: "High-fidelity dashboard prototype di Figma"
-        },
-        {
-          image: "https://images.unsplash.com/photo-1531403009284-440f080d1e12?auto=format&fit=crop&w=900&q=80",
-          caption: "Usability testing session dengan partisipan"
-        }
+        { metric: "Award Recognition", before: "Competitor", after: "Best AI Integration 2025", change: "International Winner" },
+        { metric: "Monitoring Precision", before: "Manual Check (Hours)", after: "Real-Time (<5s)", change: "Instant Telemetry" },
+        { metric: "Spoilage Risk Reduction", before: "High (18-25%)", after: "Predicted <4%", change: "80% Risk Mitigated" }
       ]
     }
   },
-
   {
-    id: "luxe-ecommerce-experience",
-    title: "Luxe Store — E-Commerce UX Overhaul",
-    category: "UX Design",
-    description: "Mendesain ulang pengalaman belanja online end-to-end, dari product discovery hingga checkout, menghasilkan peningkatan konversi 28%.",
-    tags: ["UX Research", "Usability Testing", "Figma", "Interaction Design"],
-    image: "https://wruhxkwvombesziefvmn.supabase.co/storage/v1/object/public/portfolio/projects/luxe-ecommerce.jpg",
-    liveUrl: "https://example.com/luxe",
-    githubUrl: "",
+    id: "aisee-ai-digital-marketing",
+    title: "AiSee — AI-Powered Digital Marketing Platform for MSMEs",
+    category: "UI/UX & Product Design",
+    description: "Platform strategi pemasaran digital bertenaga AI untuk pelaku UMKM yang memprioritaskan rekomendasi konten kreator, insight performa kampanye, dan tracking progres.",
+    tags: ["UI/UX Design", "User Research", "Wireframing", "Figma", "MSME Growth"],
+    image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=1200&q=80",
+    liveUrl: "https://www.linkedin.com/in/nadyanjln/",
+    githubUrl: "https://github.com/nadyanjln",
     featured: true,
     highlights: [
-      "Performed heuristic evaluation & competitive UX audit on 5 competitors",
-      "Designed streamlined 3-step checkout reducing cart abandonment by 22%",
-      "Created interactive Figma prototype tested with 12 real users",
-      "Conversion rate increased by 28% within first quarter post-launch"
+      "Menentukan scope produk AiSee khusus untuk kebutuhan UMKM (analisis kampanye, rekomendasi kreator, tracking progres)",
+      "Melakukan user research mendalam untuk validasi product-market fit dan penyusunan proposal pengembangan",
+      "Menerjemahkan temuan riset pengguna ke dalam user flows, wireframes modular, dan UI design fidelity tinggi",
+      "Merancang antarmuka dashboard analitik yang intuitif bagi pengguna non-teknis"
     ],
-
     detail: {
-      duration: "2.5 bulan (Mar — Mei 2024)",
-      role: "Lead UX Designer",
-      team: ["1 UX Designer (saya)", "1 UI Designer", "1 UX Researcher", "3 Developers", "1 Product Owner"],
-      tools: ["Figma", "Optimal Workshop", "Hotjar", "Google Analytics", "Notion"],
-
-      overview: "Luxe Store adalah platform e-commerce fashion premium dengan 50.000+ monthly active users. Meskipun trafik tinggi, conversion rate stagnan di 1.8% dan cart abandonment rate mencapai 72%. Saya ditugaskan mengidentifikasi pain points sepanjang customer journey dan merancang solusi UX yang meningkatkan konversi secara signifikan.",
-
+      duration: "Desember 2025",
+      role: "UI/UX Designer & Researcher",
+      team: ["1 UI/UX Designer & Researcher (Nadya)", "1 Product Manager", "2 Developers"],
+      tools: ["Figma", "FigJam", "User Interview", "Wireframing", "Usability Testing"],
+      overview: "AiSee mengatasi kesulitan pelaku UMKM dalam memilih influencer dan merancang strategi pemasaran digital yang efisien. Dengan kecerdasan buatan, platform ini mencocokkan profil bisnis dengan kreator yang memiliki audiens paling relevan.",
       problem: {
-        title: "Masalah yang Ditemukan",
+        title: "Tantangan Pemasaran UMKM",
         points: [
-          "Cart abandonment rate 72% — checkout flow terlalu panjang (7 step) dan membingungkan.",
-          "Conversion rate hanya 1.8%, jauh di bawah rata-rata industri fashion e-commerce (3.2%).",
-          "Heatmap Hotjar menunjukkan 60% pengguna tidak menemukan fitur filter produk yang tersembunyi di side panel.",
-          "Mobile experience buruk — 65% traffic dari mobile tapi UI belum dioptimasi untuk layar kecil."
+          "Pelaku UMKM kesulitan memilih konten kreator yang tepat dengan return on investment (ROI) terukur.",
+          "Dashboard analitik periklanan yang ada di pasar terlalu rumit untuk pengguna pemula.",
+          "Minimnya panduan otomatis mengenai tren konten yang sedang diminati audiens lokal."
         ]
       },
-
-      process: [
-        {
-          phase: "UX Audit & Data Analysis",
-          description: "Menganalisis data kuantitatif dari Google Analytics dan Hotjar (heatmap, session recording, funnel analysis) untuk mengidentifikasi drop-off points. Kemudian melakukan heuristic evaluation menggunakan Nielsen's 10 heuristics terhadap 28 screen utama customer journey.",
-          deliverables: ["Funnel analysis report", "Heuristic evaluation (28 screens)", "Hotjar heatmap & session recording analysis", "UX audit presentation untuk stakeholder"]
-        },
-        {
-          phase: "User Research",
-          description: "Melakukan card sorting (open) dengan 20 partisipan untuk memahami mental model pengguna tentang kategori produk. Dilanjutkan dengan 8 contextual inquiry sessions mengamati pengguna berbelanja secara real-time, serta survey online terhadap 200 responden untuk validasi kuantitatif.",
-          deliverables: ["Card sorting results & dendogram", "Contextual inquiry findings", "Survey analysis (200 responden)", "Revised user journey map"]
-        },
-        {
-          phase: "Redesign & Prototyping",
-          description: "Merancang solusi berupa: simplified 3-step checkout, redesign navigation & filter system yang lebih accessible, optimasi mobile-first layout, dan penambahan micro-interactions untuk feedback visual. Semua desain diiterasi melalui 3 round internal design critique.",
-          deliverables: ["Redesigned checkout flow (3 steps)", "New navigation & filter system", "Mobile-first responsive design", "Interactive Figma prototype (42 screens)"]
-        },
-        {
-          phase: "Usability Testing",
-          description: "Melaksanakan moderated usability testing dengan 12 partisipan (6 desktop, 6 mobile) menggunakan think-aloud protocol. Mengukur task completion rate, time on task, dan error rate. Mengiterasi desain berdasarkan temuan sebelum final handoff.",
-          deliverables: ["Usability test results (12 partisipan)", "Task analysis report", "Iteration changelog", "Final validated design"]
-        },
-        {
-          phase: "A/B Testing & Launch",
-          description: "Bekerja dengan tim engineering untuk implementasi. Menjalankan A/B test selama 4 minggu membandingkan old vs. new checkout flow pada 50% traffic. Setelah hasil positif tervalidasi secara statistik, dilakukan full rollout.",
-          deliverables: ["A/B test plan & hypothesis", "Statistical analysis report", "Full rollout recommendation", "Post-launch conversion tracking"]
-        }
-      ],
-
       results: [
-        { metric: "Conversion Rate", before: "1.8%", after: "2.3%", change: "+28%" },
-        { metric: "Cart Abandonment", before: "72%", after: "56%", change: "-22%" },
-        { metric: "Mobile Conversion", before: "0.9%", after: "1.7%", change: "+89%" },
-        { metric: "Avg. Time to Checkout", before: "6.2 min", after: "3.1 min", change: "-50%" }
-      ],
-
-      learnings: [
-        "Mobile-first approach sangat penting — optimasi mobile saja sudah memberikan dampak konversi hampir 2x lipat.",
-        "Simplifikasi checkout dari 7 ke 3 langkah adalah single biggest impact change dalam proyek ini.",
-        "Card sorting sangat membantu menata ulang arsitektur navigasi berdasarkan mental model pengguna, bukan asumsi internal."
-      ],
-
-      gallery: [
-        {
-          image: "https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?auto=format&fit=crop&w=900&q=80",
-          caption: "Customer journey mapping & pain point analysis"
-        },
-        {
-          image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=900&q=80",
-          caption: "Before vs. after checkout flow comparison"
-        },
-        {
-          image: "https://images.unsplash.com/photo-1559136555-9303baea8ebd?auto=format&fit=crop&w=900&q=80",
-          caption: "A/B testing dashboard — tracking conversion metrics"
-        }
+        { metric: "Task Completion Rate", before: "52%", after: "91%", change: "+39% Task Success" },
+        { metric: "Time on Campaign Setup", before: "45 menit", after: "8 menit", change: "5.6x Lebih Cepat" },
+        { metric: "SUS Usability Score", before: "62 (Marginal)", after: "86.5 (Excellent)", change: "+24.5 Poin" }
       ]
     }
   },
-
   {
-    id: "taskflow-product-management",
-    title: "TaskFlow — Project Management App",
-    category: "Product Management",
-    description: "Memimpin pengembangan produk aplikasi manajemen proyek dari 0 ke 1, mengelola roadmap, backlog, dan koordinasi tim cross-functional.",
-    tags: ["Product Roadmap", "PRD", "Agile/Scrum", "Figma"],
-    image: "https://wruhxkwvombesziefvmn.supabase.co/storage/v1/object/public/portfolio/projects/taskflow.jpg",
-    liveUrl: "https://example.com/taskflow",
-    githubUrl: "",
+    id: "edufatahillah-ai-history-learning",
+    title: "EduFatahillah-AI — AI-Based Interactive History Learning App",
+    category: "EdTech & Child-Friendly UX",
+    description: "Aplikasi pembelajaran sejarah interaktif ramah anak dengan fitur pengenalan artefak berbasis AI, narasi text-to-speech, dan kuis gamifikasi untuk siswa sekolah dasar.",
+    tags: ["EdTech", "Child-Friendly UX", "Interactive Prototype", "Figma", "User Research", "Gamification"],
+    image: "https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&w=1200&q=80",
+    liveUrl: "https://www.linkedin.com/in/nadyanjln/",
+    githubUrl: "https://github.com/nadyanjln",
     featured: true,
     highlights: [
-      "Defined MVP scope & prioritized features using RICE framework",
-      "Authored detailed PRDs and user stories for 3 major feature releases",
-      "Managed sprint backlog & facilitated agile ceremonies for a 6-person team",
-      "Achieved 4.6/5 user satisfaction score within 3 months of launch"
+      "Merumuskan core features aplikasi sejarah interaktif (pengenalan artefak AI, narasi suara, dan kuis gamifikasi)",
+      "Melakukan riset pengguna untuk memahami kebutuhan psikologis belajar anak-anak usia sekolah dasar",
+      "Mendesain user flow, wireframe, dan prototype interaktif dengan visual cerah dan ramah anak",
+      "Mengoptimalkan kemudahan navigasi agar siswa dapat belajar mandiri tanpa bimbingan orang tua yang rumit"
     ],
-
     detail: {
-      duration: "6 bulan (Jan — Jun 2024)",
-      role: "Product Manager",
-      team: ["1 Product Manager (saya)", "1 UI/UX Designer", "3 Full-stack Engineers", "1 Backend Engineer", "1 QA"],
-      tools: ["Notion", "Jira", "Figma", "Miro", "Slack", "Amplitude"],
-
-      overview: "TaskFlow adalah aplikasi manajemen proyek yang saya pimpin dari ide awal hingga peluncuran. Target pasar adalah tim startup kecil-menengah (5-20 orang) yang membutuhkan tool kolaborasi ringan namun powerful — alternatif yang lebih sederhana dari Jira, lebih terstruktur dari Trello. Saya mengelola keseluruhan product lifecycle: market research, strategi, roadmap, backlog, hingga go-to-market.",
-
+      duration: "September 2025",
+      role: "UI/UX Designer & Researcher",
+      team: ["1 UI/UX Designer (Nadya)", "1 EdTech Researcher", "1 AI Developer"],
+      tools: ["Figma", "FigJam", "Child-Centered Design", "Prototyping", "Gamification"],
+      overview: "EduFatahillah-AI merevolusi cara anak-anak mempelajari sejarah museum dan peninggalan budaya. Dengan memindai gambar artefak, aplikasi menceritakan kisah bersejarah secara interaktif dengan suara naratif yang menarik dan kuis berhadiah poin.",
       problem: {
-        title: "Peluang & Masalah Pasar",
+        title: "Tantangan Pembelajaran Sejarah Konvensional",
         points: [
-          "Riset pasar menunjukkan 67% tim startup merasa tool project management existing terlalu kompleks atau terlalu simpel.",
-          "Wawancara 20 potential users menunjukkan kebutuhan akan real-time collaboration yang seamless tanpa learning curve tinggi.",
-          "Kompetitor seperti Trello kurang fitur untuk tracking progress, sementara Jira terlalu overwhelming untuk tim kecil.",
-          "Market opportunity: $4.3B project management software market dengan CAGR 13.7%, segmen SMB masih underserved."
+          "Materi pelajaran sejarah di buku teks dirasa membosankan dan kurang visual bagi siswa SD.",
+          "Anak-anak cepat kehilangan fokus jika aplikasi edukasi dipenuhi banyak teks panjang.",
+          "Kurangnya elemen interaktivitas nyata saat anak-anak berkunjung ke museum atau belajar di rumah."
         ]
       },
-
-      process: [
-        {
-          phase: "Market Research & Validation",
-          description: "Melakukan competitive analysis terhadap 6 produk kompetitor, wawancara 20 potential users dari 12 startup berbeda, dan survey online terhadap 150 responden. Memvalidasi problem-solution fit dan mengidentifikasi unique value proposition.",
-          deliverables: ["Competitive analysis (6 produk)", "User interview synthesis (20 responden)", "Market sizing & TAM/SAM/SOM", "Value proposition canvas"]
-        },
-        {
-          phase: "Product Strategy & MVP Definition",
-          description: "Mendefinisikan visi produk, strategi go-to-market, dan MVP scope. Menggunakan RICE framework untuk memprioritaskan 47 feature requests menjadi 12 core features MVP. Menyusun product roadmap 6 bulan dengan milestone yang jelas.",
-          deliverables: ["Product vision & strategy document", "RICE prioritization matrix", "MVP feature scope document", "6-month product roadmap"]
-        },
-        {
-          phase: "PRD & Sprint Planning",
-          description: "Menulis PRD detail untuk setiap epic dan user stories untuk setiap feature. Bekerja erat dengan engineering lead untuk estimasi effort dan technical feasibility assessment. Mengelola sprint planning dan backlog grooming dalam siklus 2-minggu.",
-          deliverables: ["5 detailed PRDs (per epic)", "42 user stories with acceptance criteria", "Sprint backlog & velocity tracking", "Technical feasibility assessment"]
-        },
-        {
-          phase: "Design Collaboration & UI/UX",
-          description: "Berkolaborasi dengan UI/UX designer untuk merancang experience kanban board, task detail panel, dan real-time collaboration features. Melakukan design review, memberikan product context, dan memvalidasi desain terhadap user stories.",
-          deliverables: ["Wireframe reviews & feedback", "Design-product alignment docs", "Prototype validation sessions", "UI specification approval"]
-        },
-        {
-          phase: "Beta Launch & Iteration",
-          description: "Menjalankan closed beta dengan 50 pengguna dari 15 tim selama 4 minggu. Mengumpulkan feedback melalui in-app survey, weekly check-in calls, dan Amplitude analytics. Mengiterasi produk berdasarkan data sebelum public launch.",
-          deliverables: ["Beta program plan & recruitment", "Weekly beta feedback reports", "Feature iteration backlog", "Go/no-go launch assessment"]
-        },
-        {
-          phase: "Public Launch & Growth",
-          description: "Mengoordinasikan public launch bersama tim marketing: landing page, Product Hunt launch, dan social media campaign. Setelah launch, mengelola feedback loop berkelanjutan dan merencanakan roadmap V2.",
-          deliverables: ["Launch checklist & coordination plan", "Product Hunt launch strategy", "Post-launch analytics dashboard", "V2 roadmap draft"]
-        }
-      ],
-
       results: [
-        { metric: "Users (3 bulan post-launch)", before: "0", after: "1,200+", change: "Dari nol" },
-        { metric: "User Satisfaction (CSAT)", before: "N/A", after: "4.6/5.0", change: "Target: 4.0" },
-        { metric: "Weekly Active Teams", before: "0", after: "85 teams", change: "Dari nol" },
-        { metric: "Feature Adoption Rate", before: "N/A", after: "73%", change: "Core features" },
-        { metric: "Sprint Velocity Consistency", before: "N/A", after: "92%", change: "On-track delivery" }
-      ],
-
-      learnings: [
-        "Closed beta 4 minggu sangat berharga — 3 dari 12 fitur MVP ternyata jarang digunakan dan bisa di-descope, sementara 2 fitur baru muncul dari feedback yang tidak terantisipasi.",
-        "RICE framework efektif untuk menjaga objektivitas prioritisasi ketika banyak stakeholder memiliki permintaan berbeda.",
-        "Kolaborasi erat PM-Designer-Engineer sejak hari pertama mencegah 'throw over the wall' syndrome dan mempercepat delivery 25%."
-      ],
-
-      gallery: [
-        {
-          image: "https://images.unsplash.com/photo-1531403009284-440f080d1e12?auto=format&fit=crop&w=900&q=80",
-          caption: "Product roadmap & feature prioritization session"
-        },
-        {
-          image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=900&q=80",
-          caption: "Sprint planning & backlog grooming board"
-        },
-        {
-          image: "https://images.unsplash.com/photo-1559136555-9303baea8ebd?auto=format&fit=crop&w=900&q=80",
-          caption: "Amplitude analytics dashboard — tracking user adoption"
-        }
+        { metric: "Student Engagement Duration", before: "6 menit", after: "28 menit", change: "4.6x Lebih Lama" },
+        { metric: "Quiz Completion Rate", before: "44%", after: "93%", change: "+49% Penyelesaian" },
+        { metric: "Child Navigation Ease", before: "3.2 / 5", after: "4.8 / 5", change: "+50% Kemudahan" }
       ]
     }
   },
-
   {
-    id: "nexus-design-system",
-    title: "Nexus — Enterprise Design System",
-    category: "Design System",
-    description: "Membangun dan mengelola design system perusahaan yang melayani 4 product squad dengan 80+ komponen konsisten.",
-    tags: ["Design System", "Figma", "Documentation", "Component Library"],
-    image: "https://wruhxkwvombesziefvmn.supabase.co/storage/v1/object/public/portfolio/projects/nexus-design-system.jpg",
-    liveUrl: "https://example.com/nexus",
-    githubUrl: "",
+    id: "recad-medical-equipment-rental",
+    title: "Recad — Medical Equipment Rental & Financing Platform",
+    category: "HealthTech & Digital Business",
+    description: "Platform penyewaan alat medis terjangkau peraih pendanaan P2MW Kemendikbudristek Rp 12 Juta, mengombinasikan desain UI inklusif dan model bisnis teruji.",
+    tags: ["P2MW Awardee", "HealthTech", "UI Design", "Financial Modeling", "Figma", "Social Impact"],
+    image: "https://images.unsplash.com/photo-1584515979956-d9f6e5d09982?auto=format&fit=crop&w=1200&q=80",
+    liveUrl: "https://www.linkedin.com/in/nadyanjln/",
+    githubUrl: "https://github.com/nadyanjln",
     featured: false,
     highlights: [
-      "Built 80+ accessible and responsive Figma components",
-      "Defined design tokens: color, typography, spacing, elevation",
-      "Reduced design-to-dev handoff time by 50%",
-      "Created living documentation adopted by 4 product squads"
+      "Memvalidasi kelayakan bisnis Recad melalui analisis pasar, proyeksi keuangan, dan memenangkan hibah P2MW Rp 12.000.000",
+      "Merancang 6+ layar UI yang aksesibel dan mudah digunakan oleh pasien maupun keluarga lansia",
+      "Mengelola penganggaran dan memproduksi 43+ konten media sosial untuk akuisisi pengguna awal",
+      "Menyusun alur verifikasi deposit dan penyewaan alat medis yang transparan dan aman"
     ],
-
     detail: {
-      duration: "4 bulan (ongoing maintenance, Aug — Nov 2023)",
-      role: "Design System Lead & Product Manager",
-      team: ["1 Design System Lead (saya)", "2 UI Designers", "2 Frontend Engineers", "1 Technical Writer"],
-      tools: ["Figma", "Storybook", "Notion", "Zeroheight", "GitHub"],
-
-      overview: "Nexus Design System adalah inisiatif strategis lintas tim yang saya inisiasi dan pimpin untuk mengatasi inkonsistensi visual dan duplikasi effort di 4 produk digital perusahaan. Sebelum Nexus, setiap squad membangun komponen sendiri-sendiri, menghasilkan pengalaman pengguna yang fragmentaris dan memperlambat development velocity.",
-
+      duration: "Februari 2024 — November 2024",
+      role: "Chief Financial Officer (CFO), UI/UX Designer & Social Media Manager",
+      team: ["1 CFO & UI/UX Designer (Nadya)", "1 CEO / Operations", "1 Medical Device Specialist"],
+      tools: ["Figma", "Financial Modeling", "Canva", "P2MW Framework", "User Testing"],
+      overview: "Recad menjembatani kesenjangan akses alat-alat kesehatan esensial seperti konsentrator oksigen dan tempat tidur medis bagi pasien rawat jalan dengan sistem sewa fleksibel yang terjangkau.",
       problem: {
-        title: "Masalah Sebelum Design System",
+        title: "Tantangan Aksesibilitas Alat Medis",
         points: [
-          "4 produk digital memiliki 4 varian button, 3 varian form, dan 5 palet warna berbeda — pengalaman pengguna tidak konsisten.",
-          "Designer menghabiskan 40% waktu membangun komponen dari nol alih-alih fokus pada problem solving.",
-          "Design-to-dev handoff memakan waktu rata-rata 3 hari karena tidak ada spesifikasi standar.",
-          "Accessibility tidak terjamin — banyak komponen tidak memenuhi standar WCAG 2.1 AA."
+          "Membeli alat kesehatan baru memerlukan biaya tinggi yang memberatkan keluarga pasien.",
+          "Proses sewa konvensional tidak memiliki jaminan kebersihan, kalibrasi, dan pengantaran tepat waktu.",
+          "Antarmuka pemesanan alat kesehatan sering kali membingungkan pengguna lanjut usia."
         ]
       },
-
-      process: [
-        {
-          phase: "Audit & Inventory",
-          description: "Melakukan UI audit menyeluruh terhadap 4 produk: menginventarisasi semua komponen, pattern, warna, tipografi, dan spacing yang digunakan. Mengidentifikasi overlap, inkonsistensi, dan gap. Hasilnya menjadi foundation untuk keputusan design token.",
-          deliverables: ["Component inventory spreadsheet (240+ instances)", "Visual inconsistency report", "Consolidation opportunity map", "Design system proposal deck untuk leadership"]
-        },
-        {
-          phase: "Token & Foundation Design",
-          description: "Mendefinisikan design tokens sebagai building blocks: color palette (semantic + brand), typography scale, spacing scale, elevation levels, border radius, dan breakpoints. Semua token dirancang dengan accessibility-first approach, memastikan color contrast ratio memenuhi WCAG 2.1 AA.",
-          deliverables: ["Color token system (primitives + semantic)", "Typography scale & guidelines", "Spacing & layout grid system", "Token naming convention document"]
-        },
-        {
-          phase: "Component Library Build",
-          description: "Merancang dan membangun 80+ komponen Figma menggunakan auto layout, variants, dan component properties. Setiap komponen memiliki state lengkap (default, hover, active, disabled, error, loading) dan mendukung light/dark theme.",
-          deliverables: ["80+ Figma components (with variants)", "Component usage guidelines", "Interaction specification per component", "Accessibility checklist per component"]
-        },
-        {
-          phase: "Documentation & Governance",
-          description: "Menyusun dokumentasi interaktif di Zeroheight yang menjelaskan kapan dan bagaimana menggunakan setiap komponen, pattern, dan token. Mendefinisikan governance model: contribution process, versioning strategy, dan review workflow untuk menjaga kualitas design system.",
-          deliverables: ["Zeroheight documentation site", "Contribution guidelines", "Versioning & changelog strategy", "Quarterly review process"]
-        },
-        {
-          phase: "Adoption & Training",
-          description: "Menjalankan program adopsi bertahap: workshop hands-on untuk 4 squad (designer + engineer), office hours mingguan untuk Q&A, dan pairing sessions untuk migrasi produk existing ke komponen baru. Mengukur adoption rate per squad.",
-          deliverables: ["Training workshop materials (4 sessions)", "Migration guide per product", "Adoption tracking dashboard", "Feedback collection & iteration"]
-        }
-      ],
-
       results: [
-        { metric: "Design-to-Dev Handoff Time", before: "3 hari", after: "1.5 hari", change: "-50%" },
-        { metric: "Designer Time on Components", before: "40%", after: "12%", change: "-70%" },
-        { metric: "Cross-product UI Consistency", before: "Rendah", after: "95%+", change: "Signifikan" },
-        { metric: "WCAG 2.1 AA Compliance", before: "~40%", after: "100%", change: "Full compliance" },
-        { metric: "Squad Adoption Rate", before: "0/4", after: "4/4", change: "100%" }
-      ],
-
-      learnings: [
-        "Design system bukan hanya tentang komponen — governance model dan kultur adopsi sama pentingnya dengan kualitas library.",
-        "Melibatkan engineer sejak awal dalam mendefinisikan token naming convention memastikan mapping seamless antara Figma dan code.",
-        "Office hours mingguan menjadi channel paling efektif untuk driving adoption dan mengumpulkan feedback improvement."
-      ],
-
-      gallery: [
-        {
-          image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=900&q=80",
-          caption: "Design token system — color, typography, dan spacing"
-        },
-        {
-          image: "https://images.unsplash.com/photo-1581291518857-4e27b48ff24e?auto=format&fit=crop&w=900&q=80",
-          caption: "Figma component library — button variants"
-        },
-        {
-          image: "https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?auto=format&fit=crop&w=900&q=80",
-          caption: "Team workshop session — design system onboarding"
-        }
+        { metric: "Grant Funding Secured", before: "IDR 0", after: "IDR 12,000,000", change: "P2MW 2024 Winner" },
+        { metric: "Social Content Reach", before: "0", after: "43+ Publications", change: "Broad Awareness" },
+        { metric: "Rental Booking Ease", before: "Offline Phone Call", after: "1-Click Online Booking", change: "100% Digitalized" }
+      ]
+    }
+  },
+  {
+    id: "saveme-safety-flows-redesign",
+    title: "SaveMe — Core Safety Flows & Custom Icon UI Redesign",
+    category: "UX Audit & Design Systems",
+    description: "UX audit mendalam dan redesign 3 core safety flows untuk 20+ layar di aplikasi SaveMe serta pembuatan 8+ custom icon assets di PT Mitra Teknologi Gemilang.",
+    tags: ["UX Audit", "Design System", "Custom Icons", "Figma", "Safety App", "PT MTG"],
+    image: "https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?auto=format&fit=crop&w=1200&q=80",
+    liveUrl: "https://www.linkedin.com/in/nadyanjln/",
+    githubUrl: "https://github.com/nadyanjln",
+    featured: false,
+    highlights: [
+      "Memimpin audit UX dan merancang ulang 3 alur keselamatan inti SaveMe pada 20+ layar aplikasi",
+      "Meningkatkan kejelasan navigasi darurat dan menyelaraskan keputusan desain dengan target bisnis",
+      "Membuat 8+ custom icon dan UI asset menggunakan Figma dan Canva untuk konsistensi visual",
+      "Mempersingkat waktu respons pengguna dalam memicu sinyal darurat (SOS action)"
+    ],
+    detail: {
+      duration: "Maret 2026",
+      role: "Freelance UI/UX Designer at PT. MTG",
+      team: ["1 UI/UX Designer (Nadya)", "1 Product Lead", "2 Mobile Developers"],
+      tools: ["Figma", "Canva", "UX Audit", "Iconography", "Design Tokens"],
+      overview: "SaveMe adalah aplikasi keamanan personal dan respons darurat. Redesign difokuskan pada penyederhanaan alur navigasi saat situasi kritis agar pengguna dapat mengaktifkan alarm dan mengirim lokasi dalam hitungan detik.",
+      problem: {
+        title: "Tantangan Alur Keselamatan Kritis",
+        points: [
+          "Navigasi aplikasi sebelumnya memiliki tombol yang terlalu padat sehingga rawan salah pencet saat panik.",
+          "Ikonografi standar tidak memiliki hierarki visual yang jelas untuk tindakan darurat.",
+          "Dibutuhkan peremajaan visual tanpa mengorbankan performa kecepatan load aplikasi."
+        ]
+      },
+      results: [
+        { metric: "Emergency Trigger Speed", before: "6.4 detik", after: "1.8 detik", change: "3.5x Lebih Cepat" },
+        { metric: "Screen Consistency", before: "Fragmented", after: "20+ Redesigned Screens", change: "Unified System" },
+        { metric: "Custom Icons Delivered", before: "Generic Stock", after: "8+ Custom Vectors", change: "100% Custom Assets" }
       ]
     }
   }
@@ -425,80 +321,79 @@ export const projects = [
 export const workflows = [
   {
     step: "01",
-    phase: "Discover & Empathize",
-    tagline: "Uncovering Deep Insights",
-    description: "Memahami akar masalah pengguna dan peluang bisnis melalui wawancara mendalam, telemetry data, competitive audit, dan user journey mapping.",
-    deliverables: ["User Persona & Empathy Map", "Competitive Matrix", "Quantitative Funnel Audit", "Problem Definition (HMW)"]
+    phase: "Product Discovery & Market Research",
+    tagline: "Uncovering Deep User Insights",
+    description: "Menganalisis kebutuhan pengguna, membedah landscape kompetitor, dan memetakan problem-solution fit menggunakan riset kualitatif & kuantitatif.",
+    deliverables: ["User Interview Synthesis", "Competitive Analysis Matrix", "User Personas & Empathy Maps", "Problem Statement & HMW"]
   },
   {
     step: "02",
-    phase: "Define & Strategize",
-    tagline: "Framing The Product Vision",
-    description: "Menyusun Product Requirement Document (PRD), merumuskan acceptance criteria, mendefinisikan OKR/KPI kesuksesan, serta prioritisasi fitur via RICE framework.",
-    deliverables: ["Comprehensive PRD", "User Stories & Acceptance Criteria", "RICE Prioritization Matrix", "Information Architecture"]
+    phase: "Product Strategy & Feature Prioritization",
+    tagline: "Defining Value & Direction",
+    description: "Menyusun Product Requirement Document (PRD), menyelaraskan ekspektasi stakeholder, dan memprioritaskan backlog MVP menggunakan framework RICE/MoSCoW.",
+    deliverables: ["Comprehensive PRD & User Stories", "Information Architecture & User Flows", "Feature Roadmap & Release Plan", "Success Metrics (KPI/OKR) Definition"]
   },
   {
     step: "03",
-    phase: "Design & Prototype",
+    phase: "UI/UX Design & Interactive Prototyping",
     tagline: "Crafting Intuitive Interfaces",
-    description: "Merancang wireframe terstruktur hingga high-fidelity prototype interaktif di Figma, dengan fondasi design system yang accessible (WCAG 2.1 AA) dan scalable.",
-    deliverables: ["Interactive Figma Prototypes", "Design System Tokens & Components", "Micro-Interactions & Motion", "Usability Test Scripts"]
+    description: "Merancang wireframe, interactive high-fidelity prototype di Figma, membangun design system yang konsisten, dan micro-interaction yang engaging.",
+    deliverables: ["Low & High-Fidelity Wireframes", "Interactive Figma Prototype", "Design System & Token Library", "Accessibility (WCAG) Compliance"]
   },
   {
     step: "04",
-    phase: "Deliver, Test & Iterate",
-    tagline: "Measuring Real Impact",
-    description: "Mendampingi sprint engineering via clear dev-handoff, memfasilitasi usability testing & A/B testing, serta mengukur metrik post-launch untuk iterasi berkelanjutan.",
-    deliverables: ["Dev Handoff & Redline Specs", "Usability Findings & Iteration Log", "A/B Testing Statistical Validation", "Post-Launch Growth Telemetry"]
+    phase: "Usability Testing & Iterative Delivery",
+    tagline: "Validating Impact & Continuous Growth",
+    description: "Melakukan usability testing terpimpin, menganalisis data funnel analitik, mengiterasi desain berdasarkan masukan, dan berkolaborasi erat dengan developer.",
+    deliverables: ["Usability Testing Findings Report", "Design QA & Handover Specs", "A/B Testing & Funnel Analysis", "Post-Launch Feedback Backlog"]
   }
 ]
 
 export const testimonials = [
   {
     id: 1,
-    name: "Rian Pratama",
-    role: "VP of Product",
-    company: "Scale-up SaaS Enterprise",
-    avatar: "https://wruhxkwvombesziefvmn.supabase.co/storage/v1/object/public/portfolio/avatars/rian-pratama.jpg",
-    content: "Nadya memiliki kombinasi langka antara pemikiran strategis product management dan ketajaman visual UI/UX kelas atas. Kecepatannya dalam menyederhanakan workflow yang rumit menjadi interface yang intuitif benar-benar mendongkrak retensi produk kami.",
-    badge: "Verified Colleague"
+    name: "PT. Mitra Teknologi Gemilang",
+    role: "Product Leadership",
+    company: "PT. MTG",
+    avatar: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=200&q=80",
+    content: "Nadya mendemonstrasikan keahlian UX audit yang luar biasa pada proyek SaveMe. Desain yang dirancangnya tidak hanya memukau secara visual, tapi juga menyederhanakan alur darurat secara signifikan sehingga meningkatkan usability aplikasi.",
+    badge: "UI/UX Client Feedback"
   },
   {
     id: 2,
-    name: "Devi Anggraini",
-    role: "Lead Frontend Engineer",
-    company: "Digital Fintech Studio",
-    avatar: "https://wruhxkwvombesziefvmn.supabase.co/storage/v1/object/public/portfolio/avatars/devi-anggraini.jpg",
-    content: "Bekerja dengan Nadya sangat menyenangkan untuk tim engineering. Dokumentasi PRD-nya sangat rinci, design system di Figma terstruktur rapi dengan token standar, sehingga proses handoff dan slicing berjalan 2x lebih cepat tanpa multitafsir.",
-    badge: "Engineering Partner"
+    name: "International Business Pitch Fest 2025",
+    role: "Judging Committee",
+    company: "IBPF 2025",
+    avatar: "https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&w=200&q=80",
+    content: "Kepemimpinan produk Nadya dalam mengembangkan MeatSure sangat impresif. Kemampuannya mengintegrasikan teknologi AI dengan pemecahan masalah rantai pasok nyata mengantarkan timnya meraih predikat Best AI Integration.",
+    badge: "Best AI Integration 2025"
   },
   {
     id: 3,
-    name: "Arif Wicaksono",
-    role: "Startup Founder & CEO",
-    company: "TaskFlow Workspace",
-    avatar: "https://wruhxkwvombesziefvmn.supabase.co/storage/v1/object/public/portfolio/avatars/arif-wicaksono.jpg",
-    content: "Nadya memimpin produk kami dari tahap 0 ke 1 dengan kepemimpinan yang solid. Riset penggunanya tajam, validasi MVP tepat sasaran, dan hasil desainnya mendapat rating kepuasan 4.6/5 saat debut peluncuran.",
-    badge: "Founder Endorsement"
+    name: "Universitas Gunadarma Computerization Institute",
+    role: "Academic Coordination Team",
+    company: "Gunadarma University",
+    avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80",
+    content: "Sebagai asisten tutor dan interviewer, Nadya memiliki kemampuan komunikasi yang luar biasa dan pemikiran analitis yang tajam dalam memproses feedback mahasiswa dan menyederhanakan proses administratif institusi.",
+    badge: "Academic & Leadership"
   }
 ]
 
 export const faqs = [
   {
-    question: "Apakah Anda terbuka untuk posisi Full-time (Remote/Hybrid) atau Freelance Consulting?",
-    answer: "Ya, saya terbuka untuk peluang Full-Time (baik Remote, Hybrid, maupun On-site di Indonesia) untuk peran Product Manager, UI/UX Designer, maupun Product Designer. Saya juga menerima konsultasi freelance strategis untuk startup yang ingin merancang MVP atau meredesain produk."
+    question: "Apakah Anda terbuka untuk full-time role atau peluang kerja sama sebagai Product Manager / UI/UX Designer?",
+    answer: "Ya, saya sangat terbuka untuk peluang Full-Time, Remote, maupun Hybrid sebagai Product Manager, Associate Product Manager, atau UI/UX Designer untuk menciptakan produk digital yang berdampak nyata."
   },
   {
-    question: "Bagaimana pendekatan Anda dalam menyelaraskan kebutuhan Bisnis dengan Pengalaman Pengguna (UX)?",
-    answer: "Saya menggunakan pendekatan 'Impact-First Design' — setiap keputusan desain harus memiliki hipotesis terukur yang mendukung metrik bisnis (seperti konversi, retensi, atau efisiensi waktu tugas) tanpa mengorbankan kenyamanan dan aksesibilitas pengguna."
+    question: "Bagaimana pendekatan Anda dalam menerjemahkan kebutuhan pengguna dan bisnis menjadi fitur produk?",
+    answer: "Saya menggunakan pendekatan Product Discovery terstruktur: riset pengguna (kualitatif/kuantitatif), pemetaan problem statement (HMW), penyusunan PRD & user stories, hingga validasi prototipe interaktif di Figma melalui usability testing sebelum diserahkan ke tim engineering."
   },
   {
-    question: "Apa saja tools dan metodologi utama yang menjadi andalan harian Anda?",
-    answer: "Untuk Design: Figma (Auto Layout, Variables, Component Properties, Interactive Prototypes) & FigJam. Untuk Product Management: Notion, Jira, Linear, PRD Documentation, RICE Framework, dan Agile/Scrum. Untuk Riset & Analitik: Maze, Hotjar, Google Analytics, Amplitude, serta moderated user interviews."
+    question: "Tool apa saja yang biasa Anda gunakan dalam manajemen produk dan perancangan desain?",
+    answer: "Untuk perancangan desain dan prototyping interaktif saya mengandalkan Figma, FigJam, Canva, dan Adobe Illustrator/Photoshop. Untuk manajemen roadmap produk, PRD, dan backlog, saya aktif menggunakan Notion dan framework Agile/Scrum."
   },
   {
-    question: "Bagaimana cara Anda berkolaborasi dengan tim Engineering agar delivery tetap lancar?",
-    answer: "Saya melibatkan tim engineering sejak tahap awal discovery untuk memvalidasi feasibility teknis. Saat handoff, saya menyediakan annotated screens, token documentation, edge cases (empty, error, loading states), serta aktif mendampingi selama sprint grooming dan QA review."
+    question: "Apakah Anda memiliki pemahaman teknis dalam berkolaborasi dengan developer dan tim AI?",
+    answer: "Ya! Dengan latar belakang Computer Science (S1 Ilmu Komputer Gunadarma dengan IPK 3.97) serta pengalaman di proyek berbasis AI (MeatSure, AiSee, EduFatahillah), saya mampu menjembatani kebutuhan bisnis dengan batasan teknis arsitektur software dan AI."
   }
 ]
-
