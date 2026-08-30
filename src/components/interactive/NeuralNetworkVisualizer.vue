@@ -241,7 +241,7 @@ onMounted(() => {
 
   const handleResize = () => {
     const rect = canvas.getBoundingClientRect()
-    width = canvas.width = Math.ceil(rect.width)
+    width = canvas.width = Math.max(760, Math.ceil(rect.width))
     height = canvas.height = Math.max(380, Math.ceil(rect.height || 410))
   }
 
@@ -566,49 +566,68 @@ onMounted(() => {
     <!-- Main CNN Neural Canvas Viewport -->
     <div class="relative w-full rounded-3xl bg-white dark:bg-[#07080A] border border-slate-200 dark:border-white/10 overflow-hidden shadow-lg dark:shadow-2xl p-2 sm:p-4 transition-colors">
       
-      <!-- Top HUD Telemetry Overlay -->
-      <div class="flex flex-wrap items-center justify-between gap-2 p-3 bg-slate-50 dark:bg-black/60 border-b border-slate-200 dark:border-white/10 rounded-2xl mb-2">
-        <div class="inline-flex items-center gap-2 text-xs font-mono-tag text-slate-800 dark:text-zinc-300 font-medium">
-          <span class="w-2 h-2 rounded-full bg-[#047857] dark:bg-emerald-400 animate-pulse"></span>
-          <span>Deep Vision CNN Pipeline: Conv2D → MaxPool → Dense → Softmax</span>
-        </div>
-
-        <div class="inline-flex items-center gap-3 text-[11px] font-mono-tag text-slate-500 dark:text-zinc-400">
-          <span>Inference: <strong class="text-[#047857] dark:text-emerald-400 font-bold">3.4ms</strong></span>
-          <span>FLOPs: <strong class="text-teal-600 dark:text-cyan-400 font-bold">42.8M</strong></span>
-          <span>FPS: <strong class="text-slate-800 dark:text-white font-bold">{{ liveFps }}</strong></span>
-          <span>Pass: <strong class="text-[#047857] dark:text-emerald-300 font-bold">#{{ forwardPassCount }}</strong></span>
-        </div>
+      <!-- Mobile Horizontal Swipe Indicator -->
+      <div class="lg:hidden flex items-center justify-between px-3 py-1.5 mb-2 rounded-xl bg-emerald-50/80 dark:bg-emerald-950/40 border border-emerald-200/60 dark:border-emerald-800/40 text-[11px] font-mono-tag text-emerald-800 dark:text-emerald-300">
+        <span class="flex items-center gap-1.5 font-bold">
+          <span class="w-1.5 h-1.5 rounded-full bg-[#047857] dark:bg-emerald-400 animate-pulse"></span>
+          <span>Pipeline CNN (6 Layer)</span>
+        </span>
+        <span class="text-[10px] text-slate-500 dark:text-zinc-400 flex items-center gap-1 font-semibold">
+          <span>Geser horizontal</span>
+          <span class="animate-bounce-x">👉</span>
+        </span>
       </div>
 
-      <!-- HTML5 Neural Graph Canvas with hover inspector -->
-      <canvas 
-        ref="canvasRef" 
-        @mousemove="handleCanvasMouseMove"
-        @mouseleave="handleCanvasMouseLeave"
-        class="w-full h-[380px] sm:h-[420px] block cursor-crosshair"
-      ></canvas>
+      <!-- Horizontal Scrollable Canvas Area -->
+      <div class="overflow-x-auto custom-scroll max-w-full pb-1">
+        <div class="min-w-[760px]">
+          
+          <!-- Top HUD Telemetry Overlay -->
+          <div class="flex flex-wrap items-center justify-between gap-2 p-3 bg-slate-50 dark:bg-black/60 border-b border-slate-200 dark:border-white/10 rounded-2xl mb-2">
+            <div class="inline-flex items-center gap-2 text-xs font-mono-tag text-slate-800 dark:text-zinc-300 font-medium">
+              <span class="w-2 h-2 rounded-full bg-[#047857] dark:bg-emerald-400 animate-pulse"></span>
+              <span>Deep Vision CNN Pipeline: Conv2D → MaxPool → Dense → Softmax</span>
+            </div>
 
-      <!-- Bottom Architecture Flow Legend -->
-      <div class="p-3 bg-slate-50 dark:bg-white/5 border-t border-slate-200 dark:border-white/10 rounded-2xl flex flex-wrap items-center justify-between gap-3 text-xs font-mono-tag">
-        <div class="flex flex-wrap items-center gap-4 text-slate-600 dark:text-zinc-400">
-          <div class="flex items-center gap-1.5">
-            <span class="w-2.5 h-2.5 rounded-full bg-[#047857] dark:bg-[#10b981]"></span>
-            <span>Active Neurons (f(x) &gt; 0)</span>
+            <div class="inline-flex items-center gap-3 text-[11px] font-mono-tag text-slate-500 dark:text-zinc-400">
+              <span>Inference: <strong class="text-[#047857] dark:text-emerald-400 font-bold">3.4ms</strong></span>
+              <span>FLOPs: <strong class="text-teal-600 dark:text-cyan-400 font-bold">42.8M</strong></span>
+              <span>FPS: <strong class="text-slate-800 dark:text-white font-bold">{{ liveFps }}</strong></span>
+              <span>Pass: <strong class="text-[#047857] dark:text-emerald-300 font-bold">#{{ forwardPassCount }}</strong></span>
+            </div>
           </div>
-          <div class="flex items-center gap-1.5">
-            <span class="w-2.5 h-2.5 rounded-md border border-[#047857] dark:border-emerald-400 bg-emerald-500/20"></span>
-            <span>3×3 Kernel Convolution ({{ currentKernel.name }})</span>
-          </div>
-          <div class="flex items-center gap-1.5">
-            <span class="w-2.5 h-2.5 rounded-full bg-slate-400 dark:bg-[#047857]"></span>
-            <span>Dense Synapses</span>
-          </div>
-        </div>
 
-        <div class="text-[#047857] dark:text-emerald-400 font-bold flex items-center gap-1.5">
-          <span>Top Detection:</span>
-          <span class="text-slate-900 dark:text-white underline decoration-emerald-500 font-bold">{{ currentPreset.classes[0].label }} ({{ currentPreset.classes[0].conf }}%)</span>
+          <!-- HTML5 Neural Graph Canvas with hover inspector -->
+          <canvas 
+            ref="canvasRef" 
+            @mousemove="handleCanvasMouseMove"
+            @mouseleave="handleCanvasMouseLeave"
+            class="w-full h-[380px] sm:h-[420px] block cursor-crosshair min-w-[760px]"
+          ></canvas>
+
+          <!-- Bottom Architecture Flow Legend -->
+          <div class="p-3 bg-slate-50 dark:bg-white/5 border-t border-slate-200 dark:border-white/10 rounded-2xl flex flex-wrap items-center justify-between gap-3 text-xs font-mono-tag mt-2">
+            <div class="flex flex-wrap items-center gap-4 text-slate-600 dark:text-zinc-400">
+              <div class="flex items-center gap-1.5">
+                <span class="w-2.5 h-2.5 rounded-full bg-[#047857] dark:bg-[#10b981]"></span>
+                <span>Active Neurons (f(x) &gt; 0)</span>
+              </div>
+              <div class="flex items-center gap-1.5">
+                <span class="w-2.5 h-2.5 rounded-md border border-[#047857] dark:border-emerald-400 bg-emerald-500/20"></span>
+                <span>3×3 Kernel Convolution ({{ currentKernel.name }})</span>
+              </div>
+              <div class="flex items-center gap-1.5">
+                <span class="w-2.5 h-2.5 rounded-full bg-slate-400 dark:bg-[#047857]"></span>
+                <span>Dense Synapses</span>
+              </div>
+            </div>
+
+            <div class="text-[#047857] dark:text-emerald-400 font-bold flex items-center gap-1.5">
+              <span>Top Detection:</span>
+              <span class="text-slate-900 dark:text-white underline decoration-emerald-500 font-bold">{{ currentPreset.classes[0].label }} ({{ currentPreset.classes[0].conf }}%)</span>
+            </div>
+          </div>
+
         </div>
       </div>
 
