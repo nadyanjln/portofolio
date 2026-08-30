@@ -2,9 +2,11 @@
 import { ref, onMounted } from 'vue'
 import { RouterLink } from 'vue-router'
 import { ArrowUpRight } from 'lucide-vue-next'
-import { portfolioInfo } from '@/data/portfolioData'
+import { usePortfolioStore } from '@/composables/usePortfolioStore'
 import InfiniteMarquee from '@/components/effects/InfiniteMarquee.vue'
 import { useScrollReveal } from '@/composables/useAnimations'
+
+const { portfolioInfo } = usePortfolioStore()
 
 const sectionRef = ref(null)
 const { observeAll } = useScrollReveal()

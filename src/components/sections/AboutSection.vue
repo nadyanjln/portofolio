@@ -2,9 +2,11 @@
 import { ref, onMounted } from 'vue'
 import { RouterLink } from 'vue-router'
 import { Sparkles, Users, Lightbulb, TrendingUp, ArrowRight, ArrowDown } from 'lucide-vue-next'
-import { portfolioInfo, skills } from '@/data/portfolioData'
+import { usePortfolioStore } from '@/composables/usePortfolioStore'
 import SkillBadge from '@/components/ui/SkillBadge.vue'
 import { useScrollReveal } from '@/composables/useAnimations'
+
+const { portfolioInfo, skills } = usePortfolioStore()
 
 const highlights = [
   {

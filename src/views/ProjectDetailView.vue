@@ -24,26 +24,31 @@ import {
   Copy,
   Check
 } from 'lucide-vue-next'
-import { projects } from '@/data/portfolioData'
+import { usePortfolioStore } from '@/composables/usePortfolioStore'
 import { useScrollReveal } from '@/composables/useAnimations'
 
+const { projects } = usePortfolioStore()
 const route = useRoute()
 
 const project = computed(() => {
-  return projects.find(p => p.id === route.params.id) || null
+  return (projects.value || []).find(p => p.id === route.params.id) || null
 })
 
 const detail = computed(() => project.value?.detail || null)
 
 // Next/Prev Project Navigation helpers
-const currentIndex = computed(() => projects.findIndex(p => p.id === route.params.id))
+const currentIndex = computed(() => (projects.value || []).findIndex(p => p.id === route.params.id))
 const prevProject = computed(() => {
-  if (currentIndex.value > 0) return projects[currentIndex.value - 1]
-  return projects[projects.length - 1]
+  const list = projects.value || []
+  if (!list.length) return null
+  if (currentIndex.value > 0) return list[currentIndex.value - 1]
+  return list[list.length - 1]
 })
 const nextProject = computed(() => {
-  if (currentIndex.value < projects.length - 1) return projects[currentIndex.value + 1]
-  return projects[0]
+  const list = projects.value || []
+  if (!list.length) return null
+  if (currentIndex.value < list.length - 1) return list[currentIndex.value + 1]
+  return list[0]
 })
 
 // Sticky Sub-navigation Table of Contents

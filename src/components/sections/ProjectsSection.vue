@@ -11,11 +11,12 @@ import {
   CheckCircle2,
   TrendingUp
 } from 'lucide-vue-next'
-import { projects } from '@/data/portfolioData'
+import { usePortfolioStore } from '@/composables/usePortfolioStore'
 import ProjectCard from '@/components/ui/ProjectCard.vue'
 import { useScrollReveal } from '@/composables/useAnimations'
 
 const router = useRouter()
+const { projects } = usePortfolioStore()
 
 // View Mode: 'showcase' (Interactive Split Stage) | 'grid' (Classic Cards)
 const viewMode = ref('showcase')
@@ -25,17 +26,19 @@ const selectedCategory = ref('All')
 const categories = ['All', 'Product Design', 'UX Design', 'Product Management', 'Design System']
 
 const filteredProjects = computed(() => {
+  const list = projects.value || []
   if (selectedCategory.value === 'All') {
-    return projects
+    return list
   }
-  return projects.filter(p => p.category === selectedCategory.value)
+  return list.filter(p => p.category === selectedCategory.value)
 })
 
 // Active Selected Project
 const activeIndex = ref(0)
 const activeProject = computed(() => {
-  if (!filteredProjects.value.length) return projects[0]
-  return filteredProjects.value[activeIndex.value] || filteredProjects.value[0]
+  const list = filteredProjects.value || []
+  if (!list.length) return (projects.value && projects.value[0]) || null
+  return list[activeIndex.value] || list[0]
 })
 
 const selectProject = (idx) => {

@@ -83,7 +83,7 @@ const handleMouseLeave = () => {
       <!-- Category Badge -->
       <div class="absolute top-3.5 left-3.5 z-20">
         <span class="px-3 py-1 text-xs font-bold font-mono-tag uppercase rounded-xl bg-white/90 dark:bg-black/80 text-[#9E0402] dark:text-[#ff4d4d] border border-[#EEDCDC] dark:border-white/15 backdrop-blur-md shadow-sm">
-          {{ project.category }}
+          {{ project.category || 'Product Design' }}
         </span>
       </div>
 

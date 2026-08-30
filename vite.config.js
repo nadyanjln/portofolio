@@ -5,6 +5,7 @@ import { fileURLToPath, URL } from 'node:url'
 
 // https://vite.dev/config/
 export default defineConfig({
+  envPrefix: ['VITE_', 'SUPABASE_'],
   plugins: [
     vue(),
     tailwindcss(),

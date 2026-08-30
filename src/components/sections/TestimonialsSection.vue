@@ -1,9 +1,10 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { Sparkles, Quote, CheckCircle } from 'lucide-vue-next'
-import { testimonials } from '@/data/portfolioData'
+import { usePortfolioStore } from '@/composables/usePortfolioStore'
 import { useScrollReveal } from '@/composables/useAnimations'
 
+const { testimonials } = usePortfolioStore()
 const sectionRef = ref(null)
 const { observeAll } = useScrollReveal()
 onMounted(() => observeAll(sectionRef.value))
@@ -31,7 +32,7 @@ onMounted(() => observeAll(sectionRef.value))
       <div class="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
         <div
           v-for="(item, idx) in testimonials"
-          :key="item.id"
+          :key="item.id || idx"
           data-reveal="fade-up"
           :data-reveal-delay="idx + 1"
           class="p-6 sm:p-8 rounded-3xl bg-white dark:bg-[#14161D] border border-[#EEDCDC] dark:border-white/10 space-y-5 flex flex-col justify-between shadow-xs hover:border-[#9E0402]/40 dark:hover:border-[#ff4d4d]/40 transition-all duration-300 hover:-translate-y-1 group"
@@ -43,7 +44,7 @@ onMounted(() => observeAll(sectionRef.value))
             </div>
             <span class="inline-flex items-center gap-1 text-[11px] font-mono-tag font-bold px-2.5 py-1 rounded-full bg-[#FDF6F6] dark:bg-[#1A1C24] text-[#9E0402] dark:text-[#ff4d4d] border border-[#EEDCDC] dark:border-white/10">
               <CheckCircle class="w-3 h-3" />
-              <span>{{ item.badge }}</span>
+              <span>{{ item.badge || 'Verified Colleague' }}</span>
             </span>
           </div>
 

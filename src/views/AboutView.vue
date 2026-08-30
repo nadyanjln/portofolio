@@ -1,10 +1,12 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { Sparkles, GraduationCap, Briefcase, Award, CheckCircle2 } from 'lucide-vue-next'
-import { portfolioInfo, skills, educations } from '@/data/portfolioData'
+import { usePortfolioStore } from '@/composables/usePortfolioStore'
 import SkillBadge from '@/components/ui/SkillBadge.vue'
 import InfiniteMarquee from '@/components/effects/InfiniteMarquee.vue'
 import { useScrollReveal } from '@/composables/useAnimations'
+
+const { portfolioInfo, skills, educations } = usePortfolioStore()
 
 const experiences = [
   {

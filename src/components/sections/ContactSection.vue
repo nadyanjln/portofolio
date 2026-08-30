@@ -4,9 +4,11 @@ import { ArrowUpRight, CheckCircle2, AlertCircle, Mail, Linkedin, Github } from 
 import { portfolioInfo } from '@/data/portfolioData'
 import { sendContactMessage, isSupabaseConfigured } from '@/lib/supabase'
 import { useScrollReveal } from '@/composables/useAnimations'
+import { usePortfolioStore } from '@/composables/usePortfolioStore'
 
 const isConfigured = isSupabaseConfigured()
 const showForm = ref(false)
+const { addMessage } = usePortfolioStore()
 
 const form = reactive({
   name: '',
@@ -29,6 +31,14 @@ const handleSubmit = async () => {
   isSubmitting.value = true
 
   try {
+    // Record in local CMS Store
+    addMessage({
+      name: form.name,
+      email: form.email,
+      message: form.message,
+      category: 'Inquiry Landing Page'
+    })
+
     const res = await sendContactMessage({
       name: form.name,
       email: form.email,

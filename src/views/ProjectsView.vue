@@ -10,11 +10,12 @@ import {
   ArrowRight,
   TrendingUp
 } from 'lucide-vue-next'
-import { projects } from '@/data/portfolioData'
+import { usePortfolioStore } from '@/composables/usePortfolioStore'
 import ProjectCard from '@/components/ui/ProjectCard.vue'
 import { useScrollReveal } from '@/composables/useAnimations'
 
 const router = useRouter()
+const { projects } = usePortfolioStore()
 
 const searchQuery = ref('')
 const selectedCategory = ref('All')
@@ -23,12 +24,13 @@ const viewMode = ref('showcase') // 'showcase' | 'grid'
 const categories = ['All', 'Product Design', 'UX Design', 'Product Management', 'Design System']
 
 const filteredProjects = computed(() => {
-  return projects.filter(project => {
+  const list = projects.value || []
+  return list.filter(project => {
     const matchesCategory = selectedCategory.value === 'All' || project.category === selectedCategory.value
     const matchesSearch = 
-      project.title.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
-      project.description.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
-      project.tags.some(tag => tag.toLowerCase().includes(searchQuery.value.toLowerCase()))
+      (project.title || '').toLowerCase().includes(searchQuery.value.toLowerCase()) ||
+      (project.description || '').toLowerCase().includes(searchQuery.value.toLowerCase()) ||
+      (project.tags || []).some(tag => tag.toLowerCase().includes(searchQuery.value.toLowerCase()))
     return matchesCategory && matchesSearch
   })
 })
@@ -36,8 +38,9 @@ const filteredProjects = computed(() => {
 // Active Selected Project
 const activeIndex = ref(0)
 const activeProject = computed(() => {
-  if (!filteredProjects.value.length) return projects[0]
-  return filteredProjects.value[activeIndex.value] || filteredProjects.value[0]
+  const list = filteredProjects.value || []
+  if (!list.length) return (projects.value && projects.value[0]) || null
+  return list[activeIndex.value] || list[0]
 })
 
 const selectProject = (idx) => {
