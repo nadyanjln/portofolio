@@ -204,59 +204,59 @@ onMounted(() => observeAll(sectionRef.value))
       <!-- ═══════════════════════════════════════════ -->
       <div 
         v-if="currentProfile === 'raqwan'"
-        class="p-6 sm:p-10 rounded-[36px] bg-white dark:bg-[#14161D] border border-[#EEDCDC] dark:border-white/10 shadow-lg space-y-8 relative overflow-hidden"
+        class="p-4 sm:p-8 lg:p-10 rounded-3xl sm:rounded-[36px] bg-white dark:bg-[#14161D] border border-[#EEDCDC] dark:border-white/10 shadow-lg space-y-6 sm:space-y-8 relative overflow-hidden"
       >
-        <!-- Tab Selector Switcher -->
-        <div class="flex flex-wrap items-center gap-2 p-1.5 rounded-2xl bg-[#FFF9F9] dark:bg-[#0B0C0E] border border-[#EEDCDC] dark:border-white/10 w-fit">
+        <!-- Tab Selector Switcher (Scrollable on mobile) -->
+        <div class="flex items-center gap-1.5 sm:gap-2 p-1.5 rounded-2xl bg-[#FFF9F9] dark:bg-[#0B0C0E] border border-[#EEDCDC] dark:border-white/10 max-w-full overflow-x-auto custom-scroll pb-2 sm:pb-1.5">
           <button
             @click="activeRaqwanTab = 'cnn'"
-            class="px-4 sm:px-6 py-2.5 rounded-xl text-xs sm:text-sm font-mono-tag font-bold tracking-wider uppercase transition-all duration-300 flex items-center gap-2 cursor-pointer"
+            class="px-3.5 sm:px-5 py-2 sm:py-2.5 rounded-xl text-xs sm:text-sm font-mono-tag font-bold tracking-wider uppercase transition-all duration-300 flex items-center gap-2 cursor-pointer shrink-0"
             :class="[
               activeRaqwanTab === 'cnn'
                 ? 'bg-[#047857] text-white shadow-md shadow-[#047857]/30'
                 : 'text-[#5C4848] dark:text-zinc-400 hover:text-[#1C1313] dark:hover:text-white'
             ]"
           >
-            <Activity class="w-4 h-4" />
+            <Activity class="w-4 h-4 shrink-0" />
             <span>CNN Neural Network</span>
           </button>
 
           <button
             @click="activeRaqwanTab = 'quantization'"
-            class="px-4 sm:px-6 py-2.5 rounded-xl text-xs sm:text-sm font-mono-tag font-bold tracking-wider uppercase transition-all duration-300 flex items-center gap-2 cursor-pointer"
+            class="px-3.5 sm:px-5 py-2 sm:py-2.5 rounded-xl text-xs sm:text-sm font-mono-tag font-bold tracking-wider uppercase transition-all duration-300 flex items-center gap-2 cursor-pointer shrink-0"
             :class="[
               activeRaqwanTab === 'quantization'
                 ? 'bg-[#047857] text-white shadow-md shadow-[#047857]/30'
                 : 'text-[#5C4848] dark:text-zinc-400 hover:text-[#1C1313] dark:hover:text-white'
             ]"
           >
-            <Cpu class="w-4 h-4" />
+            <Cpu class="w-4 h-4 shrink-0" />
             <span>Quantization & Latency</span>
           </button>
 
           <button
             @click="activeRaqwanTab = 'agentic'"
-            class="px-4 sm:px-6 py-2.5 rounded-xl text-xs sm:text-sm font-mono-tag font-bold tracking-wider uppercase transition-all duration-300 flex items-center gap-2 cursor-pointer"
+            class="px-3.5 sm:px-5 py-2 sm:py-2.5 rounded-xl text-xs sm:text-sm font-mono-tag font-bold tracking-wider uppercase transition-all duration-300 flex items-center gap-2 cursor-pointer shrink-0"
             :class="[
               activeRaqwanTab === 'agentic'
                 ? 'bg-[#047857] text-white shadow-md shadow-[#047857]/30'
                 : 'text-[#5C4848] dark:text-zinc-400 hover:text-[#1C1313] dark:hover:text-white'
             ]"
           >
-            <Bot class="w-4 h-4" />
+            <Bot class="w-4 h-4 shrink-0" />
             <span>Agentic DAG Simulator</span>
           </button>
 
           <button
             @click="activeRaqwanTab = 'gan'"
-            class="px-4 sm:px-6 py-2.5 rounded-xl text-xs sm:text-sm font-mono-tag font-bold tracking-wider uppercase transition-all duration-300 flex items-center gap-2 cursor-pointer"
+            class="px-3.5 sm:px-5 py-2 sm:py-2.5 rounded-xl text-xs sm:text-sm font-mono-tag font-bold tracking-wider uppercase transition-all duration-300 flex items-center gap-2 cursor-pointer shrink-0"
             :class="[
               activeRaqwanTab === 'gan'
                 ? 'bg-[#047857] text-white shadow-md shadow-[#047857]/30'
                 : 'text-[#5C4848] dark:text-zinc-400 hover:text-[#1C1313] dark:hover:text-white'
             ]"
           >
-            <Network class="w-4 h-4" />
+            <Network class="w-4 h-4 shrink-0" />
             <span>GAN Latent Space</span>
           </button>
         </div>
@@ -475,46 +475,46 @@ onMounted(() => observeAll(sectionRef.value))
       <!-- ═══════════════════════════════════════════ -->
       <div 
         v-else
-        class="p-6 sm:p-10 rounded-[36px] bg-white dark:bg-[#14161D] border border-[#EEDCDC] dark:border-white/10 shadow-lg space-y-8 relative overflow-hidden"
+        class="p-4 sm:p-8 lg:p-10 rounded-3xl sm:rounded-[36px] bg-white dark:bg-[#14161D] border border-[#EEDCDC] dark:border-white/10 shadow-lg space-y-6 sm:space-y-8 relative overflow-hidden"
       >
-        <!-- Tab Selector Switcher -->
-        <div class="flex flex-wrap items-center gap-2 p-1.5 rounded-2xl bg-[#FFF9F9] dark:bg-[#0B0C0E] border border-[#EEDCDC] dark:border-white/10 w-fit">
+        <!-- Tab Selector Switcher (Scrollable on mobile) -->
+        <div class="flex items-center gap-1.5 sm:gap-2 p-1.5 rounded-2xl bg-[#FFF9F9] dark:bg-[#0B0C0E] border border-[#EEDCDC] dark:border-white/10 max-w-full overflow-x-auto custom-scroll pb-2 sm:pb-1.5">
           <button
             @click="activeNadyaTab = 'uiux'"
-            class="px-4 sm:px-6 py-2.5 rounded-xl text-xs sm:text-sm font-mono-tag font-bold tracking-wider uppercase transition-all duration-300 flex items-center gap-2 cursor-pointer"
+            class="px-3.5 sm:px-5 py-2 sm:py-2.5 rounded-xl text-xs sm:text-sm font-mono-tag font-bold tracking-wider uppercase transition-all duration-300 flex items-center gap-2 cursor-pointer shrink-0"
             :class="[
               activeNadyaTab === 'uiux'
                 ? 'bg-[#9E0402] text-white shadow-md shadow-[#9E0402]/25'
                 : 'text-[#5C4848] dark:text-zinc-400 hover:text-[#1C1313] dark:hover:text-white'
             ]"
           >
-            <Layers class="w-4 h-4" />
+            <Layers class="w-4 h-4 shrink-0" />
             <span>UI/UX Design Tokens</span>
           </button>
 
           <button
             @click="activeNadyaTab = 'metrics'"
-            class="px-4 sm:px-6 py-2.5 rounded-xl text-xs sm:text-sm font-mono-tag font-bold tracking-wider uppercase transition-all duration-300 flex items-center gap-2 cursor-pointer"
+            class="px-3.5 sm:px-5 py-2 sm:py-2.5 rounded-xl text-xs sm:text-sm font-mono-tag font-bold tracking-wider uppercase transition-all duration-300 flex items-center gap-2 cursor-pointer shrink-0"
             :class="[
               activeNadyaTab === 'metrics'
                 ? 'bg-[#9E0402] text-white shadow-md shadow-[#9E0402]/25'
                 : 'text-[#5C4848] dark:text-zinc-400 hover:text-[#1C1313] dark:hover:text-white'
             ]"
           >
-            <TrendingUp class="w-4 h-4" />
+            <TrendingUp class="w-4 h-4 shrink-0" />
             <span>Business Impact Simulator</span>
           </button>
 
           <button
             @click="activeNadyaTab = 'pm'"
-            class="px-4 sm:px-6 py-2.5 rounded-xl text-xs sm:text-sm font-mono-tag font-bold tracking-wider uppercase transition-all duration-300 flex items-center gap-2 cursor-pointer"
+            class="px-3.5 sm:px-5 py-2 sm:py-2.5 rounded-xl text-xs sm:text-sm font-mono-tag font-bold tracking-wider uppercase transition-all duration-300 flex items-center gap-2 cursor-pointer shrink-0"
             :class="[
               activeNadyaTab === 'pm'
                 ? 'bg-[#9E0402] text-white shadow-md shadow-[#9E0402]/25'
                 : 'text-[#5C4848] dark:text-zinc-400 hover:text-[#1C1313] dark:hover:text-white'
             ]"
           >
-            <FileText class="w-4 h-4" />
+            <FileText class="w-4 h-4 shrink-0" />
             <span>PM RICE Prioritizer</span>
           </button>
         </div>

@@ -307,7 +307,7 @@ onUnmounted(() => {
 
       <!-- Clean 2-Line Bold Typography -->
       <h2 
-        class="text-4xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl font-black tracking-tight uppercase leading-[0.92] sm:leading-[0.88] transition-all duration-500 ease-out group-hover:scale-[1.01]"
+        class="text-3xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl font-black tracking-tight uppercase leading-[0.92] sm:leading-[0.88] transition-all duration-500 ease-out group-hover:scale-[1.01]"
         :class="currentProfile === 'raqwan' 
           ? 'text-[#0F172A] dark:text-white drop-shadow-[0_4px_20px_rgba(4,120,87,0.15)] dark:drop-shadow-2xl' 
           : 'text-[#1C1313] dark:text-white drop-shadow-[0_4px_20px_rgba(158,4,2,0.12)] dark:drop-shadow-2xl'"

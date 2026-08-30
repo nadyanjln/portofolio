@@ -261,17 +261,49 @@ html[data-profile="raqwan"] ::selection,
    Inspired by benjamincreative.me & spragadheeshraj.com
    ═══════════════════════════════════════════ */
 
-/* Base reveal state — default is ALWAYS visible to prevent blank pages */
+/* Base unrevealed state */
 [data-reveal] {
-  opacity: 1;
-  transform: none;
+  opacity: 0;
+  transform: translateY(32px);
+  filter: blur(4px);
   transition:
-    opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1),
-    transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-  will-change: opacity, transform;
+    opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.8s cubic-bezier(0.16, 1, 0.3, 1),
+    filter 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform, filter;
 }
 
-/* Revealed state — active and fully visible */
+[data-reveal="fade-up"] {
+  opacity: 0;
+  transform: translateY(36px);
+  filter: blur(4px);
+}
+
+[data-reveal="fade-down"] {
+  opacity: 0;
+  transform: translateY(-36px);
+  filter: blur(4px);
+}
+
+[data-reveal="fade-left"] {
+  opacity: 0;
+  transform: translateX(40px);
+  filter: blur(4px);
+}
+
+[data-reveal="fade-right"] {
+  opacity: 0;
+  transform: translateX(-40px);
+  filter: blur(4px);
+}
+
+[data-reveal="scale-up"] {
+  opacity: 0;
+  transform: scale(0.92) translateY(24px);
+  filter: blur(4px);
+}
+
+/* Revealed state — active, crisp and fully visible */
 [data-reveal].revealed {
   opacity: 1 !important;
   transform: translateY(0) translateX(0) scale(1) !important;
@@ -279,14 +311,14 @@ html[data-profile="raqwan"] ::selection,
 }
 
 /* Stagger delays for child elements */
-[data-reveal-delay="1"] { transition-delay: 0.06s; }
-[data-reveal-delay="2"] { transition-delay: 0.12s; }
-[data-reveal-delay="3"] { transition-delay: 0.18s; }
-[data-reveal-delay="4"] { transition-delay: 0.24s; }
-[data-reveal-delay="5"] { transition-delay: 0.30s; }
-[data-reveal-delay="6"] { transition-delay: 0.36s; }
-[data-reveal-delay="7"] { transition-delay: 0.42s; }
-[data-reveal-delay="8"] { transition-delay: 0.48s; }
+[data-reveal-delay="1"] { transition-delay: 0.08s; }
+[data-reveal-delay="2"] { transition-delay: 0.16s; }
+[data-reveal-delay="3"] { transition-delay: 0.24s; }
+[data-reveal-delay="4"] { transition-delay: 0.32s; }
+[data-reveal-delay="5"] { transition-delay: 0.40s; }
+[data-reveal-delay="6"] { transition-delay: 0.48s; }
+[data-reveal-delay="7"] { transition-delay: 0.56s; }
+[data-reveal-delay="8"] { transition-delay: 0.64s; }
 
 /* ═══════════════════════════════════════════
    TEXT SPLIT / CHARACTER REVEAL

@@ -57,36 +57,36 @@ watch(currentProfile, () => {
 
       <!-- Giant Editorial Statement -->
       <div class="space-y-1 sm:space-y-2 select-none overflow-visible max-w-full" v-if="currentProfile === 'raqwan'">
-        <h1 class="hero-animate-2 text-4xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl font-extrabold tracking-tighter leading-[0.95] text-[#1C1313] dark:text-[#F4F4F6] whitespace-nowrap">
-          Train Vision <span class="text-[#047857] dark:text-emerald-400 font-mono-tag text-3xl sm:text-5xl md:text-7xl font-normal">*</span>
+        <h1 class="hero-animate-2 text-3xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl font-extrabold tracking-tighter leading-[0.95] text-[#1C1313] dark:text-[#F4F4F6] whitespace-nowrap">
+          Train Vision <span class="text-[#047857] dark:text-emerald-400 font-mono-tag text-2xl sm:text-5xl md:text-7xl font-normal">*</span>
         </h1>
-        <h1 class="hero-animate-3 text-4xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl font-extrabold tracking-tighter leading-[0.95] text-[#047857] dark:text-emerald-400 whitespace-nowrap">
-          Scale Agents <span class="text-[#1C1313] dark:text-[#F4F4F6] font-mono-tag text-3xl sm:text-5xl md:text-7xl font-normal">#</span>
+        <h1 class="hero-animate-3 text-3xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl font-extrabold tracking-tighter leading-[0.95] text-[#047857] dark:text-emerald-400 whitespace-nowrap">
+          Scale Agents <span class="text-[#1C1313] dark:text-[#F4F4F6] font-mono-tag text-2xl sm:text-5xl md:text-7xl font-normal">#</span>
         </h1>
         <h1 
-          class="hero-animate-4 hero-third-phrase text-3xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-extrabold tracking-tighter leading-[0.95] text-[#1C1313]/65 dark:text-zinc-400 transition-all duration-500 cursor-pointer inline-flex items-baseline justify-center whitespace-nowrap group py-1"
+          class="hero-animate-4 hero-third-phrase text-2xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-extrabold tracking-tighter leading-[0.95] text-[#1C1313]/65 dark:text-zinc-400 transition-all duration-500 cursor-pointer inline-flex items-baseline justify-center whitespace-nowrap group py-1"
         >
           <span class="inline-block transition-all duration-500 ease-out whitespace-nowrap group-hover:scale-[1.03] group-hover:tracking-wider group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-[#047857] group-hover:via-emerald-500 group-hover:to-teal-400 group-hover:drop-shadow-[0_0_35px_rgba(4,120,87,0.45)]">
             Deploy Intelligence
           </span>
-          <span class="text-[#047857] dark:text-emerald-400 font-mono-tag text-xl sm:text-3xl md:text-5xl font-normal align-top inline-block transition-all duration-500 group-hover:rotate-12 group-hover:scale-125 ml-1">™</span>
+          <span class="text-[#047857] dark:text-emerald-400 font-mono-tag text-lg sm:text-3xl md:text-5xl font-normal align-top inline-block transition-all duration-500 group-hover:rotate-12 group-hover:scale-125 ml-1">™</span>
         </h1>
       </div>
 
       <div class="space-y-1 sm:space-y-2 select-none overflow-visible max-w-full" v-else>
-        <h1 class="hero-animate-2 text-4xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl font-extrabold tracking-tighter leading-[0.95] text-[#1C1313] dark:text-[#F4F4F6] whitespace-nowrap">
-          Be Strategic <span class="text-[#9E0402] dark:text-[#ff4d4d] font-mono-tag text-3xl sm:text-5xl md:text-7xl font-normal">*</span>
+        <h1 class="hero-animate-2 text-3xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl font-extrabold tracking-tighter leading-[0.95] text-[#1C1313] dark:text-[#F4F4F6] whitespace-nowrap">
+          Be Strategic <span class="text-[#9E0402] dark:text-[#ff4d4d] font-mono-tag text-2xl sm:text-5xl md:text-7xl font-normal">*</span>
         </h1>
-        <h1 class="hero-animate-3 text-4xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl font-extrabold tracking-tighter leading-[0.95] text-[#9E0402] dark:text-[#ff3b38] whitespace-nowrap">
-          Be Creative <span class="text-[#1C1313] dark:text-[#F4F4F6] font-mono-tag text-3xl sm:text-5xl md:text-7xl font-normal">#</span>
+        <h1 class="hero-animate-3 text-3xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl font-extrabold tracking-tighter leading-[0.95] text-[#9E0402] dark:text-[#ff3b38] whitespace-nowrap">
+          Be Creative <span class="text-[#1C1313] dark:text-[#F4F4F6] font-mono-tag text-2xl sm:text-5xl md:text-7xl font-normal">#</span>
         </h1>
         <h1 
-          class="hero-animate-4 hero-third-phrase text-4xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl font-extrabold tracking-tighter leading-[0.95] text-[#1C1313]/65 dark:text-zinc-400 transition-all duration-500 cursor-pointer inline-flex items-baseline justify-center whitespace-nowrap group py-1"
+          class="hero-animate-4 hero-third-phrase text-3xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl font-extrabold tracking-tighter leading-[0.95] text-[#1C1313]/65 dark:text-zinc-400 transition-all duration-500 cursor-pointer inline-flex items-baseline justify-center whitespace-nowrap group py-1"
         >
           <span class="inline-block transition-all duration-500 ease-out whitespace-nowrap group-hover:scale-[1.03] group-hover:tracking-wider group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-[#9E0402] group-hover:via-[#ff3b38] group-hover:to-[#9FC2EA] group-hover:drop-shadow-[0_0_35px_rgba(158,4,2,0.4)]">
             Be Bold
           </span>
-          <span class="text-[#9E0402] dark:text-[#ff4d4d] font-mono-tag text-xl sm:text-3xl md:text-5xl font-normal align-top inline-block transition-all duration-500 group-hover:rotate-12 group-hover:scale-125 ml-1">™</span>
+          <span class="text-[#9E0402] dark:text-[#ff4d4d] font-mono-tag text-lg sm:text-3xl md:text-5xl font-normal align-top inline-block transition-all duration-500 group-hover:rotate-12 group-hover:scale-125 ml-1">™</span>
         </h1>
       </div>
 

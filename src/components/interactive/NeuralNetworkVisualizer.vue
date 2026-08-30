@@ -526,14 +526,14 @@ onMounted(() => {
     <div class="p-3.5 sm:p-4 rounded-2xl sm:rounded-3xl bg-[#F8FAFC] dark:bg-[#0B0C0E] border border-[#E2E8F0] dark:border-white/10 flex flex-col md:flex-row md:items-center justify-between gap-3 sm:gap-4 shadow-xs transition-colors">
       
       <!-- Left: Pattern Switcher Buttons without Emojis -->
-      <div class="flex flex-wrap items-center gap-2 sm:gap-3">
-        <span class="text-xs font-mono-tag font-bold uppercase text-[#475569] dark:text-zinc-400">Input Pattern:</span>
-        <div class="flex flex-wrap items-center gap-1 p-1 rounded-xl bg-white dark:bg-white/5 border border-[#E2E8F0] dark:border-white/10">
+      <div class="flex items-center gap-2 sm:gap-3 max-w-full overflow-x-auto custom-scroll pb-1 md:pb-0">
+        <span class="text-xs font-mono-tag font-bold uppercase text-[#475569] dark:text-zinc-400 shrink-0 hidden sm:inline-block">Input Pattern:</span>
+        <div class="flex items-center gap-1 p-1 rounded-xl bg-white dark:bg-white/5 border border-[#E2E8F0] dark:border-white/10 shrink-0">
           <button
             v-for="(p, key) in presets"
             :key="key"
             @click="selectedInputPattern = key"
-            class="px-3 py-1.5 rounded-lg text-xs font-mono-tag font-bold transition-all cursor-pointer"
+            class="px-2.5 sm:px-3 py-1.5 rounded-lg text-xs font-mono-tag font-bold transition-all cursor-pointer shrink-0 whitespace-nowrap"
             :class="selectedInputPattern === key ? 'bg-[#047857] text-white shadow-xs' : 'text-[#475569] dark:text-zinc-400 hover:text-[#0F172A] dark:hover:text-white'"
           >
             {{ p.name }}
@@ -542,10 +542,10 @@ onMounted(() => {
       </div>
 
       <!-- Right: Action Triggers (Clean Minimalist Buttons) -->
-      <div class="flex items-center gap-2 self-end md:self-auto shrink-0">
+      <div class="flex items-center gap-2 self-start md:self-auto shrink-0">
         <button
           @click="triggerForwardPass"
-          class="px-4 py-2 rounded-xl bg-[#047857] hover:bg-[#065F46] text-white text-xs font-mono-tag font-bold uppercase tracking-wider flex items-center gap-1.5 transition-all shadow-md shadow-[#047857]/30 cursor-pointer hover:scale-105 active:scale-95"
+          class="px-3.5 sm:px-4 py-2 rounded-xl bg-[#047857] hover:bg-[#065F46] text-white text-xs font-mono-tag font-bold uppercase tracking-wider flex items-center gap-1.5 transition-all shadow-md shadow-[#047857]/30 cursor-pointer hover:scale-105 active:scale-95"
         >
           <Zap class="w-3.5 h-3.5 fill-white" />
           <span>Forward Pass</span>

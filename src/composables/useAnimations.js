@@ -12,8 +12,8 @@ import { ref, onMounted, onUnmounted } from 'vue'
  */
 export function useScrollReveal(options = {}) {
   const {
-    threshold = 0.01,
-    rootMargin = '100px 0px 100px 0px',
+    threshold = 0.08,
+    rootMargin = '0px 0px -40px 0px',
     once = true
   } = options
 
@@ -22,10 +22,10 @@ export function useScrollReveal(options = {}) {
   const observe = (el) => {
     if (!el) return
 
-    // Immediately reveal if already within or near viewport
+    // Immediately reveal if already inside the initial viewport on page load
     if (typeof window !== 'undefined') {
       const rect = el.getBoundingClientRect()
-      if (rect.top < window.innerHeight + 150 && rect.bottom > -150) {
+      if (rect.top < window.innerHeight - 60 && rect.bottom > 0) {
         el.classList.add('revealed')
         if (once) return
       }
@@ -47,13 +47,6 @@ export function useScrollReveal(options = {}) {
 
     observer.observe(el)
     observers.push(observer)
-
-    // Safety fallback: reveal after 800ms so no text ever gets permanently hidden
-    setTimeout(() => {
-      if (el && !el.classList.contains('revealed')) {
-        el.classList.add('revealed')
-      }
-    }, 800)
   }
 
   const observeAll = (container) => {
