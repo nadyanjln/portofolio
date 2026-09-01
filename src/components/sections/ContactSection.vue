@@ -81,11 +81,11 @@ onMounted(() => observeAll(sectionRef.value))
           :class="currentProfile === 'raqwan' ? 'bg-[#047857]/30' : 'bg-[#9E0402]/20'"
         ></div>
 
-        <!-- Parenthesized Creative Headline (Clean 2-line structure) -->
-        <div class="relative z-10 max-w-3xl mx-auto select-none space-y-2 sm:space-y-3" v-if="currentProfile === 'raqwan'">
-          <h2 class="text-2xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight text-[#1C1313] dark:text-[#F4F4F6] leading-tight sm:leading-[1.15]">
-            <span class="inline sm:inline-block">
-              <span class="text-[#047857] dark:text-emerald-400 font-light">(</span> Have an ambitious AI idea? <span class="text-[#047857] dark:text-emerald-400 font-light">)</span>
+        <!-- Parenthesized Creative Headline (Clean 2-line structure, fully responsive across all screens) -->
+        <div class="relative z-10 max-w-4xl lg:max-w-5xl mx-auto select-none space-y-2 sm:space-y-3" v-if="currentProfile === 'raqwan'">
+          <h2 class="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-extrabold tracking-tight text-[#1C1313] dark:text-[#F4F4F6] leading-tight sm:leading-[1.18]">
+            <span class="inline-block">
+              <span class="text-[#047857] dark:text-emerald-400 font-light mr-1">(</span>Have an ambitious AI idea?<span class="text-[#047857] dark:text-emerald-400 font-light ml-1">)</span>
             </span>
             <span class="block mt-1.5 sm:mt-3">
               Let's <span class="text-[#047857] dark:text-emerald-400 underline decoration-cyan-500 decoration-wavy decoration-2 sm:decoration-3">train & deploy it</span> together!
@@ -98,10 +98,10 @@ onMounted(() => observeAll(sectionRef.value))
           </div>
         </div>
 
-        <div class="relative z-10 max-w-3xl mx-auto select-none space-y-2 sm:space-y-3" v-else>
-          <h2 class="text-2xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight text-[#1C1313] dark:text-[#F4F4F6] leading-tight sm:leading-[1.15]">
-            <span class="inline sm:inline-block">
-              <span class="text-[#9E0402] dark:text-[#ff4d4d] font-light">(</span> Have an ambitious idea? <span class="text-[#9E0402] dark:text-[#ff4d4d] font-light">)</span>
+        <div class="relative z-10 max-w-4xl lg:max-w-5xl mx-auto select-none space-y-2 sm:space-y-3" v-else>
+          <h2 class="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-extrabold tracking-tight text-[#1C1313] dark:text-[#F4F4F6] leading-tight sm:leading-[1.18]">
+            <span class="inline-block">
+              <span class="text-[#9E0402] dark:text-[#ff4d4d] font-light mr-1">(</span>Have an ambitious idea?<span class="text-[#9E0402] dark:text-[#ff4d4d] font-light ml-1">)</span>
             </span>
             <span class="block mt-1.5 sm:mt-3">
               Let's <span class="text-[#9E0402] dark:text-[#ff4d4d] underline decoration-[#9FC2EA] decoration-wavy decoration-2 sm:decoration-3">build it</span> together!
@@ -115,11 +115,11 @@ onMounted(() => observeAll(sectionRef.value))
         </div>
 
         <!-- Start the project button / Toggle form -->
-        <div class="relative z-10 flex flex-col items-center gap-3 sm:gap-4 pt-1">
+        <div class="relative z-10 flex flex-col items-center gap-3.5 sm:gap-4 pt-1">
           <div class="flex flex-col sm:flex-row items-center justify-center gap-3 w-full sm:w-auto">
             <button
               @click="showForm = !showForm"
-              class="w-full sm:w-auto justify-center px-6 sm:px-8 py-3.5 sm:py-4 rounded-full text-white font-mono-tag font-bold text-xs sm:text-sm uppercase tracking-wider sm:tracking-widest transition-all duration-300 shadow-lg flex items-center gap-2.5 sm:gap-3 cursor-pointer hover:scale-105 active:scale-95"
+              class="w-full sm:w-auto justify-center px-6 sm:px-8 py-3.5 sm:py-4 rounded-full text-white font-mono-tag font-bold text-xs sm:text-sm uppercase tracking-wider sm:tracking-widest transition-all duration-300 shadow-lg flex items-center gap-2.5 sm:gap-3 cursor-pointer hover:scale-105 active:scale-95 shrink-0"
               :class="currentProfile === 'raqwan' ? 'bg-[#047857] hover:bg-[#065F46] shadow-[#047857]/30' : 'bg-[#9E0402] hover:bg-[#B80604] shadow-[#9E0402]/25'"
             >
               <span>{{ showForm ? 'TUTUP FORMULIR [X]' : 'START THE PROJECT ↗' }}</span>
@@ -127,7 +127,7 @@ onMounted(() => observeAll(sectionRef.value))
 
             <a
               :href="'mailto:' + portfolioInfo.email"
-              class="w-full sm:w-auto justify-center px-5 sm:px-6 py-3.5 sm:py-4 rounded-full bg-white dark:bg-[#1A1C24] text-[#1C1313] dark:text-white border border-[#EEDCDC] dark:border-white/10 font-mono-tag font-bold text-xs sm:text-sm tracking-wider uppercase transition-all duration-300 flex items-center gap-2 shadow-xs hover:scale-105 active:scale-95 truncate"
+              class="w-full sm:w-auto justify-center px-5 sm:px-6 py-3.5 sm:py-4 rounded-full bg-white dark:bg-[#1A1C24] text-[#1C1313] dark:text-white border border-[#EEDCDC] dark:border-white/10 font-mono-tag font-bold text-xs sm:text-sm tracking-wider uppercase transition-all duration-300 flex items-center gap-2 shadow-xs hover:scale-105 active:scale-95 truncate shrink-0"
               :class="currentProfile === 'raqwan' ? 'hover:bg-emerald-50 dark:hover:bg-[#252834] hover:border-[#047857]/50' : 'hover:bg-[#FDF6F6] dark:hover:bg-[#252834]'"
             >
               <Mail class="w-4 h-4 shrink-0" :class="currentProfile === 'raqwan' ? 'text-[#047857] dark:text-emerald-400' : 'text-[#9E0402] dark:text-[#ff4d4d]'" />
