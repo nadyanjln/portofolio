@@ -25,7 +25,7 @@ const topSkills = computed(() => {
           <div class="flex items-center gap-2.5">
             <div 
               class="w-9 h-9 rounded-xl flex items-center justify-center text-white font-extrabold text-sm shadow-md transform -rotate-2"
-              :class="currentProfile === 'raqwan' ? 'bg-[#047857] shadow-[#047857]/30' : 'bg-[#9E0402] shadow-[#9E0402]/25'"
+              :class="currentProfile === 'raqwan' ? 'bg-[#047857] shadow-[#047857]/30' : 'bg-[#FB4617] shadow-[#FB4617]/25'"
             >
               {{ currentProfile === 'raqwan' ? 'R*' : 'N*' }}
             </div>
@@ -72,7 +72,7 @@ const topSkills = computed(() => {
         <div class="md:col-span-3 lg:col-span-3 space-y-3">
           <h4 
             class="text-xs font-bold uppercase font-mono-tag tracking-wider flex items-center gap-1.5"
-            :class="currentProfile === 'raqwan' ? 'text-emerald-400' : 'text-[#9E0402] dark:text-[#ff4d4d]'"
+            :class="currentProfile === 'raqwan' ? 'text-emerald-400' : 'text-[#FB4617] dark:text-[#FB4617]'"
           >
             <span class="w-1.5 h-1.5 rounded-full bg-current"></span>
             Navigasi
@@ -82,7 +82,7 @@ const topSkills = computed(() => {
               <RouterLink 
                 :to="'/' + currentProfile" 
                 class="inline-flex items-center gap-1.5 transition-colors group"
-                :class="currentProfile === 'raqwan' ? 'hover:text-emerald-400' : 'hover:text-[#9E0402] dark:hover:text-[#ff4d4d]'"
+                :class="currentProfile === 'raqwan' ? 'hover:text-emerald-400' : 'hover:text-[#FB4617] dark:hover:text-[#FB4617]'"
               >
                 <span class="text-zinc-400 dark:text-zinc-600 group-hover:text-current transition-colors">/</span>
                 <span>Beranda</span>
@@ -92,7 +92,7 @@ const topSkills = computed(() => {
               <RouterLink 
                 :to="'/' + currentProfile + '/projects'" 
                 class="inline-flex items-center gap-1.5 transition-colors group"
-                :class="currentProfile === 'raqwan' ? 'hover:text-emerald-400' : 'hover:text-[#9E0402] dark:hover:text-[#ff4d4d]'"
+                :class="currentProfile === 'raqwan' ? 'hover:text-emerald-400' : 'hover:text-[#FB4617] dark:hover:text-[#FB4617]'"
               >
                 <span class="text-zinc-400 dark:text-zinc-600 group-hover:text-current transition-colors">/</span>
                 <span>Case Studies</span>
@@ -102,7 +102,7 @@ const topSkills = computed(() => {
               <RouterLink 
                 :to="'/' + currentProfile + '/about'" 
                 class="inline-flex items-center gap-1.5 transition-colors group"
-                :class="currentProfile === 'raqwan' ? 'hover:text-emerald-400' : 'hover:text-[#9E0402] dark:hover:text-[#ff4d4d]'"
+                :class="currentProfile === 'raqwan' ? 'hover:text-emerald-400' : 'hover:text-[#FB4617] dark:hover:text-[#FB4617]'"
               >
                 <span class="text-zinc-400 dark:text-zinc-600 group-hover:text-current transition-colors">/</span>
                 <span>Tentang Saya</span>
@@ -112,7 +112,7 @@ const topSkills = computed(() => {
               <RouterLink 
                 :to="'/' + currentProfile + '/contact'" 
                 class="inline-flex items-center gap-1.5 transition-colors group"
-                :class="currentProfile === 'raqwan' ? 'hover:text-emerald-400' : 'hover:text-[#9E0402] dark:hover:text-[#ff4d4d]'"
+                :class="currentProfile === 'raqwan' ? 'hover:text-emerald-400' : 'hover:text-[#FB4617] dark:hover:text-[#FB4617]'"
               >
                 <span class="text-zinc-400 dark:text-zinc-600 group-hover:text-current transition-colors">/</span>
                 <span>Hubungi Saya</span>
@@ -134,7 +134,7 @@ const topSkills = computed(() => {
         <div class="md:col-span-3 lg:col-span-4 space-y-2.5">
           <h4 
             class="text-xs font-bold uppercase font-mono-tag tracking-wider"
-            :class="currentProfile === 'raqwan' ? 'text-emerald-400' : 'text-[#9E0402] dark:text-[#ff4d4d]'"
+            :class="currentProfile === 'raqwan' ? 'text-emerald-400' : 'text-[#FB4617] dark:text-[#FB4617]'"
           >
             Core Competencies
           </h4>
@@ -159,7 +159,7 @@ const topSkills = computed(() => {
       <div class="pt-4 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs font-mono-tag text-[#5C4848] dark:text-zinc-400">
         <p>© {{ currentYear }} {{ portfolioInfo.name }}. All rights reserved.</p>
         <p class="flex items-center gap-1.5">
-          Built with <Heart class="w-3.5 h-3.5" :class="currentProfile === 'raqwan' ? 'text-emerald-500 fill-emerald-500' : 'text-[#9E0402] fill-[#9E0402]'" /> using Vue 3, Tailwind & Supabase
+          Built with <Heart class="w-3.5 h-3.5" :class="currentProfile === 'raqwan' ? 'text-emerald-500 fill-emerald-500' : 'text-[#FB4617] fill-[#FB4617]'" /> using Vue 3, Tailwind & Supabase
         </p>
       </div>
 

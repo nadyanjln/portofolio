@@ -5,10 +5,14 @@ import { useTheme } from '@/composables/useTheme'
 
 const { portfolioInfo, currentProfile } = usePortfolioStore()
 const { isDark } = useTheme()
+const containerRef = ref(null)
 const canvasRef = ref(null)
 const currentYear = new Date().getFullYear()
 
 let animationFrameId = null
+let observer = null
+let isLooping = false
+let lastFrameTime = 0
 let width = 0
 let height = 0
 let particles = []
@@ -212,6 +216,15 @@ onMounted(() => {
   let startTime = performance.now()
 
   const loop = (currentTime) => {
+    if (!isLooping) return
+
+    // Throttle to 30 FPS for 50% CPU savings
+    if (currentTime - lastFrameTime < 33) {
+      animationFrameId = requestAnimationFrame(loop)
+      return
+    }
+    lastFrameTime = currentTime
+
     const time = (currentTime - startTime) * 0.05
     const ctx = canvas.getContext('2d')
     ctx.clearRect(0, 0, width, height)
@@ -246,17 +259,43 @@ onMounted(() => {
     animationFrameId = requestAnimationFrame(loop)
   }
 
-  animationFrameId = requestAnimationFrame(loop)
+  // IntersectionObserver: Only run RAF loop when the footer is actually visible in the viewport!
+  const target = containerRef.value || canvas
+  observer = new IntersectionObserver((entries) => {
+    const isVisible = entries[0]?.isIntersecting
+    if (isVisible) {
+      if (!isLooping) {
+        isLooping = true
+        startTime = performance.now()
+        animationFrameId = requestAnimationFrame(loop)
+      }
+    } else {
+      if (isLooping) {
+        isLooping = false
+        if (animationFrameId) {
+          cancelAnimationFrame(animationFrameId)
+          animationFrameId = null
+        }
+      }
+    }
+  }, { threshold: 0.05 })
+
+  observer.observe(target)
 })
 
 onUnmounted(() => {
   window.removeEventListener('resize', handleResize)
+  if (observer) {
+    observer.disconnect()
+    observer = null
+  }
   if (animationFrameId) cancelAnimationFrame(animationFrameId)
 })
 </script>
 
 <template>
   <div 
+    ref="containerRef"
     class="relative w-full rounded-3xl sm:rounded-[48px] border overflow-hidden py-8 sm:py-16 lg:py-20 px-3 sm:px-8 select-none group transition-colors duration-300"
     :class="currentProfile === 'raqwan'
       ? 'bg-[#F0FDF4] dark:bg-[#07080A] border-emerald-200 dark:border-white/10'

@@ -1,11 +1,4 @@
 import { createClient } from '@supabase/supabase-js'
-import { 
-  portfolioInfo, 
-  skills, 
-  projects, 
-  testimonials, 
-  educations 
-} from '../src/data/portfolioData.js'
 
 const SUPABASE_URL = 'https://wruhxkwvombesziefvmn.supabase.co'
 const SERVICE_ROLE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndydWh4a3d2b21iZXN6aWVmdm1uIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc4ODA4MTAxMywiZXhwIjoyMTAzNjU3MDEzfQ.QZLu-tZxwQY4bi5OHv_UU_z3DZhInyg0fA25x4JqAGg'

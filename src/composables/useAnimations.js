@@ -12,8 +12,8 @@ import { ref, onMounted, onUnmounted } from 'vue'
  */
 export function useScrollReveal(options = {}) {
   const {
-    threshold = 0.08,
-    rootMargin = '0px 0px -40px 0px',
+    threshold = 0.01,
+    rootMargin = '80px 0px 80px 0px',
     once = true
   } = options
 
@@ -22,20 +22,28 @@ export function useScrollReveal(options = {}) {
   const observe = (el) => {
     if (!el) return
 
-    // Immediately reveal if already inside the initial viewport on page load
+    const reveal = () => {
+      if (el) el.classList.add('revealed')
+    }
+
+    // Immediately reveal if element is already within or near viewport
     if (typeof window !== 'undefined') {
-      const rect = el.getBoundingClientRect()
-      if (rect.top < window.innerHeight - 60 && rect.bottom > 0) {
-        el.classList.add('revealed')
-        if (once) return
-      }
+      requestAnimationFrame(() => {
+        const rect = el.getBoundingClientRect()
+        // If element is anywhere near the visible screen or has rendered
+        if (rect.top < window.innerHeight + 150) {
+          reveal()
+        }
+      })
+      // Fail-safe: ensure elements are never permanently hidden
+      setTimeout(reveal, 120)
     }
 
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('revealed')
+          if (entry.isIntersecting || entry.intersectionRatio > 0) {
+            reveal()
             if (once) observer.unobserve(entry.target)
           } else if (!once) {
             entry.target.classList.remove('revealed')
@@ -53,6 +61,9 @@ export function useScrollReveal(options = {}) {
     if (!container) return
     const els = container.querySelectorAll('[data-reveal]')
     els.forEach((el) => observe(el))
+    if (container.hasAttribute && container.hasAttribute('data-reveal')) {
+      observe(container)
+    }
   }
 
   onUnmounted(() => {

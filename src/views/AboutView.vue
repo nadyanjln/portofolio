@@ -16,7 +16,9 @@ import {
   BarChart3, 
   Building2, 
   FlaskConical,
-  Filter
+  Filter,
+  MessageCircle,
+  Mail
 } from 'lucide-vue-next'
 import { usePortfolioStore } from '@/composables/usePortfolioStore'
 import SkillBadge from '@/components/ui/SkillBadge.vue'
@@ -26,6 +28,20 @@ import { useScrollReveal } from '@/composables/useAnimations'
 const { portfolioInfo, skills, educations, experiences, milestones, certifications, currentProfile } = usePortfolioStore()
 
 const activeSkillFilter = ref('all')
+
+const directPhone = computed(() => {
+  if (currentProfile.value === 'raqwan') return '+62 812-9828-7897'
+  return '+62 821-1146-4583'
+})
+
+const whatsappUrl = computed(() => {
+  const num = currentProfile.value === 'raqwan' ? '6281298287897' : '6282111464583'
+  const isNadya = currentProfile.value === 'nadya'
+  const text = isNadya
+    ? 'Halo Nadya, saya tertarik untuk mendiskusikan peluang kolaborasi atau lowongan kerja terkait Product Management & UI/UX.'
+    : 'Halo Raqwan, saya ingin berdiskusi mengenai proyek machine learning atau peluang implementasi AI.'
+  return `https://wa.me/${num}?text=${encodeURIComponent(text)}`
+})
 
 // Group skills by category with distinct metadata
 const skillCategories = computed(() => {
@@ -63,6 +79,13 @@ const skillCategories = computed(() => {
   }
 
   return [
+    {
+      id: 'writing',
+      name: 'Technical Writing & Documentation',
+      icon: Code2,
+      desc: 'Dokumentasi teknis arsitektur sistem, standarisasi API specs, PRD, release notes, dan user manuals.',
+      skills: skills.value.filter(s => s.category === 'Documentation' || s.name.toLowerCase().includes('writing') || s.name.toLowerCase().includes('doc'))
+    },
     {
       id: 'strategy',
       name: 'Product Strategy & Management',
@@ -102,7 +125,7 @@ const experienceSections = computed(() => {
         icon: Building2,
         badge: 'Enterprise & Industry',
         desc: 'Peran engineering di korporat energi, AI consulting, dan production deep learning.',
-        items: list.filter(e => ['Accenture', 'PT. Arna Teknologi Peduli', 'PT. Mitra Teknologi Gemilang'].includes(e.company))
+        items: list.filter(e => ['Accenture', 'PT. Arna Teknologi Peduli', 'PT. Mitra Teknologi Gemilang'].includes(e.company) || e.company.includes('Mitra'))
       },
       {
         title: 'Research & Tech Leadership',
@@ -119,16 +142,32 @@ const experienceSections = computed(() => {
     {
       title: 'Industry & Professional Experience',
       icon: Building2,
-      badge: 'Product & Design',
-      desc: 'Pengalaman profesional merancang alur produk digital, UX audit, dan pembuatan asset desain terstruktur.',
-      items: list.filter(e => e.company.includes('Mitra Teknologi Gemilang') || e.company.includes('PT.'))
+      badge: 'Product & Tech Writing',
+      desc: 'Pengalaman profesional technical writing, spesifikasi teknis sistem, UX audit, dan perancangan produk digital.',
+      items: list.filter(e => 
+        e.role.toLowerCase().includes('technical') || 
+        e.role.toLowerCase().includes('writer') || 
+        e.company.includes('Mitreka') || 
+        e.company.includes('Mitra') || 
+        e.company.includes('PT.') || 
+        e.role.toLowerCase().includes('designer') || 
+        e.role.toLowerCase().includes('manager')
+      )
     },
     {
       title: 'Academic, Community & Organization',
       icon: FlaskConical,
       badge: 'Leadership & Academic',
       desc: 'Kepemimpinan organisasi kemahasiswaan, asistensi laboratorium, dan evaluasi rekrutmen institusi.',
-      items: list.filter(e => !e.company.includes('Mitra Teknologi Gemilang') && !e.company.includes('PT.'))
+      items: list.filter(e => 
+        !e.role.toLowerCase().includes('technical') && 
+        !e.role.toLowerCase().includes('writer') && 
+        !e.company.includes('Mitreka') && 
+        !e.company.includes('Mitra') && 
+        !e.company.includes('PT.') && 
+        !e.role.toLowerCase().includes('designer') && 
+        !e.role.toLowerCase().includes('manager')
+      )
     }
   ]
 })
@@ -153,7 +192,7 @@ watch(currentProfile, () => {
         <!-- Top Tag Pill -->
         <div 
           class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-white dark:bg-[#1A1C24] border text-xs font-mono-tag font-bold uppercase shadow-xs"
-          :class="currentProfile === 'raqwan' ? 'text-emerald-400 border-[#047857]/40 bg-[#047857]/10' : 'text-[#9E0402] dark:text-[#ff4d4d] border-[#EEDCDC] dark:border-white/10'"
+          :class="currentProfile === 'raqwan' ? 'text-emerald-400 border-[#047857]/40 bg-[#047857]/10' : 'text-[#FB4617] dark:text-[#FB4617] border-[#FB4617]/30 bg-[#FB4617]/10'"
         >
           <Sparkles class="w-3.5 h-3.5" />
           <span>About Me /2026/</span>
@@ -164,7 +203,7 @@ watch(currentProfile, () => {
           Translating AI Research into <span class="text-emerald-400">Scalable Production Systems</span>
         </h1>
         <h1 class="text-3xl sm:text-5xl md:text-6xl font-extrabold text-[#1C1313] dark:text-white leading-tight" v-else>
-          Merancang Produk Digital yang <span class="text-[#9E0402] dark:text-[#ff3b38]">Bermakna</span> & Berdampak
+          Merancang Produk Digital yang <span class="text-[#FB4617] dark:text-[#FB4617]">Bermakna</span> & Berdampak
         </h1>
 
         <!-- Bio Paragraph -->
@@ -175,11 +214,33 @@ watch(currentProfile, () => {
         <!-- Status & Contact Pills -->
         <div class="flex flex-wrap items-center gap-3 pt-2 text-xs font-mono-tag">
           <div class="flex items-center gap-2">
-            <span class="w-2 h-2 rounded-full animate-pulse" :class="currentProfile === 'raqwan' ? 'bg-[#047857]' : 'bg-[#9E0402]'"></span>
-            <span class="font-semibold" :class="currentProfile === 'raqwan' ? 'text-emerald-400' : 'text-[#9E0402] dark:text-[#ff4d4d]'">{{ portfolioInfo.status }}</span>
+            <span class="w-2 h-2 rounded-full animate-pulse" :class="currentProfile === 'raqwan' ? 'bg-[#047857]' : 'bg-[#FB4617]'"></span>
+            <span class="font-semibold" :class="currentProfile === 'raqwan' ? 'text-emerald-400' : 'text-[#FB4617] dark:text-[#FB4617]'">{{ portfolioInfo.status }}</span>
           </div>
           <span class="text-zinc-500">•</span>
           <span class="text-zinc-400 font-semibold">{{ portfolioInfo.email }}</span>
+        </div>
+
+        <!-- Direct WhatsApp Action Button -->
+        <div class="pt-2 flex flex-wrap items-center gap-3">
+          <a 
+            :href="whatsappUrl"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="px-5 py-3 rounded-2xl text-white text-xs font-mono-tag font-bold uppercase tracking-wider flex items-center gap-2 shadow-md transition-all hover:scale-105 active:scale-95 cursor-pointer"
+            :class="currentProfile === 'raqwan' ? 'bg-[#047857] hover:bg-[#065F46] shadow-[#047857]/30' : 'bg-[#FB4617] hover:bg-[#E0370E] shadow-[#FB4617]/30'"
+          >
+            <MessageCircle class="w-4 h-4" />
+            <span>Chat Langsung WhatsApp ({{ directPhone }}) ↗</span>
+          </a>
+
+          <a 
+            :href="'mailto:' + portfolioInfo.email"
+            class="px-4 py-3 rounded-2xl bg-white dark:bg-white/5 border border-[#EEDCDC] dark:border-white/10 text-xs font-mono-tag font-semibold text-[#1C1313] dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-white/10 flex items-center gap-2 transition-all cursor-pointer"
+          >
+            <Mail class="w-4 h-4" />
+            <span>Kirim Email</span>
+          </a>
         </div>
       </div>
 
@@ -187,17 +248,17 @@ watch(currentProfile, () => {
       <div class="lg:col-span-4 flex justify-center order-1 lg:order-2">
         <div 
           class="relative w-64 h-64 sm:w-72 sm:h-72 rounded-3xl p-1 shadow-2xl"
-          :class="currentProfile === 'raqwan' ? 'bg-gradient-to-br from-[#047857]/40 via-white/10 to-teal-500/20' : 'bg-gradient-to-br from-[#9E0402]/30 via-white/10 to-[#9FC2EA]/30'"
+          :class="currentProfile === 'raqwan' ? 'bg-gradient-to-br from-[#047857]/40 via-white/10 to-teal-500/20' : 'bg-gradient-to-br from-[#FB4617]/30 via-white/10 to-[#9FC2EA]/30'"
         >
           <div class="w-full h-full rounded-[22px] bg-white dark:bg-[#14161D] border border-[#EEDCDC] dark:border-white/10 flex flex-col items-center justify-center p-6 text-center space-y-3 relative overflow-hidden group">
             <div 
               class="absolute -top-10 -right-10 w-32 h-32 rounded-full blur-2xl pointer-events-none transition-all group-hover:scale-125"
-              :class="currentProfile === 'raqwan' ? 'bg-[#047857]/25' : 'bg-[#9E0402]/20'"
+              :class="currentProfile === 'raqwan' ? 'bg-[#047857]/25' : 'bg-[#FB4617]/20'"
             ></div>
             
             <div 
               class="w-20 h-20 rounded-2xl flex items-center justify-center text-white font-extrabold text-3xl shadow-lg transition-transform group-hover:scale-105"
-              :class="currentProfile === 'raqwan' ? 'bg-[#047857] shadow-[#047857]/35' : 'bg-[#9E0402] shadow-[#9E0402]/30'"
+              :class="currentProfile === 'raqwan' ? 'bg-[#047857] shadow-[#047857]/35' : 'bg-[#FB4617] shadow-[#FB4617]/30'"
             >
               {{ currentProfile === 'raqwan' ? 'R*' : 'N*' }}
             </div>
@@ -206,7 +267,7 @@ watch(currentProfile, () => {
               <p class="text-xs font-mono-tag text-[#5C4848] dark:text-zinc-400">{{ portfolioInfo.title }}</p>
             </div>
             <span class="px-3 py-1 text-[11px] font-mono-tag font-bold rounded-full bg-[#FFF9F9] dark:bg-white/5 border border-[#EEDCDC] dark:border-white/10 text-[#5C4848] dark:text-zinc-300">
-              📍 {{ portfolioInfo.location }}
+              {{ portfolioInfo.location }}
             </span>
           </div>
         </div>
@@ -222,7 +283,7 @@ watch(currentProfile, () => {
       <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-4 border-b border-[#EEDCDC] dark:border-white/10">
         <div class="space-y-1">
           <div class="flex items-center gap-2">
-            <span class="w-2 h-2 rounded-full" :class="currentProfile === 'raqwan' ? 'bg-emerald-400' : 'bg-[#9E0402]'"></span>
+            <span class="w-2 h-2 rounded-full" :class="currentProfile === 'raqwan' ? 'bg-emerald-400' : 'bg-[#FB4617]'"></span>
             <h2 class="text-xl sm:text-2xl font-bold text-[#1C1313] dark:text-white">Skills & Keahlian Terkategori</h2>
           </div>
           <p class="text-xs sm:text-sm text-[#5C4848] dark:text-zinc-400">
@@ -235,7 +296,7 @@ watch(currentProfile, () => {
           <button
             @click="activeSkillFilter = 'all'"
             class="px-3 py-1.5 rounded-xl text-xs font-mono-tag font-bold transition-all cursor-pointer"
-            :class="activeSkillFilter === 'all' ? (currentProfile === 'raqwan' ? 'bg-[#047857] text-white shadow-xs' : 'bg-[#9E0402] text-white shadow-xs') : 'text-[#5C4848] dark:text-zinc-400 hover:text-[#1C1313] dark:hover:text-white'"
+            :class="activeSkillFilter === 'all' ? (currentProfile === 'raqwan' ? 'bg-[#047857] text-white shadow-xs' : 'bg-[#FB4617] text-white shadow-xs') : 'text-[#5C4848] dark:text-zinc-400 hover:text-[#1C1313] dark:hover:text-white'"
           >
             All Categories
           </button>
@@ -244,7 +305,7 @@ watch(currentProfile, () => {
             :key="cat.id"
             @click="activeSkillFilter = cat.id"
             class="px-3 py-1.5 rounded-xl text-xs font-mono-tag font-bold transition-all cursor-pointer"
-            :class="activeSkillFilter === cat.id ? (currentProfile === 'raqwan' ? 'bg-[#047857] text-white shadow-xs' : 'bg-[#9E0402] text-white shadow-xs') : 'text-[#5C4848] dark:text-zinc-400 hover:text-[#1C1313] dark:hover:text-white'"
+            :class="activeSkillFilter === cat.id ? (currentProfile === 'raqwan' ? 'bg-[#047857] text-white shadow-xs' : 'bg-[#FB4617] text-white shadow-xs') : 'text-[#5C4848] dark:text-zinc-400 hover:text-[#1C1313] dark:hover:text-white'"
           >
             {{ cat.name.split('&')[0].trim() }}
           </button>
@@ -257,7 +318,7 @@ watch(currentProfile, () => {
           v-for="category in filteredSkillCategories" 
           :key="category.name"
           class="p-6 sm:p-8 rounded-3xl bg-white dark:bg-[#14161D] border border-[#EEDCDC] dark:border-white/10 flex flex-col justify-between space-y-6 transition-all duration-300 shadow-sm hover:shadow-md"
-          :class="currentProfile === 'raqwan' ? 'hover:border-[#047857]/60' : 'hover:border-[#9E0402]/40'"
+          :class="currentProfile === 'raqwan' ? 'hover:border-[#047857]/60' : 'hover:border-[#FB4617]/40'"
         >
           <!-- Category Card Header -->
           <div class="space-y-2">
@@ -265,7 +326,7 @@ watch(currentProfile, () => {
               <div class="flex items-center gap-3">
                 <div 
                   class="w-10 h-10 rounded-2xl flex items-center justify-center shrink-0 shadow-xs"
-                  :class="currentProfile === 'raqwan' ? 'bg-emerald-100 dark:bg-[#047857]/20 text-[#047857] dark:text-emerald-300 border border-emerald-200 dark:border-[#047857]/30' : 'bg-rose-100 dark:bg-[#9E0402]/10 text-[#9E0402] dark:text-[#ff4d4d] border border-rose-200 dark:border-[#9E0402]/20'"
+                  :class="currentProfile === 'raqwan' ? 'bg-emerald-100 dark:bg-[#047857]/20 text-[#047857] dark:text-emerald-300 border border-emerald-200 dark:border-[#047857]/30' : 'bg-orange-100 dark:bg-[#FB4617]/10 text-[#FB4617] dark:text-[#FB4617] border border-orange-200 dark:border-[#FB4617]/20'"
                 >
                   <component :is="category.icon" class="w-5 h-5" />
                 </div>
@@ -296,13 +357,14 @@ watch(currentProfile, () => {
     </div>
 
     <!-- ═══════════════════════════════════════════════════════ -->
+    <!-- ═══════════════════════════════════════════════════════ -->
     <!-- 2. PENGALAMAN & TRACK RECORD (Spacious 2-Col Grid)    -->
     <!-- ═══════════════════════════════════════════════════════ -->
     <div data-reveal="fade-up" class="space-y-8">
       <div class="flex items-center justify-between pb-4 border-b border-[#EEDCDC] dark:border-white/10">
         <div class="space-y-1">
           <div class="flex items-center gap-2">
-            <Briefcase class="w-5 h-5" :class="currentProfile === 'raqwan' ? 'text-emerald-400' : 'text-[#9E0402] dark:text-[#ff4d4d]'" />
+            <Briefcase class="w-5 h-5" :class="currentProfile === 'raqwan' ? 'text-emerald-400' : 'text-[#FB4617] dark:text-[#FB4617]'" />
             <h2 class="text-xl sm:text-2xl font-bold text-[#1C1313] dark:text-white">Pengalaman & Track Record</h2>
           </div>
           <p class="text-xs sm:text-sm text-[#5C4848] dark:text-zinc-400">
@@ -322,7 +384,7 @@ watch(currentProfile, () => {
           <div class="flex flex-wrap items-center justify-between gap-3 p-3 rounded-2xl bg-[#FFF9F9] dark:bg-[#0B0C0E] border border-[#EEDCDC] dark:border-white/10">
             <div class="flex items-center gap-2.5">
               <component :is="sec.icon" class="w-4.5 h-4.5 text-emerald-400" v-if="currentProfile === 'raqwan'" />
-              <component :is="sec.icon" class="w-4.5 h-4.5 text-[#9E0402] dark:text-[#ff4d4d]" v-else />
+              <component :is="sec.icon" class="w-4.5 h-4.5 text-[#FB4617] dark:text-[#FB4617]" v-else />
               <h3 class="text-sm font-bold text-[#1C1313] dark:text-white">
                 {{ sec.title }}
               </h3>
@@ -336,13 +398,13 @@ watch(currentProfile, () => {
               v-for="exp in sec.items" 
               :key="exp.role + exp.company"
               class="p-6 sm:p-7 rounded-3xl bg-white dark:bg-[#14161D] border border-[#EEDCDC] dark:border-white/10 flex flex-col justify-between space-y-4 transition-all duration-300 shadow-sm hover:shadow-md hover:-translate-y-1"
-              :class="currentProfile === 'raqwan' ? 'hover:border-[#047857]/60' : 'hover:border-[#9E0402]/40'"
+              :class="currentProfile === 'raqwan' ? 'hover:border-[#047857]/60' : 'hover:border-[#FB4617]/40'"
             >
               <div class="space-y-3">
                 <div class="flex flex-wrap items-center justify-between gap-2">
                   <span 
                     class="px-3 py-1 rounded-lg text-xs font-mono-tag font-bold uppercase tracking-wider" 
-                    :class="currentProfile === 'raqwan' ? 'bg-emerald-50 dark:bg-[#047857]/20 text-emerald-800 dark:text-emerald-300 border border-emerald-200 dark:border-[#047857]/40' : 'bg-rose-50 dark:bg-[#9E0402]/10 text-rose-900 dark:text-[#ff4d4d] border border-rose-200 dark:border-[#9E0402]/30'"
+                    :class="currentProfile === 'raqwan' ? 'bg-emerald-50 dark:bg-[#047857]/20 text-emerald-800 dark:text-emerald-300 border border-emerald-200 dark:border-[#047857]/40' : 'bg-orange-50 dark:bg-[#FB4617]/10 text-orange-900 dark:text-[#FB4617] border border-orange-200 dark:border-[#FB4617]/30'"
                   >
                     {{ exp.company }}
                   </span>
@@ -368,7 +430,7 @@ watch(currentProfile, () => {
     <!-- ═══════════════════════════════════════════════════════ -->
     <div data-reveal="fade-up" class="space-y-6" v-if="milestones && milestones.length > 0">
       <div class="flex items-center gap-2.5 pb-4 border-b border-[#EEDCDC] dark:border-white/10">
-        <Trophy class="w-5 h-5" :class="currentProfile === 'raqwan' ? 'text-emerald-400' : 'text-[#9E0402] dark:text-[#ff4d4d]'" />
+        <Trophy class="w-5 h-5" :class="currentProfile === 'raqwan' ? 'text-emerald-400' : 'text-[#FB4617] dark:text-[#FB4617]'" />
         <div>
           <h2 class="text-xl sm:text-2xl font-bold text-[#1C1313] dark:text-white">Penghargaan & Milestones</h2>
           <p class="text-xs sm:text-sm text-[#5C4848] dark:text-zinc-400">Prestasi kompetisi teknologi dan rekognisi industri terverifikasi.</p>
@@ -380,11 +442,11 @@ watch(currentProfile, () => {
           v-for="mile in milestones" 
           :key="mile.title"
           class="p-6 sm:p-7 rounded-3xl bg-white dark:bg-[#14161D] border border-[#EEDCDC] dark:border-white/10 flex flex-col justify-between space-y-4 relative overflow-hidden transition-all duration-300 shadow-sm group hover:-translate-y-1"
-          :class="currentProfile === 'raqwan' ? 'hover:border-[#047857]/60' : 'hover:border-[#9E0402]/40'"
+          :class="currentProfile === 'raqwan' ? 'hover:border-[#047857]/60' : 'hover:border-[#FB4617]/40'"
         >
           <div class="space-y-2.5">
             <div class="flex items-center justify-between gap-2">
-              <span class="px-2.5 py-1 rounded-md text-[10px] font-mono-tag font-bold uppercase" :class="currentProfile === 'raqwan' ? 'bg-[#047857]/20 text-emerald-300 border border-[#047857]/40' : 'bg-[#9E0402]/10 text-[#ff4d4d] border border-[#9E0402]/30'">
+              <span class="px-2.5 py-1 rounded-md text-[10px] font-mono-tag font-bold uppercase" :class="currentProfile === 'raqwan' ? 'bg-[#047857]/20 text-emerald-300 border border-[#047857]/40' : 'bg-[#FB4617]/10 text-[#FB4617] border border-[#FB4617]/30'">
                 {{ mile.badge }}
               </span>
               <span class="text-xs font-mono-tag font-bold text-zinc-400">{{ mile.year }}</span>
@@ -413,7 +475,7 @@ watch(currentProfile, () => {
       <!-- Education -->
       <div class="p-6 sm:p-8 rounded-3xl bg-white dark:bg-[#14161D] border border-[#EEDCDC] dark:border-white/10 space-y-4 shadow-sm">
         <div class="flex items-center gap-2 pb-3 border-b border-[#EEDCDC] dark:border-white/10">
-          <GraduationCap class="w-5 h-5" :class="currentProfile === 'raqwan' ? 'text-emerald-400' : 'text-[#9E0402] dark:text-[#ff4d4d]'" />
+          <GraduationCap class="w-5 h-5" :class="currentProfile === 'raqwan' ? 'text-emerald-400' : 'text-[#FB4617] dark:text-[#FB4617]'" />
           <h3 class="font-bold text-lg text-[#1C1313] dark:text-white">Pendidikan Formal</h3>
         </div>
         <div 
@@ -423,14 +485,14 @@ watch(currentProfile, () => {
         >
           <h4 class="font-bold text-sm sm:text-base text-[#1C1313] dark:text-white">{{ edu.degree }}</h4>
           <p class="text-xs sm:text-sm text-[#5C4848] dark:text-zinc-400">{{ edu.school }}</p>
-          <span class="text-xs font-mono-tag font-bold block pt-1" :class="currentProfile === 'raqwan' ? 'text-emerald-400' : 'text-[#9E0402] dark:text-[#ff4d4d]'">{{ edu.year }}</span>
+          <span class="text-xs font-mono-tag font-bold block pt-1" :class="currentProfile === 'raqwan' ? 'text-emerald-400' : 'text-[#FB4617] dark:text-[#FB4617]'">{{ edu.year }}</span>
         </div>
       </div>
 
       <!-- Certifications -->
       <div class="p-6 sm:p-8 rounded-3xl bg-white dark:bg-[#14161D] border border-[#EEDCDC] dark:border-white/10 space-y-4 shadow-sm">
         <div class="flex items-center gap-2 pb-3 border-b border-[#EEDCDC] dark:border-white/10">
-          <Award class="w-5 h-5" :class="currentProfile === 'raqwan' ? 'text-emerald-400' : 'text-[#9E0402] dark:text-[#ff4d4d]'" />
+          <Award class="w-5 h-5" :class="currentProfile === 'raqwan' ? 'text-emerald-400' : 'text-[#FB4617] dark:text-[#FB4617]'" />
           <h3 class="font-bold text-lg text-[#1C1313] dark:text-white">Sertifikasi & Afiliasi</h3>
         </div>
         <div class="space-y-3">

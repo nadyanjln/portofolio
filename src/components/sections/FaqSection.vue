@@ -24,13 +24,13 @@ onMounted(() => observeAll(sectionRef.value))
       <div data-reveal="fade-up" class="space-y-3 text-center max-w-2xl mx-auto">
         <div 
           class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-white dark:bg-[#1A1C24] border border-[#EEDCDC] dark:border-white/10 text-xs font-mono-tag font-bold uppercase shadow-xs"
-          :class="currentProfile === 'raqwan' ? 'text-emerald-400 border-emerald-500/30' : 'text-[#9E0402] dark:text-[#ff4d4d]'"
+          :class="currentProfile === 'raqwan' ? 'text-emerald-400 border-emerald-500/30' : 'text-[#FB4617] dark:text-[#FB4617]'"
         >
           <HelpCircle class="w-3.5 h-3.5" />
           <span>Frequently Asked Questions</span>
         </div>
         <h2 class="text-3xl sm:text-5xl font-extrabold text-[#1C1313] dark:text-white tracking-tight">
-          Pertanyaan yang Sering <span :class="currentProfile === 'raqwan' ? 'text-emerald-400' : 'text-[#9E0402] dark:text-[#ff3b38]'">Diajukan</span>
+          Pertanyaan yang Sering <span :class="currentProfile === 'raqwan' ? 'text-emerald-400' : 'text-[#FB4617] dark:text-[#FB4617]'">Diajukan</span>
         </h2>
         <p class="text-sm sm:text-base text-[#5C4848] dark:text-zinc-300 leading-relaxed" v-if="currentProfile === 'raqwan'">
           Informasi seputar ketersediaan kerja, riset model Machine Learning, dan kolaborasi AI engineering.
@@ -50,7 +50,7 @@ onMounted(() => observeAll(sectionRef.value))
           class="rounded-2xl border transition-all duration-300 overflow-hidden shadow-xs"
           :class="[
             activeIndex === idx
-              ? (currentProfile === 'raqwan' ? 'bg-white dark:bg-[#14161D] border-emerald-500/60' : 'bg-white dark:bg-[#14161D] border-[#9E0402]/50 dark:border-[#ff4d4d]/50')
+              ? (currentProfile === 'raqwan' ? 'bg-white dark:bg-[#14161D] border-emerald-500/60' : 'bg-white dark:bg-[#14161D] border-[#FB4617]/50 dark:border-[#FB4617]/50')
               : 'bg-white dark:bg-[#14161D] border-[#EEDCDC] dark:border-white/10 hover:border-white/20'
           ]"
         >
@@ -61,7 +61,7 @@ onMounted(() => observeAll(sectionRef.value))
           >
             <span 
               class="text-sm sm:text-base font-bold text-[#1C1313] dark:text-white" 
-              :class="activeIndex === idx ? (currentProfile === 'raqwan' ? 'text-[#047857] dark:text-emerald-400' : 'text-[#9E0402] dark:text-[#ff4d4d]') : ''"
+              :class="activeIndex === idx ? (currentProfile === 'raqwan' ? 'text-[#047857] dark:text-emerald-400' : 'text-[#FB4617] dark:text-[#FB4617]') : ''"
             >
               {{ faq.question }}
             </span>
@@ -69,7 +69,7 @@ onMounted(() => observeAll(sectionRef.value))
               class="w-8 h-8 rounded-full flex items-center justify-center shrink-0 transition-transform duration-300"
               :class="[
                 activeIndex === idx
-                  ? (currentProfile === 'raqwan' ? 'bg-emerald-100 dark:bg-emerald-500/20 text-[#047857] dark:text-emerald-400 rotate-180' : 'bg-[#9E0402]/10 text-[#9E0402] dark:text-[#ff4d4d] rotate-180')
+                  ? (currentProfile === 'raqwan' ? 'bg-emerald-100 dark:bg-emerald-500/20 text-[#047857] dark:text-emerald-400 rotate-180' : 'bg-[#FB4617]/10 text-[#FB4617] dark:text-[#FB4617] rotate-180')
                   : 'bg-[#FFF9F9] dark:bg-white/5 text-[#5C4848] dark:text-zinc-400'
               ]"
             >

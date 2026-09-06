@@ -34,6 +34,7 @@ END $$;
 -- 2. Table: Projects (Case Studies)
 CREATE TABLE IF NOT EXISTS public.projects (
   id TEXT PRIMARY KEY,
+  profile_id TEXT DEFAULT 'nadya',
   title TEXT NOT NULL,
   category TEXT NOT NULL,
   description TEXT,
@@ -46,6 +47,12 @@ CREATE TABLE IF NOT EXISTS public.projects (
   detail JSONB DEFAULT '{}'::jsonb,
   created_at TIMESTAMPTZ DEFAULT now()
 );
+
+-- Migration for existing tables:
+-- ALTER TABLE public.projects ADD COLUMN IF NOT EXISTS profile_id TEXT DEFAULT 'nadya';
+-- ALTER TABLE public.skills ADD COLUMN IF NOT EXISTS profile_id TEXT DEFAULT 'nadya';
+-- ALTER TABLE public.testimonials ADD COLUMN IF NOT EXISTS profile_id TEXT DEFAULT 'nadya';
+-- ALTER TABLE public.educations ADD COLUMN IF NOT EXISTS profile_id TEXT DEFAULT 'nadya';
 
 -- 3. Table: Skills
 CREATE TABLE IF NOT EXISTS public.skills (

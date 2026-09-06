@@ -1,6 +1,10 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import GatewayPortalView from '@/views/GatewayPortalView.vue'
 import HomeView from '@/views/HomeView.vue'
+import ProjectsView from '@/views/ProjectsView.vue'
+import ProjectDetailView from '@/views/ProjectDetailView.vue'
+import AboutView from '@/views/AboutView.vue'
+import ContactView from '@/views/ContactView.vue'
 import { useAuth } from '@/composables/useAuth'
 import { usePortfolioStore } from '@/composables/usePortfolioStore'
 
@@ -23,25 +27,25 @@ const routes = [
   {
     path: '/:profile(nadya|raqwan)/projects',
     name: 'profile-projects',
-    component: () => import('@/views/ProjectsView.vue'),
+    component: ProjectsView,
     meta: { title: 'Case Studies & Projects' }
   },
   {
     path: '/:profile(nadya|raqwan)/projects/:id',
     name: 'profile-project-detail',
-    component: () => import('@/views/ProjectDetailView.vue'),
+    component: ProjectDetailView,
     meta: { title: 'Project Details' }
   },
   {
     path: '/:profile(nadya|raqwan)/about',
     name: 'profile-about',
-    component: () => import('@/views/AboutView.vue'),
+    component: AboutView,
     meta: { title: 'About' }
   },
   {
     path: '/:profile(nadya|raqwan)/contact',
     name: 'profile-contact',
-    component: () => import('@/views/ContactView.vue'),
+    component: ContactView,
     meta: { title: 'Get in Touch' }
   },
 

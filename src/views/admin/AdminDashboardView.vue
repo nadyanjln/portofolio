@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, watch } from 'vue'
 import { useRouter, RouterLink } from 'vue-router'
 import { 
   LayoutDashboard, 
@@ -136,56 +136,123 @@ const handleLogout = () => {
 }
 
 // -------------------------------------------------------------
-// PROFILE EDITING STATE
+// PROFILE EDITING STATE (SYNCED WITH SUPABASE CLOUD)
 // -------------------------------------------------------------
 const profileForm = ref({ ...portfolioInfo.value })
-const saveProfile = () => {
-  updateInfo(profileForm.value, selectedAdminProfile.value)
-  showToast(`Profil ${selectedAdminProfile.value === 'nadya' ? 'Nadya' : 'Raqwan'} berhasil diperbarui!`)
+const isSavingProfile = ref(false)
+
+// Keep form reactively synced when portfolioInfo loads from Supabase
+watch(portfolioInfo, (newVal) => {
+  if (newVal && newVal.name) {
+    profileForm.value = { ...newVal }
+    if (!profileForm.value.socials) profileForm.value.socials = {}
+  }
+}, { immediate: true, deep: true })
+
+watch(educations, (newEdus) => {
+  if (newEdus && newEdus.length) {
+    educationList.value = JSON.parse(JSON.stringify(newEdus))
+  }
+}, { immediate: true, deep: true })
+
+watch(workflows, (newWorkflows) => {
+  if (newWorkflows && newWorkflows.length) {
+    workflowList.value = JSON.parse(JSON.stringify(newWorkflows)).map(w => ({
+      ...w,
+      deliverablesString: (w.deliverables || []).join(', ')
+    }))
+  }
+}, { immediate: true, deep: true })
+
+const saveProfile = async () => {
+  isSavingProfile.value = true
+  try {
+    const res = await updateInfo(profileForm.value, selectedAdminProfile.value)
+    if (res?.success !== false) {
+      showToast(`Profil ${selectedAdminProfile.value === 'nadya' ? 'Nadya' : 'Raqwan'} berhasil disimpan langsung ke Supabase Cloud!`)
+    } else {
+      showToast(`Gagal menyimpan ke Supabase: ${res?.error || 'Periksa koneksi'}`, 'error')
+    }
+  } catch (err) {
+    showToast(`Error: ${err.message}`, 'error')
+  } finally {
+    isSavingProfile.value = false
+  }
 }
 
 // -------------------------------------------------------------
 // PROJECT MODAL & FORM STATE
 // -------------------------------------------------------------
+// PROJECT MODAL & FORM STATE (FULLY ACCOMMODATED FOR SUPABASE & LIVE VIEWS)
+// -------------------------------------------------------------
 const isProjectModalOpen = ref(false)
 const isEditingProject = ref(false)
 const editingProjectId = ref(null)
 
+const nadyaCategories = [
+  'Product Design',
+  'UX Design',
+  'Product Management',
+  'Design System',
+  'Technical Writing'
+]
+
+const raqwanCategories = [
+  'Agentic AI & LLMs',
+  'Computer Vision & MLOps',
+  'Edge Computing & IoT',
+  'Robotics & Embedded Systems',
+  'Fullstack AI Systems'
+]
+
+const currentCategories = computed(() => {
+  return selectedAdminProfile.value === 'raqwan' ? raqwanCategories : nadyaCategories
+})
+
 const projectForm = ref({
   title: '',
   category: 'Product Design',
+  role: '',
+  duration: '3 bulan',
   description: '',
   tagsString: '',
   image: '',
   liveUrl: '',
   githubUrl: '',
   featured: true,
-  duration: '3 bulan',
+  prolog: '',
   problem: '',
+  problemPointsString: '',
   solution: '',
   resultMetric: '',
   resultBefore: '',
-  resultAfter: ''
+  resultAfter: '',
+  galleryString: ''
 })
 
 const openAddProjectModal = () => {
   isEditingProject.value = false
   editingProjectId.value = null
+  const isRaqwan = selectedAdminProfile.value === 'raqwan'
   projectForm.value = {
     title: '',
-    category: selectedAdminProfile.value === 'raqwan' ? 'Agentic AI' : 'Product Strategy & IoT',
+    category: isRaqwan ? 'Agentic AI & LLMs' : 'Product Design',
+    role: isRaqwan ? 'Lead AI Engineer & MLOps' : 'Product Manager & UI/UX Designer',
+    duration: '3 bulan (Sep – Nov 2024)',
     description: '',
-    tagsString: selectedAdminProfile.value === 'raqwan' ? 'PyTorch, Computer Vision, Deep Learning' : 'Figma, UI/UX, Product Strategy',
+    tagsString: isRaqwan ? 'PyTorch, TensorRT, FastAPI, Docker' : 'Figma, User Research, Design System, Agile',
     image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=1200&q=80',
     liveUrl: '',
     githubUrl: '',
     featured: true,
-    duration: '3 bulan',
-    problem: 'Tantangan teknis utama yang diselesaikan.',
-    solution: 'Pendekatan arsitektur dan sistem yang diimplementasikan.',
-    resultMetric: 'Performance Boost',
-    resultBefore: '55%',
-    resultAfter: '85%'
+    prolog: '',
+    problem: 'Tantangan teknis atau bisnis utama yang diselesaikan.',
+    problemPointsString: 'Bottleneck performa dan skalabilitas sistem lama\nKurangnya standarisasi arsitektur produk\nKebutuhan latensi rendah dan keandalan tinggi',
+    solution: 'Pendekatan arsitektur dan sistem modular yang diimplementasikan secara teruji.',
+    resultMetric: isRaqwan ? 'Inference Speedup' : 'Usability Score',
+    resultBefore: isRaqwan ? '45 ms' : '62/100',
+    resultAfter: isRaqwan ? '3.8 ms' : '91/100',
+    galleryString: ''
   }
   isProjectModalOpen.value = true
 }
@@ -193,21 +260,56 @@ const openAddProjectModal = () => {
 const openEditProjectModal = (proj) => {
   isEditingProject.value = true
   editingProjectId.value = proj.id
+  const isRaqwan = selectedAdminProfile.value === 'raqwan'
+
+  // Extract problem string & points
+  let problemDesc = ''
+  let problemPointsStr = ''
+  if (typeof proj.detail?.problem === 'string') {
+    problemDesc = proj.detail.problem
+  } else if (typeof proj.detail?.problem === 'object' && proj.detail?.problem) {
+    problemDesc = proj.detail.problem.description || proj.detail.problem.overview || ''
+    if (Array.isArray(proj.detail.problem.points)) {
+      problemPointsStr = proj.detail.problem.points.map(p => {
+        if (typeof p === 'string') return p
+        return p.title ? `${p.title}: ${p.description || ''}` : (p.description || '')
+      }).filter(Boolean).join('\n')
+    }
+  }
+
+  // Extract solution
+  const solutionDesc = typeof proj.detail?.solution === 'string' 
+    ? proj.detail.solution 
+    : (proj.detail?.solution?.description || '')
+
+  // Extract gallery
+  let galleryStr = ''
+  if (Array.isArray(proj.detail?.gallery)) {
+    galleryStr = proj.detail.gallery.map(g => typeof g === 'string' ? g : (g.image || g.url)).filter(Boolean).join('\n')
+  }
+
+  // Extract prolog / overview
+  const prologText = proj.detail?.prolog || (typeof proj.detail?.overview === 'string' ? proj.detail.overview : proj.detail?.overview?.description) || ''
+
   projectForm.value = {
     title: proj.title || '',
-    category: proj.category || (selectedAdminProfile.value === 'raqwan' ? 'Agentic AI' : 'Product Strategy & IoT'),
+    category: proj.category || (isRaqwan ? 'Agentic AI & LLMs' : 'Product Design'),
+    role: proj.detail?.role || (isRaqwan ? 'Lead AI Engineer' : 'Lead PM & UI/UX Designer'),
+    duration: proj.detail?.duration || '3 bulan',
     description: proj.description || '',
     tagsString: (proj.tags || []).join(', '),
     image: proj.image || '',
-    liveUrl: proj.liveUrl || '',
-    githubUrl: proj.githubUrl || '',
+    liveUrl: proj.liveUrl || proj.live_url || '',
+    githubUrl: proj.githubUrl || proj.github_url || '',
     featured: proj.featured ?? true,
-    duration: proj.detail?.duration || '3 bulan',
-    problem: typeof proj.detail?.problem === 'string' ? proj.detail.problem : (proj.detail?.problem?.description || ''),
-    solution: proj.detail?.solution || '',
+    prolog: prologText,
+    problem: problemDesc,
+    problemPointsString: problemPointsStr,
+    solution: solutionDesc,
     resultMetric: proj.detail?.results?.[0]?.metric || '',
     resultBefore: proj.detail?.results?.[0]?.before || '',
-    resultAfter: proj.detail?.results?.[0]?.after || ''
+    resultAfter: proj.detail?.results?.[0]?.after || '',
+    galleryString: galleryStr
   }
   isProjectModalOpen.value = true
 }
@@ -229,6 +331,31 @@ const saveProjectForm = () => {
 
   const existingDetail = existingProject?.detail || {}
 
+  // Parse problem points
+  const points = projectForm.value.problemPointsString
+    ? projectForm.value.problemPointsString.split('\n').map(p => p.trim()).filter(Boolean).map((pt, idx) => {
+        const parts = pt.split(':')
+        if (parts.length > 1) {
+          return { num: `0${idx + 1}`, title: parts[0].trim(), description: parts.slice(1).join(':').trim() }
+        }
+        return { num: `0${idx + 1}`, title: `Tantangan 0${idx + 1}`, description: pt }
+      })
+    : (existingDetail.problem?.points || [])
+
+  // Parse gallery
+  const galleryUrls = projectForm.value.galleryString
+    ? projectForm.value.galleryString.split('\n').map(u => u.trim()).filter(Boolean)
+    : []
+
+  const formattedGallery = galleryUrls.length ? galleryUrls.map((url, i) => {
+    const existingG = Array.isArray(existingDetail.gallery) ? existingDetail.gallery[i] : null
+    return {
+      image: url,
+      title: existingG?.title || `Artifact Showcase 0${i + 1}`,
+      caption: existingG?.caption || `Visual production artifact 0${i + 1}`
+    }
+  }) : (existingDetail.gallery || [])
+
   const payload = {
     title: projectForm.value.title,
     category: projectForm.value.category,
@@ -245,12 +372,22 @@ const saveProjectForm = () => {
     detail: {
       ...existingDetail,
       duration: projectForm.value.duration,
-      role: existingDetail.role || (selectedAdminProfile.value === 'raqwan' ? 'Lead AI Engineer' : 'Lead PM & UI/UX Designer'),
+      role: projectForm.value.role || (selectedAdminProfile.value === 'raqwan' ? 'Lead AI Engineer' : 'Lead PM & UI/UX Designer'),
       technology: existingDetail.technology || projectForm.value.category,
       tools: existingDetail.tools || tags,
-      overview: existingDetail.overview || projectForm.value.description,
-      problem: projectForm.value.problem,
-      solution: projectForm.value.solution,
+      overview: projectForm.value.prolog || projectForm.value.description,
+      prolog: projectForm.value.prolog,
+      problem: {
+        title: 'The Core Challenge',
+        overview: projectForm.value.problem,
+        description: projectForm.value.problem,
+        points: points
+      },
+      solution: {
+        title: 'Production Architecture',
+        description: projectForm.value.solution
+      },
+      gallery: formattedGallery,
       results: projectForm.value.resultMetric ? [
         {
           metric: projectForm.value.resultMetric,
@@ -264,10 +401,10 @@ const saveProjectForm = () => {
 
   if (isEditingProject.value && editingProjectId.value) {
     updateProject(editingProjectId.value, payload, selectedAdminProfile.value)
-    showToast('Proyek & Artifact Gallery berhasil diperbarui!')
+    showToast('Proyek & Artifact Gallery berhasil diperbarui langsung ke Supabase Cloud!')
   } else {
     addProject(payload, selectedAdminProfile.value)
-    showToast('Proyek & Artifact Gallery baru berhasil ditambahkan!')
+    showToast('Proyek & Artifact Gallery baru berhasil ditambahkan langsung ke Supabase Cloud!')
   }
 
   isProjectModalOpen.value = false
@@ -489,14 +626,14 @@ const handleReset = () => {
           class="px-3.5 py-1.5 rounded-xl text-xs font-mono-tag font-bold transition-all flex items-center gap-1.5 cursor-pointer"
           :class="selectedAdminProfile === 'nadya' ? 'bg-[#9E0402] text-white shadow-md' : 'text-zinc-400 hover:text-white'"
         >
-          <span>👩‍💼 Nadya (PM & UX)</span>
+          <span>Nadya (PM & UX)</span>
         </button>
         <button 
           @click="switchAdminProfile('raqwan')"
           class="px-3.5 py-1.5 rounded-xl text-xs font-mono-tag font-bold transition-all flex items-center gap-1.5 cursor-pointer"
           :class="selectedAdminProfile === 'raqwan' ? 'bg-[#047857] text-white shadow-md' : 'text-zinc-400 hover:text-white'"
         >
-          <span>👨‍💻 Raqwan (AI Eng)</span>
+          <span>Raqwan (AI Eng)</span>
         </button>
       </div>
 
@@ -783,13 +920,13 @@ const handleReset = () => {
               </div>
               <div class="space-y-0.5">
                 <div class="flex items-center gap-2">
-                  <span class="text-xs font-bold font-mono-tag uppercase text-white">Client-Side Cache (TTL 24 Jam)</span>
+                  <span class="text-xs font-bold font-mono-tag uppercase text-white">Client-Side Cache (TTL 6 Jam)</span>
                   <span class="px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 text-[10px] font-mono-tag font-bold">
                     {{ isLoadedFromCache ? 'Cached Active' : 'Live Fetched' }}
                   </span>
                 </div>
                 <p class="text-[11px] text-zinc-400">
-                  Data Supabase disimpan di cache lokal browser selama 24 jam untuk kecepatan instan & menghemat kuota request API.
+                  Data Supabase disimpan di cache lokal browser selama 6 jam untuk kecepatan instan & menghemat kuota request API.
                 </p>
               </div>
             </div>
@@ -1096,13 +1233,25 @@ const handleReset = () => {
               </div>
             </div>
 
-            <div class="space-y-1.5">
-              <label class="block text-xs font-mono-tag font-bold uppercase text-zinc-300">Status Ketersediaan</label>
-              <input 
-                v-model="profileForm.status"
-                type="text"
-                class="w-full px-4 py-2.5 rounded-xl bg-[#090A0D] border border-white/10 focus:border-[#9E0402] text-xs sm:text-sm text-white outline-none"
-              />
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div class="space-y-1.5">
+                <label class="block text-xs font-mono-tag font-bold uppercase text-zinc-300">Status Ketersediaan</label>
+                <input 
+                  v-model="profileForm.status"
+                  type="text"
+                  class="w-full px-4 py-2.5 rounded-xl bg-[#090A0D] border border-white/10 focus:border-[#9E0402] text-xs sm:text-sm text-white outline-none"
+                />
+              </div>
+
+              <div class="space-y-1.5">
+                <label class="block text-xs font-mono-tag font-bold uppercase text-zinc-300">Tahun Pengalaman (Track Record)</label>
+                <input 
+                  v-model="profileForm.experienceYears"
+                  type="text"
+                  placeholder="Contoh: 1+ Tahun atau 2+ Tahun"
+                  class="w-full px-4 py-2.5 rounded-xl bg-[#090A0D] border border-white/10 focus:border-[#9E0402] text-xs sm:text-sm text-white outline-none"
+                />
+              </div>
             </div>
 
             <div class="space-y-1.5">
@@ -1151,10 +1300,12 @@ const handleReset = () => {
             <div class="pt-3">
               <button 
                 @click="saveProfile"
-                class="px-6 py-3 rounded-2xl bg-[#9E0402] hover:bg-[#B80604] text-white font-mono-tag font-bold text-xs uppercase tracking-wider flex items-center gap-2 shadow-lg shadow-[#9E0402]/20 cursor-pointer"
+                :disabled="isSavingProfile"
+                class="px-6 py-3 rounded-2xl bg-[#9E0402] hover:bg-[#B80604] disabled:opacity-50 text-white font-mono-tag font-bold text-xs uppercase tracking-wider flex items-center gap-2 shadow-lg shadow-[#9E0402]/20 cursor-pointer"
               >
-                <Save class="w-4 h-4" />
-                <span>Simpan Perubahan Profil</span>
+                <Save v-if="!isSavingProfile" class="w-4 h-4" />
+                <RefreshCw v-else class="w-4 h-4 animate-spin" />
+                <span>{{ isSavingProfile ? 'Menyimpan ke Supabase...' : 'Simpan Perubahan Profil' }}</span>
               </button>
             </div>
 
@@ -1422,31 +1573,43 @@ const handleReset = () => {
           </button>
         </div>
 
-        <form @submit.prevent="saveProjectForm" class="space-y-4 max-h-[70vh] overflow-y-auto pr-2 custom-scroll">
+        <form @submit.prevent="saveProjectForm" class="space-y-4 max-h-[75vh] overflow-y-auto pr-2 custom-scroll">
           
+          <!-- 1. Identitas Proyek & Role -->
           <div class="space-y-1">
-            <label class="block text-xs font-mono-tag font-bold uppercase text-zinc-300">Judul Proyek</label>
+            <label class="block text-xs font-mono-tag font-bold uppercase text-zinc-300">Judul Proyek *</label>
             <input 
               v-model="projectForm.title"
               type="text"
               required
               placeholder="Contoh: Zenith Analytics — SaaS Dashboard Redesign"
-              class="w-full px-4 py-2.5 rounded-xl bg-[#090A0D] border border-white/10 text-xs sm:text-sm text-white outline-none"
+              class="w-full px-4 py-2.5 rounded-xl bg-[#090A0D] border border-white/10 focus:border-[#9E0402] text-xs sm:text-sm text-white outline-none"
             />
           </div>
 
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
             <div class="space-y-1">
-              <label class="block text-xs font-mono-tag font-bold uppercase text-zinc-300">Kategori</label>
-              <select 
+              <label class="block text-xs font-mono-tag font-bold uppercase text-zinc-300">Kategori Proyek</label>
+              <input 
                 v-model="projectForm.category"
-                class="w-full px-4 py-2.5 rounded-xl bg-[#090A0D] border border-white/10 text-xs sm:text-sm text-white outline-none"
-              >
-                <option value="Product Design">Product Design</option>
-                <option value="UX Design">UX Design</option>
-                <option value="Product Management">Product Management</option>
-                <option value="Design System">Design System</option>
-              </select>
+                list="category-suggestions"
+                type="text"
+                placeholder="Pilih atau ketik kategori..."
+                class="w-full px-3.5 py-2.5 rounded-xl bg-[#090A0D] border border-white/10 focus:border-[#9E0402] text-xs text-white outline-none"
+              />
+              <datalist id="category-suggestions">
+                <option v-for="cat in currentCategories" :key="cat" :value="cat" />
+              </datalist>
+            </div>
+
+            <div class="space-y-1">
+              <label class="block text-xs font-mono-tag font-bold uppercase text-zinc-300">Role / Peran</label>
+              <input 
+                v-model="projectForm.role"
+                type="text"
+                :placeholder="selectedAdminProfile === 'raqwan' ? 'Lead AI Engineer & MLOps' : 'Lead PM & UI/UX Designer'"
+                class="w-full px-3.5 py-2.5 rounded-xl bg-[#090A0D] border border-white/10 focus:border-[#9E0402] text-xs text-white outline-none"
+              />
             </div>
 
             <div class="space-y-1">
@@ -1455,42 +1618,126 @@ const handleReset = () => {
                 v-model="projectForm.duration"
                 type="text"
                 placeholder="Contoh: 3 bulan (Sep – Nov 2024)"
-                class="w-full px-4 py-2.5 rounded-xl bg-[#090A0D] border border-white/10 text-xs sm:text-sm text-white outline-none"
+                class="w-full px-3.5 py-2.5 rounded-xl bg-[#090A0D] border border-white/10 focus:border-[#9E0402] text-xs text-white outline-none"
+              />
+            </div>
+          </div>
+
+          <!-- 2. Deskripsi & Tags -->
+          <div class="space-y-1">
+            <label class="block text-xs font-mono-tag font-bold uppercase text-zinc-300">Deskripsi Singkat (Ringkasan Card)</label>
+            <textarea 
+              v-model="projectForm.description"
+              rows="2"
+              placeholder="Ringkasan singkat dampak dan pendekatan proyek untuk kartu..."
+              class="w-full px-4 py-2.5 rounded-xl bg-[#090A0D] border border-white/10 focus:border-[#9E0402] text-xs sm:text-sm text-white outline-none"
+            ></textarea>
+          </div>
+
+          <div class="space-y-1">
+            <label class="block text-xs font-mono-tag font-bold uppercase text-zinc-300">Tags Teknologi / Tools (Pisahkan koma)</label>
+            <input 
+              v-model="projectForm.tagsString"
+              type="text"
+              placeholder="PyTorch, TensorRT, FastAPI, Docker, Figma, Design System"
+              class="w-full px-4 py-2.5 rounded-xl bg-[#090A0D] border border-white/10 focus:border-[#9E0402] text-xs sm:text-sm text-white outline-none"
+            />
+          </div>
+
+          <!-- 3. Tautan Eksternal & Gambar Utama -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div class="space-y-1">
+              <label class="block text-xs font-mono-tag font-bold uppercase text-zinc-300">Live Demo / Product URL</label>
+              <input 
+                v-model="projectForm.liveUrl"
+                type="url"
+                placeholder="https://..."
+                class="w-full px-3.5 py-2.5 rounded-xl bg-[#090A0D] border border-white/10 focus:border-[#9E0402] text-xs text-white outline-none"
+              />
+            </div>
+
+            <div class="space-y-1">
+              <label class="block text-xs font-mono-tag font-bold uppercase text-zinc-300">Repository GitHub / Docs</label>
+              <input 
+                v-model="projectForm.githubUrl"
+                type="url"
+                placeholder="https://github.com/..."
+                class="w-full px-3.5 py-2.5 rounded-xl bg-[#090A0D] border border-white/10 focus:border-[#9E0402] text-xs text-white outline-none"
               />
             </div>
           </div>
 
           <div class="space-y-1">
-            <label class="block text-xs font-mono-tag font-bold uppercase text-zinc-300">Deskripsi Singkat</label>
-            <textarea 
-              v-model="projectForm.description"
-              rows="2"
-              placeholder="Ringkasan dampak dan pendekatan proyek..."
-              class="w-full px-4 py-2.5 rounded-xl bg-[#090A0D] border border-white/10 text-xs sm:text-sm text-white outline-none"
-            ></textarea>
-          </div>
-
-          <div class="space-y-1">
-            <label class="block text-xs font-mono-tag font-bold uppercase text-zinc-300">Tags (Pisahkan dengan koma)</label>
-            <input 
-              v-model="projectForm.tagsString"
-              type="text"
-              placeholder="Product Strategy, Figma, User Research, Design System"
-              class="w-full px-4 py-2.5 rounded-xl bg-[#090A0D] border border-white/10 text-xs sm:text-sm text-white outline-none"
-            />
-          </div>
-
-          <div class="space-y-1">
-            <label class="block text-xs font-mono-tag font-bold uppercase text-zinc-300">URL Gambar Mockup</label>
+            <label class="block text-xs font-mono-tag font-bold uppercase text-zinc-300">URL Gambar Mockup Utama</label>
             <input 
               v-model="projectForm.image"
               type="url"
               placeholder="https://images.unsplash.com/..."
-              class="w-full px-4 py-2.5 rounded-xl bg-[#090A0D] border border-white/10 text-xs sm:text-sm text-white outline-none"
+              class="w-full px-4 py-2.5 rounded-xl bg-[#090A0D] border border-white/10 focus:border-[#9E0402] text-xs sm:text-sm text-white outline-none"
             />
           </div>
 
-          <!-- Impact Metrics -->
+          <!-- 4. Prolog, Masalah & Solusi (Detail Case Study) -->
+          <div class="p-4 rounded-2xl bg-[#0B0C0E] border border-white/10 space-y-4">
+            <span class="text-xs font-mono-tag font-bold text-[#ff8080] uppercase block">Narasi Case Study (Halaman Detail)</span>
+            
+            <div class="space-y-1">
+              <label class="block text-[11px] font-mono-tag text-zinc-400">Prolog — Latar Belakang & Visi Utama</label>
+              <textarea 
+                v-model="projectForm.prolog"
+                rows="3"
+                placeholder="Ceritakan latar belakang kemunculan proyek, visi strategis, dan problem space yang dihadapi..."
+                class="w-full px-3 py-2 rounded-xl bg-[#111319] border border-white/10 text-xs text-white outline-none"
+              ></textarea>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div class="space-y-1">
+                <label class="block text-[11px] font-mono-tag text-zinc-400">Tantangan Utama (The Core Challenge)</label>
+                <textarea 
+                  v-model="projectForm.problem"
+                  rows="3"
+                  placeholder="Gambaran umum kendala teknis / bisnis utama..."
+                  class="w-full px-3 py-2 rounded-xl bg-[#111319] border border-white/10 text-xs text-white outline-none"
+                ></textarea>
+              </div>
+
+              <div class="space-y-1">
+                <label class="block text-[11px] font-mono-tag text-zinc-400">Solusi & Rekayasa Arsitektur</label>
+                <textarea 
+                  v-model="projectForm.solution"
+                  rows="3"
+                  placeholder="Pendekatan arsitektur dan sistem yang dieksekusi..."
+                  class="w-full px-3 py-2 rounded-xl bg-[#111319] border border-white/10 text-xs text-white outline-none"
+                ></textarea>
+              </div>
+            </div>
+
+            <div class="space-y-1">
+              <label class="block text-[11px] font-mono-tag text-zinc-400">Poin Kendala / Pain Points (1 per baris, contoh: "Judul: Deskripsi")</label>
+              <textarea 
+                v-model="projectForm.problemPointsString"
+                rows="2"
+                placeholder="Latensi Tinggi: Pipeline lama membutuhkan 120ms&#10;Akurasi Rendah: Terlalu banyak false positive"
+                class="w-full px-3 py-2 rounded-xl bg-[#111319] border border-white/10 text-xs text-white outline-none font-mono"
+              ></textarea>
+            </div>
+          </div>
+
+          <!-- 5. Galeri Gambar Artefak Tambahan -->
+          <div class="space-y-1">
+            <label class="block text-xs font-mono-tag font-bold uppercase text-zinc-300">
+              Galeri Mockup & Artifact Showcase (1 URL Gambar per baris)
+            </label>
+            <textarea 
+              v-model="projectForm.galleryString"
+              rows="2"
+              placeholder="https://images.unsplash.com/...&#10;https://images.unsplash.com/..."
+              class="w-full px-4 py-2.5 rounded-xl bg-[#090A0D] border border-white/10 focus:border-[#9E0402] text-xs font-mono text-white outline-none"
+            ></textarea>
+          </div>
+
+          <!-- 6. Impact Metrics -->
           <div class="p-4 rounded-2xl bg-[#0B0C0E] border border-white/10 space-y-3">
             <span class="text-xs font-mono-tag font-bold text-[#ff8080] uppercase block">Dampak & Metrik Terukur</span>
             <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
@@ -1499,7 +1746,7 @@ const handleReset = () => {
                 <input 
                   v-model="projectForm.resultMetric"
                   type="text"
-                  placeholder="Task Completion Rate"
+                  placeholder="Contoh: Inference Latency"
                   class="w-full px-3 py-2 rounded-xl bg-[#111319] border border-white/10 text-xs text-white outline-none"
                 />
               </div>
@@ -1509,7 +1756,7 @@ const handleReset = () => {
                 <input 
                   v-model="projectForm.resultBefore"
                   type="text"
-                  placeholder="55%"
+                  placeholder="Contoh: 45 ms"
                   class="w-full px-3 py-2 rounded-xl bg-[#111319] border border-white/10 text-xs text-white outline-none"
                 />
               </div>
@@ -1519,14 +1766,26 @@ const handleReset = () => {
                 <input 
                   v-model="projectForm.resultAfter"
                   type="text"
-                  placeholder="85%"
+                  placeholder="Contoh: 3.8 ms"
                   class="w-full px-3 py-2 rounded-xl bg-[#111319] border border-white/10 text-xs text-white outline-none"
                 />
               </div>
             </div>
           </div>
 
-          <div class="flex items-center justify-end gap-3 pt-3">
+          <!-- 7. Opsi Tampilan -->
+          <div class="flex items-center gap-3 pt-1">
+            <label class="flex items-center gap-2 cursor-pointer text-xs font-mono-tag text-zinc-300">
+              <input 
+                type="checkbox" 
+                v-model="projectForm.featured" 
+                class="w-4 h-4 rounded accent-[#9E0402]"
+              />
+              <span>Tampilkan sebagai Proyek Unggulan (Featured Project) di Beranda</span>
+            </label>
+          </div>
+
+          <div class="flex items-center justify-end gap-3 pt-3 border-t border-white/10">
             <button 
               type="button"
               @click="isProjectModalOpen = false"

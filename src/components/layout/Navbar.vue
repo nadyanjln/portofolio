@@ -33,7 +33,7 @@ const navLinks = computed(() => {
 const otherProfile = computed(() => {
   return currentProfile.value === 'nadya'
     ? { key: 'raqwan', name: 'Raqwan', role: 'AI Engineer' }
-    : { key: 'nadya', name: 'Nadya', role: 'Product Manager' }
+    : { key: 'nadya', name: 'Nadya', role: 'Product & Tech Writer' }
 })
 
 const toggleMobileMenu = () => {
@@ -46,7 +46,7 @@ const closeMobileMenu = () => {
 </script>
 
 <template>
-  <header class="fixed top-0 left-0 right-0 z-50 px-4 sm:px-8 py-3.5 sm:py-4 transition-all duration-300">
+  <header class="fixed top-0 left-0 right-0 z-50 px-4 sm:px-8 py-3 sm:py-3.5 transition-all duration-300 bg-[#FFF9F9]/80 dark:bg-[#0B0C0E]/80 backdrop-blur-xl border-b border-[#EEDCDC]/60 dark:border-white/[0.06]">
     <div class="max-w-7xl mx-auto flex items-center justify-between">
       
       <!-- Left Logo Badge & Profile Name -->
@@ -59,14 +59,14 @@ const closeMobileMenu = () => {
           class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl flex items-center justify-center text-white font-extrabold text-sm shadow-md transition-all duration-300 transform -rotate-2 group-hover:rotate-0"
           :class="[
             currentProfile === 'nadya'
-              ? 'bg-[#9E0402] hover:bg-[#B80604] shadow-[#9E0402]/25'
+              ? 'bg-[#FB4617] hover:bg-[#E0370E] shadow-[#FB4617]/25'
               : 'bg-[#047857] hover:bg-[#065F46] shadow-[#047857]/30'
           ]"
         >
           {{ currentProfile === 'nadya' ? 'N*' : 'R*' }}
         </div>
         <div class="hidden sm:flex flex-col">
-          <span class="font-bold text-sm tracking-tight text-[#1C1313] dark:text-[#F4F4F6] transition-colors" :class="[currentProfile === 'nadya' ? 'group-hover:text-[#9E0402]' : 'group-hover:text-emerald-400']">
+          <span class="font-bold text-sm tracking-tight text-[#1C1313] dark:text-[#F4F4F6] transition-colors" :class="[currentProfile === 'nadya' ? 'group-hover:text-[#FB4617]' : 'group-hover:text-emerald-400']">
             {{ portfolioInfo.name }}
           </span>
           <span class="font-mono-tag text-[9px] text-[#5C4848] dark:text-zinc-400 tracking-wider uppercase">
@@ -84,12 +84,12 @@ const closeMobileMenu = () => {
           class="text-xs sm:text-sm font-semibold transition-all duration-200 flex items-center gap-1 group py-1"
           :class="[
             route.path === link.path 
-              ? (currentProfile === 'nadya' ? 'text-[#9E0402] font-bold' : 'text-emerald-400 font-bold')
-              : (currentProfile === 'nadya' ? 'text-[#5C4848] dark:text-zinc-400 hover:text-[#9E0402] dark:hover:text-white' : 'text-[#5C4848] dark:text-zinc-400 hover:text-emerald-400 dark:hover:text-white')
+              ? (currentProfile === 'nadya' ? 'text-[#FB4617] font-bold' : 'text-emerald-400 font-bold')
+              : (currentProfile === 'nadya' ? 'text-[#5C4848] dark:text-zinc-400 hover:text-[#FB4617] dark:hover:text-white' : 'text-[#5C4848] dark:text-zinc-400 hover:text-emerald-400 dark:hover:text-white')
           ]"
         >
           <span>{{ link.name }}</span>
-          <span v-if="link.symbol" class="text-[11px] font-mono-tag group-hover:translate-x-0.5 transition-transform" :class="currentProfile === 'nadya' ? 'text-[#9E0402]' : 'text-emerald-400'">
+          <span v-if="link.symbol" class="text-[11px] font-mono-tag group-hover:translate-x-0.5 transition-transform" :class="currentProfile === 'nadya' ? 'text-[#FB4617]' : 'text-emerald-400'">
             {{ link.symbol }}
           </span>
         </RouterLink>
@@ -102,7 +102,7 @@ const closeMobileMenu = () => {
         <RouterLink
           to="/"
           class="hidden lg:flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white/90 dark:bg-[#15161B] text-[#5C4848] dark:text-zinc-300 border border-[#EEDCDC] dark:border-white/10 text-xs font-mono-tag transition-all shadow-xs"
-          :class="currentProfile === 'nadya' ? 'hover:border-[#9E0402]/40' : 'hover:border-[#047857]/50'"
+          :class="currentProfile === 'nadya' ? 'hover:border-[#FB4617]/40' : 'hover:border-[#047857]/50'"
           title="Kembali ke Ruang Nadya & Raqwan"
         >
           <Compass class="w-3.5 h-3.5 text-zinc-400" />
@@ -113,7 +113,7 @@ const closeMobileMenu = () => {
           :to="'/' + otherProfile.key"
           @click="setActiveProfile(otherProfile.key); closeMobileMenu()"
           class="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white/90 dark:bg-[#15161B] text-[#5C4848] dark:text-zinc-300 border border-[#EEDCDC] dark:border-white/10 text-xs font-mono-tag transition-all shadow-xs cursor-pointer"
-          :class="currentProfile === 'nadya' ? 'hover:border-[#9E0402]/40' : 'hover:border-[#047857]/50'"
+          :class="currentProfile === 'nadya' ? 'hover:border-[#FB4617]/40' : 'hover:border-[#047857]/50'"
           :title="'Beralih ke Portofolio ' + otherProfile.name"
         >
           <ArrowLeftRight class="w-3.5 h-3.5 text-zinc-400" />
@@ -124,12 +124,12 @@ const closeMobileMenu = () => {
         <button
           @click="toggleTheme"
           class="p-2 sm:p-2.5 rounded-xl bg-white dark:bg-[#15161B] text-[#5C4848] dark:text-zinc-300 border border-[#EEDCDC] dark:border-white/10 dark:hover:border-white/20 transition-all cursor-pointer shadow-xs"
-          :class="currentProfile === 'nadya' ? 'hover:text-[#9E0402] hover:border-[#9E0402]/30' : 'hover:text-emerald-400 hover:border-[#047857]/50'"
+          :class="currentProfile === 'nadya' ? 'hover:text-[#FB4617] hover:border-[#FB4617]/30' : 'hover:text-emerald-400 hover:border-[#047857]/50'"
           :title="isDark ? 'Beralih ke Light Mode' : 'Beralih ke Dark Mode'"
           aria-label="Toggle Dark/Light Mode"
         >
           <Sun v-if="isDark" class="w-4 h-4 text-amber-400 transition-transform duration-300 hover:rotate-45" />
-          <Moon v-else class="w-4 h-4 transition-transform duration-300 hover:-rotate-12" :class="currentProfile === 'nadya' ? 'text-[#9E0402]' : 'text-emerald-500'" />
+          <Moon v-else class="w-4 h-4 transition-transform duration-300 hover:-rotate-12" :class="currentProfile === 'nadya' ? 'text-[#FB4617]' : 'text-emerald-500'" />
         </button>
 
         <!-- Let's Talk Primary CTA Pill -->
@@ -138,7 +138,7 @@ const closeMobileMenu = () => {
           class="px-3.5 sm:px-5 py-2 text-xs sm:text-sm font-bold rounded-full text-white shadow-md transition-all duration-300 flex items-center gap-1.5 transform hover:-translate-y-0.5 active:translate-y-0"
           :class="[
             currentProfile === 'nadya'
-              ? 'bg-[#9E0402] hover:bg-[#B80604] shadow-[#9E0402]/20'
+              ? 'bg-[#FB4617] hover:bg-[#E0370E] shadow-[#FB4617]/20'
               : 'bg-[#047857] hover:bg-[#065F46] shadow-[#047857]/25'
           ]"
         >
@@ -180,7 +180,7 @@ const closeMobileMenu = () => {
           class="flex items-center justify-between px-4 py-2.5 text-sm font-semibold rounded-xl transition-all"
           :class="[
             route.path === link.path 
-              ? (currentProfile === 'nadya' ? 'bg-[#9E0402] text-white' : 'bg-[#047857] text-white')
+              ? (currentProfile === 'nadya' ? 'bg-[#FB4617] text-white' : 'bg-[#047857] text-white')
               : 'text-[#1C1313] dark:text-zinc-200 hover:bg-[#FDF6F6] dark:hover:bg-white/5'
           ]"
         >

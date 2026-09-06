@@ -13,8 +13,7 @@ import {
   Network,
   Bot
 } from 'lucide-vue-next'
-import AsciiCanvas from '@/components/effects/AsciiCanvas.vue'
-import CustomCursor from '@/components/effects/CustomCursor.vue'
+import ModernAmbientBackground from '@/components/effects/ModernAmbientBackground.vue'
 
 // 3D Tilt State for Cards
 const leftTilt = ref({ rx: 0, ry: 0, hovered: false })
@@ -40,9 +39,9 @@ const handleMouseMove = (e, target) => {
 
 const handleMouseLeave = (target) => {
   if (target === 'left') {
-    leftTilt.value = { rx, ry, hovered: false }
+    leftTilt.value = { rx: 0, ry: 0, hovered: false }
   } else {
-    rightTilt.value = { rx, ry, hovered: false }
+    rightTilt.value = { rx: 0, ry: 0, hovered: false }
   }
 }
 </script>
@@ -50,13 +49,8 @@ const handleMouseLeave = (target) => {
 <template>
   <div class="min-h-screen bg-[#07080A] text-white flex flex-col justify-between relative overflow-hidden selection:bg-[#9E0402] selection:text-white font-sans">
     
-    <!-- Matrix Particle Grid Background -->
-    <AsciiCanvas />
-    <CustomCursor />
-
-    <!-- Top Ambient Glows -->
-    <div class="absolute top-0 left-1/4 w-96 h-96 bg-[#9E0402]/15 blur-[130px] pointer-events-none"></div>
-    <div class="absolute top-0 right-1/4 w-96 h-96 bg-[#047857]/15 blur-[130px] pointer-events-none"></div>
+    <!-- Modern Ambient Architectural Background (100% GPU) -->
+    <ModernAmbientBackground />
 
     <!-- Header Brand Bar -->
     <header class="relative z-20 max-w-7xl w-full mx-auto px-4 sm:px-8 py-6 sm:py-8 flex items-center justify-between">

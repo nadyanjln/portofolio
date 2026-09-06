@@ -1,9 +1,10 @@
 <script setup>
 import HeroSection from '@/components/sections/HeroSection.vue'
 import ProjectsSection from '@/components/sections/ProjectsSection.vue'
+import SkillsSection from '@/components/sections/SkillsSection.vue'
 import ProcessSection from '@/components/sections/ProcessSection.vue'
-import DesignPlayground from '@/components/interactive/DesignPlayground.vue'
 import AboutSection from '@/components/sections/AboutSection.vue'
+import DesignPlayground from '@/components/interactive/DesignPlayground.vue'
 import TestimonialsSection from '@/components/sections/TestimonialsSection.vue'
 import FaqSection from '@/components/sections/FaqSection.vue'
 import ContactSection from '@/components/sections/ContactSection.vue'
@@ -14,25 +15,28 @@ import ContactSection from '@/components/sections/ContactSection.vue'
     <!-- 1. Hero Section with Editorial Statement & Moving Ticker -->
     <HeroSection />
 
-    <!-- 2. Selected Works & Case Studies Bento Showcase -->
+    <!-- 2. Selected Works & Case Studies (01 / WORKS) -->
     <ProjectsSection />
 
-    <!-- 3. End-to-End Product & UX Framework (How I Work) -->
+    <!-- 3. Skill Sets Capabilities (02 / CAPABILITIES - Benjamin Creative Style) -->
+    <SkillsSection />
+
+    <!-- 4. End-to-End Product & AI Framework (03 / METHODOLOGY) -->
     <ProcessSection />
 
-    <!-- 4. Interactive PM & UI/UX Craft Sandbox (Design Tokens & ROI Calculator) -->
+    <!-- 5. Interactive PM & AI Craft Sandbox (CNN & ROI Calculator) -->
     <DesignPlayground />
 
-    <!-- 5. About Bio & 1x1 Vertical Skills Scanner -->
+    <!-- 6. About Bio & Highlights -->
     <AboutSection />
 
-    <!-- 6. Social Proof & Endorsement Wall -->
+    <!-- 7. Social Proof & Endorsement Wall (05 / ENDORSEMENTS) -->
     <TestimonialsSection />
 
-    <!-- 7. Frequently Asked Questions Accordion -->
+    <!-- 8. Frequently Asked Questions Accordion -->
     <FaqSection />
 
-    <!-- 8. Creative Parenthesized Callout & Proposal Form -->
+    <!-- 9. Creative Parenthesized Callout & Proposal Form -->
     <ContactSection />
   </div>
 </template>

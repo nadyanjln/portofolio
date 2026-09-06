@@ -83,6 +83,7 @@ const handleMouseLeave = () => {
         :alt="project.title"
         class="w-full h-full object-cover object-center group-hover:scale-106 transition-transform duration-700 ease-out"
         loading="lazy"
+        decoding="async"
       />
       <div class="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent"></div>
       

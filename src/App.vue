@@ -3,8 +3,7 @@ import { computed, onMounted } from 'vue'
 import { RouterView, useRoute } from 'vue-router'
 import Navbar from '@/components/layout/Navbar.vue'
 import Footer from '@/components/layout/Footer.vue'
-import AsciiCanvas from '@/components/effects/AsciiCanvas.vue'
-import CustomCursor from '@/components/effects/CustomCursor.vue'
+import ModernAmbientBackground from '@/components/effects/ModernAmbientBackground.vue'
 import ScrollProgress from '@/components/effects/ScrollProgress.vue'
 import { useTheme } from '@/composables/useTheme'
 import { usePortfolioStore } from '@/composables/usePortfolioStore'
@@ -31,19 +30,17 @@ onMounted(() => {
 
 <template>
   <div 
-    class="min-h-screen flex flex-col justify-between relative overflow-x-hidden transition-colors duration-300"
+    class="min-h-screen flex flex-col justify-between relative overflow-x-clip transition-colors duration-300"
     :class="currentProfile === 'raqwan' 
       ? 'bg-[#F8FAFC] dark:bg-[#0B0C0E] text-[#0F172A] dark:text-[#F4F4F6] selection:bg-[#047857] selection:text-white' 
-      : 'bg-[#FFF9F9] dark:bg-[#0B0C0E] text-[#1C1313] dark:text-[#F4F4F6] selection:bg-[#9E0402] selection:text-white'"
+      : 'bg-[#FFF9F9] dark:bg-[#0B0C0E] text-[#1C1313] dark:text-[#F4F4F6] selection:bg-[#FB4617] selection:text-white'"
   >
     <!-- Top Reading Scroll Progress Bar (Public only) -->
     <ScrollProgress v-if="isPublicRoute" />
 
-    <!-- Interactive Magnetic Custom Cursor -->
-    <CustomCursor />
 
-    <!-- Interactive ASCII Matrix Canvas Background (Public only) -->
-    <AsciiCanvas v-if="isPublicRoute" />
+    <!-- Modern Ambient Architectural Background (Public only, 100% GPU) -->
+    <ModernAmbientBackground v-if="isPublicRoute" />
 
     <!-- Studio Public Navbar -->
     <Navbar v-if="isPublicRoute" />
@@ -68,17 +65,11 @@ onMounted(() => {
 <style>
 .page-fade-enter-active,
 .page-fade-leave-active {
-  transition: opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1),
-              transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: opacity 0.15s ease-out;
 }
 
-.page-fade-enter-from {
-  opacity: 0;
-  transform: translateY(12px);
-}
-
+.page-fade-enter-from,
 .page-fade-leave-to {
   opacity: 0;
-  transform: translateY(-12px);
 }
 </style>

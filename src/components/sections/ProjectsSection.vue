@@ -107,333 +107,283 @@ watch(currentProfile, () => {
 </script>
 
 <template>
-  <section ref="sectionRef" class="py-14 sm:py-20 relative overflow-hidden scroll-mt-28" id="works">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8 sm:space-y-10">
+  <section ref="sectionRef" class="py-16 sm:py-24 relative scroll-mt-28" id="works">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       
-      <!-- ═══════════════════════════════════════════ -->
-      <!-- TOP HEADER & FILTER BAR                     -->
-      <!-- ═══════════════════════════════════════════ -->
-      <div data-reveal="fade-up" class="flex flex-col lg:flex-row lg:items-end justify-between gap-6 pb-2">
-        <div class="space-y-3 max-w-2xl">
-          <div 
-            class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-white dark:bg-[#1A1C24] border text-xs font-mono-tag font-bold uppercase shadow-xs"
-            :class="currentProfile === 'raqwan' ? 'text-[#047857] dark:text-emerald-400 border-emerald-300 dark:border-[#047857]/40 bg-emerald-50 dark:bg-[#047857]/10' : 'text-[#9E0402] dark:text-[#ff4d4d] border-[#EEDCDC] dark:border-white/10'"
-          >
-            <Sparkles class="w-3.5 h-3.5" />
-            <span>Selected Case Studies /2026/</span>
-          </div>
-          <h2 class="text-3xl sm:text-5xl lg:text-6xl font-extrabold tracking-tighter leading-tight text-[#1C1313] dark:text-white">
-            Featured Works & <span :class="currentProfile === 'raqwan' ? 'text-[#047857] dark:text-emerald-400' : 'text-[#9E0402] dark:text-[#ff3b38]'">Craft</span>
-          </h2>
-          <p class="text-sm sm:text-base text-[#5C4848] dark:text-zinc-300 leading-relaxed max-w-xl" v-if="currentProfile === 'raqwan'">
-            Sistem kecerdasan buatan end-to-end — dari Computer Vision dan NLP canggih hingga Autonomous Agentic AI & Generative Modeling.
-          </p>
-          <p class="text-sm sm:text-base text-[#5C4848] dark:text-zinc-300 leading-relaxed max-w-xl" v-else>
-            Riset pengguna mendalam, strategi produk end-to-end, dan antarmuka terukur yang mengubah insight menjadi produk bernilai tinggi.
-          </p>
-        </div>
-
-        <!-- Right: View Switcher & Archive Link -->
-        <div class="flex items-center gap-3 flex-wrap">
-          <div class="p-1 rounded-2xl bg-white dark:bg-[#14161D] border border-[#EEDCDC] dark:border-white/10 flex items-center gap-1 shadow-xs">
-            <button
-              @click="viewMode = 'showcase'"
-              class="px-4 py-2 rounded-xl text-xs font-mono-tag font-bold uppercase flex items-center gap-1.5 transition-all cursor-pointer shrink-0"
-              :class="[
-                viewMode === 'showcase' 
-                  ? (currentProfile === 'raqwan' ? 'bg-[#047857] text-white shadow-xs' : 'bg-[#9E0402] text-white shadow-xs')
-                  : (currentProfile === 'raqwan' ? 'text-[#1C1313] dark:text-zinc-400 hover:text-[#047857] dark:hover:text-white' : 'text-[#1C1313] dark:text-zinc-400 hover:text-[#9E0402] dark:hover:text-[#ff4d4d]')
-              ]"
-            >
-              <Columns class="w-3.5 h-3.5 shrink-0" />
-              <span>Interactive View</span>
-            </button>
-
-            <button
-              @click="viewMode = 'grid'"
-              class="px-4 py-2 rounded-xl text-xs font-mono-tag font-bold uppercase flex items-center gap-1.5 transition-all cursor-pointer shrink-0"
-              :class="[
-                viewMode === 'grid' 
-                  ? (currentProfile === 'raqwan' ? 'bg-[#047857] text-white shadow-xs' : 'bg-[#9E0402] text-white shadow-xs')
-                  : (currentProfile === 'raqwan' ? 'text-[#1C1313] dark:text-zinc-400 hover:text-[#047857] dark:hover:text-white' : 'text-[#1C1313] dark:text-zinc-400 hover:text-[#9E0402] dark:hover:text-[#ff4d4d]')
-              ]"
-            >
-              <LayoutGrid class="w-3.5 h-3.5 shrink-0" />
-              <span>Grid View</span>
-            </button>
-          </div>
-
-          <RouterLink
-            :to="'/' + currentProfile + '/projects'"
-            class="px-5 py-2.5 rounded-2xl bg-white dark:bg-[#14161D] border border-[#EEDCDC] dark:border-white/10 text-xs font-mono-tag font-bold uppercase tracking-wider flex items-center gap-1.5 shadow-xs transition-colors"
-            :class="currentProfile === 'raqwan' ? 'text-[#047857] dark:text-emerald-400 hover:border-[#047857]/60' : 'text-[#9E0402] dark:text-[#ff4d4d] hover:border-[#9E0402]/40'"
-          >
-            <span>All Works ({{ projects.length }})</span>
-            <ArrowUpRight class="w-3.5 h-3.5" />
-          </RouterLink>
-        </div>
-      </div>
-
-      <!-- Categories Filter Select Bar -->
-      <div data-reveal="fade-up" data-reveal-delay="1" class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-zinc-200/60 dark:border-white/5">
-        <!-- Input Select Dropdown -->
-        <div class="flex items-center gap-3 w-full sm:w-auto">
-          <div class="relative w-full sm:w-80">
-            <div class="absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none text-zinc-400">
-              <Filter class="w-4 h-4" :class="currentProfile === 'raqwan' ? 'text-emerald-500' : 'text-[#9E0402]'" />
-            </div>
-            <select
-              v-model="selectedCategory"
-              @change="activeIndex = 0"
-              class="w-full appearance-none pl-10 pr-10 py-2.5 rounded-xl bg-white dark:bg-[#14161D] border text-xs sm:text-sm font-mono-tag font-bold tracking-wide outline-none cursor-pointer transition-all shadow-xs"
-              :class="currentProfile === 'raqwan' 
-                ? 'border-emerald-300/60 dark:border-white/10 text-zinc-900 dark:text-white focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 hover:border-emerald-400' 
-                : 'border-red-300/60 dark:border-white/10 text-zinc-900 dark:text-white focus:border-[#9E0402] focus:ring-1 focus:ring-[#9E0402] hover:border-red-400'"
-            >
-              <option 
-                v-for="cat in categories" 
-                :key="cat" 
-                :value="cat" 
-                class="bg-white dark:bg-[#14161D] text-zinc-900 dark:text-white py-2"
-              >
-                {{ cat === 'All' ? 'Semua Kategori (All Works)' : cat }} ({{ getCategoryCount(cat) }})
-              </option>
-            </select>
-            <ChevronDown class="w-4 h-4 text-zinc-400 absolute right-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
-          </div>
-
-          <button 
-            v-if="selectedCategory !== 'All'"
-            @click="selectedCategory = 'All'; activeIndex = 0"
-            class="text-xs font-mono-tag text-zinc-500 hover:text-zinc-900 dark:hover:text-white transition-colors underline cursor-pointer shrink-0"
-          >
-            Reset
-          </button>
-        </div>
-
-        <div class="flex items-center gap-2 text-xs font-mono-tag text-zinc-500 dark:text-zinc-400 shrink-0 self-start sm:self-center">
-          <span class="w-1.5 h-1.5 rounded-full" :class="currentProfile === 'raqwan' ? 'bg-[#047857]' : 'bg-[#9E0402]'"></span>
-          <span>Menampilkan <strong class="text-zinc-800 dark:text-zinc-200">{{ filteredProjects.length }}</strong> dari {{ projects.length }} Case Studies</span>
-        </div>
-      </div>
-
-      <!-- ═══════════════════════════════════════════ -->
-      <!-- VIEW 1: INTERACTIVE SPLIT STAGE             -->
-      <!-- ═══════════════════════════════════════════ -->
-      <transition name="view-fade" mode="out-in">
+      <!-- 2-Column Sticky Pin-and-Scroll Layout (Benjamin Creative Style) -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16">
         
-        <div 
-          v-if="viewMode === 'showcase' && activeProject" 
-          key="showcase"
-          class="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-stretch"
-        >
-          <!-- LEFT: Clean Vertical Project Index List -->
-          <div class="lg:col-span-5 flex flex-col justify-between h-full space-y-2 order-2 lg:order-1">
-            <div 
-              class="h-full flex flex-col gap-3 p-2 sm:p-2.5"
-              :class="[
-                filteredProjects.length > 4 
-                  ? 'max-h-[520px] lg:max-h-[560px] overflow-y-auto custom-scroll justify-start' 
-                  : 'justify-between'
-              ]"
+        <!-- ══════════════════════════════════════════════════════
+             LEFT COLUMN: STICKY PINNED PANEL ("DI-HOLD")
+             ══════════════════════════════════════════════════════ -->
+        <div class="lg:col-span-5 relative self-stretch">
+          <div class="lg:sticky lg:top-28 sm:lg:top-32 space-y-6 sm:space-y-8 select-none">
+          
+            <!-- Category Index & Section Badge -->
+            <div class="flex items-center gap-2.5">
+            <span 
+              class="px-3 py-1 rounded-full text-xs font-mono-tag font-bold tracking-wider uppercase border"
+              :class="currentProfile === 'raqwan'
+                ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20'
+                : 'bg-[#FB4617]/10 text-[#FB4617] dark:text-[#FB4617] border-[#FB4617]/20'"
             >
-              <div
-                v-for="(p, idx) in filteredProjects"
-                :key="p.id"
-                @mouseenter="selectProject(idx)"
-                @click="selectProject(idx)"
-                class="p-5 sm:p-6 rounded-3xl border-2 transition-all duration-300 cursor-pointer flex flex-col justify-between group relative shrink-0"
-                :class="[
-                  activeIndex === idx
-                    ? (currentProfile === 'raqwan'
-                        ? 'bg-white dark:bg-[#14161D] border-[#047857] dark:border-emerald-500 shadow-xl shadow-[#047857]/15'
-                        : 'bg-white dark:bg-[#14161D] border-[#9E0402] dark:border-[#ff4d4d] shadow-xl shadow-[#9E0402]/15')
-                    : 'bg-white/70 dark:bg-[#14161D]/50 border-[#EEDCDC] dark:border-white/10 hover:bg-white dark:hover:bg-[#14161D] hover:border-zinc-300 dark:hover:border-white/20'
-                ]"
-              >
-                <!-- Top Row: Index & Category & Duration -->
-                <div class="flex items-center justify-between gap-3 pb-2">
-                  <div class="flex items-center gap-2 flex-wrap">
-                    <span 
-                      v-if="activeIndex === idx"
-                      class="w-2 h-2 rounded-full shrink-0 animate-pulse"
-                      :class="currentProfile === 'raqwan' ? 'bg-emerald-500' : 'bg-[#9E0402] dark:bg-[#ff4d4d]'"
-                    ></span>
-                    <span 
-                      class="text-xs font-mono-tag font-bold tracking-tight"
-                      :class="activeIndex === idx ? (currentProfile === 'raqwan' ? 'text-[#047857] dark:text-emerald-400' : 'text-[#9E0402] dark:text-[#ff4d4d]') : 'text-[#5C4848] dark:text-zinc-400'"
-                    >
-                      ({{ String(idx + 1).padStart(2, '0') }})
-                    </span>
-                    <span class="text-xs font-mono-tag text-[#5C4848] dark:text-zinc-300 uppercase font-bold tracking-wider">
-                      {{ p.category }}
-                    </span>
-                  </div>
+              (01) / WORKS
+            </span>
+            <span class="text-xs font-mono-tag text-[#5C4848] dark:text-zinc-500 uppercase">
+              • Case Studies /2026/
+            </span>
+          </div>
 
-                  <span 
-                    v-if="p.detail?.duration"
-                    class="text-[11px] font-mono-tag text-[#5C4848] dark:text-zinc-400 shrink-0 font-medium"
-                  >
-                    {{ p.detail.duration }}
-                  </span>
-                </div>
+          <!-- Giant Editorial Title -->
+          <div class="space-y-4">
+            <h2 
+              class="text-4xl sm:text-6xl lg:text-7xl font-extrabold tracking-tighter leading-[0.95] text-[#1C1313] dark:text-white"
+            >
+              <span v-if="currentProfile === 'raqwan'">
+                Selected Works & <br />
+                <span class="text-[#047857] dark:text-emerald-400">AI Craft</span>
+              </span>
+              <span v-else>
+                Selected Works & <br />
+                <span class="text-[#FB4617] dark:text-[#FB4617]">Product Craft</span>
+              </span>
+            </h2>
 
-                <!-- Project Title -->
-                <div class="space-y-2">
-                  <h3 
-                    class="text-base sm:text-lg font-bold leading-snug tracking-tight transition-colors"
-                    :class="[
-                      activeIndex === idx 
-                        ? (currentProfile === 'raqwan' ? 'text-[#047857] dark:text-emerald-400' : 'text-[#9E0402] dark:text-[#ff4d4d]') 
-                        : (currentProfile === 'raqwan' ? 'text-[#1C1313] dark:text-white group-hover:text-[#047857] dark:group-hover:text-emerald-400' : 'text-[#1C1313] dark:text-white group-hover:text-[#9E0402] dark:group-hover:text-[#ff4d4d]')
-                    ]"
-                  >
-                    {{ p.title }}
-                  </h3>
+            <!-- Heavy Solid Accent Bar (Benjamin Style) -->
+            <div 
+              class="w-36 sm:w-48 h-2 rounded-full transition-all duration-500"
+              :class="currentProfile === 'raqwan' ? 'bg-[#047857] dark:bg-emerald-400' : 'bg-[#FB4617] dark:bg-[#FB4617]'"
+            ></div>
+          </div>
 
-                  <!-- Expandable Summary & Tags for Active Item -->
-                  <div v-if="activeIndex === idx" class="space-y-3 pt-2">
-                    <p class="text-xs sm:text-sm text-[#5C4848] dark:text-zinc-300 leading-relaxed line-clamp-2">
-                      {{ p.description }}
-                    </p>
+          <!-- Monospace Trademark Tag & Statement Paragraph -->
+          <div class="space-y-3 pt-2">
+            <span class="font-mono-tag text-xs font-bold text-[#5C4848] dark:text-zinc-400 tracking-wider block uppercase">
+              {{ currentProfile === 'raqwan' ? '(DEEP-VISION® — 2026)' : '(UX-STRATEGY® — 2026)' }}
+            </span>
 
-                    <!-- Tags -->
-                    <div class="flex flex-wrap gap-1.5">
-                      <span 
-                        v-for="tag in p.tags" 
-                        :key="tag"
-                        class="px-2.5 py-1 text-[10px] font-bold font-mono-tag rounded-lg"
-                        :class="currentProfile === 'raqwan' ? 'bg-emerald-50 dark:bg-[#047857]/20 text-emerald-800 dark:text-emerald-300 border border-emerald-200 dark:border-[#047857]/40' : 'bg-rose-50 dark:bg-[#9FC2EA]/15 text-rose-900 dark:text-[#9FC2EA] border border-rose-200 dark:border-[#9FC2EA]/40'"
-                      >
-                        {{ tag }}
-                      </span>
-                    </div>
-                  </div>
-                </div>
+            <p class="text-sm sm:text-base text-[#5C4848] dark:text-zinc-300 leading-relaxed font-sans max-w-md">
+              <span v-if="currentProfile === 'raqwan'">
+                Sistem kecerdasan buatan end-to-end — dari Computer Vision dan NLP canggih hingga Autonomous Agentic AI & Generative Modeling berakurasi tinggi.
+              </span>
+              <span v-else>
+                Riset pengguna mendalam, strategi produk end-to-end, dan antarmuka terukur yang mengubah insight menjadi produk bernilai tinggi bagi bisnis dan pengguna.
+              </span>
+            </p>
+          </div>
 
-                <!-- Bottom CTA Link for Active Item -->
-                <div v-if="activeIndex === idx" class="pt-3 mt-3 border-t border-[#EEDCDC] dark:border-white/10 flex items-center justify-between">
-                  <RouterLink
-                    :to="'/' + currentProfile + '/projects/' + p.id"
-                    class="text-xs font-bold font-mono-tag uppercase flex items-center gap-1.5 hover:underline"
-                    :class="currentProfile === 'raqwan' ? 'text-[#047857] dark:text-emerald-400' : 'text-[#9E0402] dark:text-[#ff4d4d]'"
-                  >
-                    <span>Read Full Case Study</span>
-                    <ArrowRight class="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
-                  </RouterLink>
-
-                  <div class="flex items-center gap-1">
-                    <span class="text-xs font-mono-tag text-[#5C4848] dark:text-zinc-400 font-semibold">
-                      Live Preview ↗
-                    </span>
-                  </div>
-                </div>
+          <!-- Filter & Controls Toolbar in Left Sticky Column -->
+          <div class="space-y-3 pt-2">
+            <!-- Category Filter Dropdown -->
+            <div class="relative w-full">
+              <div class="absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none text-zinc-400">
+                <Filter class="w-4 h-4" :class="currentProfile === 'raqwan' ? 'text-emerald-500' : 'text-[#FB4617]'" />
               </div>
+              <select
+                v-model="selectedCategory"
+                @change="activeIndex = 0"
+                class="w-full appearance-none pl-10 pr-10 py-2.5 rounded-xl bg-white dark:bg-[#14161D] border text-xs sm:text-sm font-mono-tag font-bold tracking-wide outline-none cursor-pointer transition-all shadow-xs"
+                :class="currentProfile === 'raqwan' 
+                  ? 'border-emerald-300/60 dark:border-white/10 text-zinc-900 dark:text-white focus:border-emerald-500 hover:border-emerald-400' 
+                  : 'border-orange-300/60 dark:border-white/10 text-zinc-900 dark:text-white focus:border-[#FB4617] hover:border-orange-400'"
+              >
+                <option 
+                  v-for="cat in categories" 
+                  :key="cat" 
+                  :value="cat" 
+                  class="bg-white dark:bg-[#14161D] text-zinc-900 dark:text-white py-2"
+                >
+                  {{ cat === 'All' ? 'Semua Kategori (All Works)' : cat }} ({{ getCategoryCount(cat) }})
+                </option>
+              </select>
+              <ChevronDown class="w-4 h-4 text-zinc-400 absolute right-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
             </div>
 
-            <!-- Scroll Indicator Helper when > 4 projects -->
-            <div v-if="filteredProjects.length > 4" class="pt-1.5 text-center text-xs font-mono-tag text-[#5C4848] dark:text-zinc-400 flex items-center justify-center gap-1.5">
-              <span>Scroll untuk melihat {{ filteredProjects.length - 4 }} proyek lainnya</span>
-              <span class="animate-bounce" :class="currentProfile === 'raqwan' ? 'text-emerald-400' : 'text-[#9E0402] dark:text-[#ff4d4d]'">↓</span>
+            <!-- View Switcher & Link -->
+            <div class="flex items-center gap-2 pt-1 flex-wrap">
+              <div class="p-1 rounded-xl bg-white dark:bg-[#14161D] border border-[#EEDCDC] dark:border-white/10 flex items-center gap-1 shadow-xs">
+                <button
+                  @click="viewMode = 'showcase'"
+                  class="px-3 py-1.5 rounded-lg text-xs font-mono-tag font-bold uppercase flex items-center gap-1.5 transition-all cursor-pointer"
+                  :class="[
+                    viewMode === 'showcase' 
+                      ? (currentProfile === 'raqwan' ? 'bg-[#047857] text-white shadow-xs' : 'bg-[#FB4617] text-white shadow-xs')
+                      : 'text-[#5C4848] dark:text-zinc-400 hover:text-black dark:hover:text-white'
+                  ]"
+                >
+                  <Columns class="w-3.5 h-3.5 shrink-0" />
+                  <span>Stream</span>
+                </button>
+
+                <button
+                  @click="viewMode = 'grid'"
+                  class="px-3 py-1.5 rounded-lg text-xs font-mono-tag font-bold uppercase flex items-center gap-1.5 transition-all cursor-pointer"
+                  :class="[
+                    viewMode === 'grid' 
+                      ? (currentProfile === 'raqwan' ? 'bg-[#047857] text-white shadow-xs' : 'bg-[#FB4617] text-white shadow-xs')
+                      : 'text-[#5C4848] dark:text-zinc-400 hover:text-black dark:hover:text-white'
+                  ]"
+                >
+                  <LayoutGrid class="w-3.5 h-3.5 shrink-0" />
+                  <span>Grid</span>
+                </button>
+              </div>
+
+              <RouterLink
+                :to="'/' + currentProfile + '/projects'"
+                class="px-4 py-2 rounded-xl bg-white dark:bg-[#14161D] border border-[#EEDCDC] dark:border-white/10 text-xs font-mono-tag font-bold uppercase tracking-wider flex items-center gap-1.5 shadow-xs transition-colors"
+                :class="currentProfile === 'raqwan' ? 'text-[#047857] dark:text-emerald-400 hover:border-[#047857]/60' : 'text-[#FB4617] dark:text-[#FB4617] hover:border-[#FB4617]/40'"
+              >
+                <span>All ({{ projects.length }})</span>
+                <ArrowUpRight class="w-3.5 h-3.5" />
+              </RouterLink>
             </div>
           </div>
 
-          <!-- RIGHT: Large Cinematic Mockup Stage -->
-          <div class="lg:col-span-7 flex flex-col h-full order-1 lg:order-2">
-            <div 
-              ref="stageRef"
-              @mousemove="handleStageMouseMove"
-              @mouseenter="handleStageMouseEnter"
-              @mouseleave="handleStageMouseLeave"
-              @click="navigateToProject(activeProject.id)"
-              class="w-full h-full min-h-[440px] p-3 sm:p-4 rounded-[36px] bg-white dark:bg-[#14161D] border border-[#EEDCDC] dark:border-white/10 shadow-xl flex flex-col justify-between relative overflow-hidden group cursor-pointer select-none"
+          <!-- Large Minimalist Arrow Graphic (Benjamin Style) -->
+          <div class="pt-6 hidden lg:block opacity-15 dark:opacity-20 hover:opacity-30 transition-opacity pointer-events-none">
+            <ArrowUpRight 
+              class="w-36 h-36" 
+              :class="currentProfile === 'raqwan' ? 'text-emerald-400' : 'text-[#FB4617] dark:text-[#FB4617]'" 
+            />
+          </div>
+        </div>
+      </div>
+
+        <!-- ══════════════════════════════════════════════════════
+             RIGHT COLUMN: SCROLLABLE PROJECT CARDS (STREAM / GRID)
+             ══════════════════════════════════════════════════════ -->
+        <div class="lg:col-span-7 space-y-8 sm:space-y-10">
+          
+          <!-- STREAM MODE (Benjamin Creative Featured Cards) -->
+          <div v-if="viewMode === 'showcase'" class="space-y-8 sm:space-y-10">
+            <div
+              v-for="(p, idx) in filteredProjects"
+              :key="p.id"
+              class="rounded-3xl sm:rounded-[36px] bg-white dark:bg-[#14161D] border border-[#EEDCDC] dark:border-white/10 overflow-hidden shadow-sm hover:shadow-xl transition-all duration-500 group flex flex-col justify-between"
+              :class="currentProfile === 'raqwan' ? 'hover:border-[#047857]/50' : 'hover:border-[#FB4617]/40'"
             >
-              <!-- Dynamic Shine Spotlight -->
+              <!-- Card Image Viewport with Hover Zoom -->
               <div 
-                class="absolute inset-0 pointer-events-none z-20 transition-opacity duration-300 rounded-[36px]"
-                :style="{
-                  opacity: isStageHovered ? 1 : 0,
-                  background: currentProfile === 'raqwan'
-                    ? `radial-gradient(circle at ${shineX}% ${shineY}%, rgba(255, 255, 255, 0.2) 0%, rgba(4, 120, 87, 0.12) 45%, transparent 70%)`
-                    : `radial-gradient(circle at ${shineX}% ${shineY}%, rgba(255, 255, 255, 0.2) 0%, rgba(158, 4, 2, 0.08) 45%, transparent 70%)`
-                }"
-              ></div>
-
-              <!-- Main Viewport Image with Absolute Fill -->
-              <div class="relative overflow-hidden rounded-[26px] bg-[#14161D] shadow-inner flex-1 w-full h-full min-h-[360px]">
+                class="relative w-full aspect-[16/10] sm:aspect-[16/9] overflow-hidden bg-zinc-900 cursor-pointer"
+                @click="navigateToProject(p.id)"
+              >
                 <img 
-                  :src="activeProject.image" 
-                  :alt="activeProject.title"
-                  class="absolute inset-0 w-full h-full object-cover group-hover:scale-104 transition-transform duration-700 ease-out"
+                  :src="p.image" 
+                  :alt="p.title"
+                  class="w-full h-full object-cover group-hover:scale-104 transition-transform duration-700 ease-out"
                   loading="lazy"
+                  decoding="async"
                 />
-                <div class="absolute inset-0 bg-gradient-to-t from-black/75 via-black/20 to-black/30"></div>
+                <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-black/30"></div>
 
-                <!-- Top Badges Row -->
+                <!-- Top Floating Pills -->
                 <div class="absolute top-4 left-4 right-4 z-10 flex items-center justify-between gap-2">
-                  <span class="px-3.5 py-1 text-xs font-bold font-mono-tag uppercase rounded-xl bg-black/70 text-white border border-white/20 backdrop-blur-md shadow-sm">
-                    {{ activeProject.category }}
-                  </span>
-
-                  <!-- Metric badge if available -->
-                  <span 
-                    v-if="activeProject.detail?.results?.length" 
-                    class="px-3.5 py-1 text-xs font-bold font-mono-tag uppercase rounded-xl text-white border border-white/20 backdrop-blur-md shadow-md flex items-center gap-1.5"
-                    :class="currentProfile === 'raqwan' ? 'bg-[#047857]' : 'bg-[#9E0402]'"
+                  <!-- Benjamin Creative Style Number Badge -->
+                  <div 
+                    class="px-3 py-1 rounded-sm font-mono-tag font-bold text-xs text-white uppercase tracking-wider shadow-sm"
+                    :class="currentProfile === 'raqwan' ? 'bg-[#047857]' : 'bg-[#FB4617]'"
                   >
-                    <TrendingUp class="w-3.5 h-3.5" />
-                    <span>{{ activeProject.detail.results[0].metric }}: {{ activeProject.detail.results[0].after }}</span>
+                    ({{ String(idx + 1).padStart(2, '0') }})
+                  </div>
+
+                  <!-- Category Tag -->
+                  <span class="px-3.5 py-1 text-xs font-bold font-mono-tag uppercase rounded-full bg-black/60 text-white border border-white/20 backdrop-blur-md">
+                    {{ p.category }}
                   </span>
                 </div>
 
                 <!-- Hover Center Explore Pill -->
                 <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 z-30">
                   <span 
-                    class="px-7 py-3.5 rounded-full text-white font-mono-tag font-bold text-xs uppercase tracking-widest shadow-2xl flex items-center gap-2 transform group-hover:scale-105 transition-transform"
-                    :class="currentProfile === 'raqwan' ? 'bg-[#047857] hover:bg-[#065F46]' : 'bg-[#9E0402] hover:bg-[#B80604]'"
+                    class="px-6 py-3 rounded-full text-white font-mono-tag font-bold text-xs uppercase tracking-widest shadow-2xl flex items-center gap-2 transform group-hover:scale-105 transition-transform"
+                    :class="currentProfile === 'raqwan' ? 'bg-[#047857]' : 'bg-[#FB4617]'"
                   >
                     <span>Explore Case Study</span>
                     <ArrowUpRight class="w-4 h-4" />
                   </span>
                 </div>
 
-                <!-- Bottom Title & Action Strip -->
-                <div class="absolute bottom-4 left-4 right-4 z-10 flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-black/60 backdrop-blur-md p-4 rounded-2xl border border-white/10 text-white">
-                  <div class="space-y-0.5 min-w-0">
-                    <span class="text-[10px] font-mono-tag text-zinc-300 uppercase tracking-wider block">Featured Project</span>
-                    <h4 class="text-sm sm:text-base font-bold truncate text-white">{{ activeProject.title }}</h4>
+                <!-- Bottom Image Bar (Metric if exists) -->
+                <div 
+                  v-if="p.detail?.results?.length" 
+                  class="absolute bottom-4 left-4 right-4 z-10 flex items-center justify-between bg-black/60 backdrop-blur-md px-3.5 py-2 rounded-xl border border-white/10 text-white text-xs font-mono-tag"
+                >
+                  <div class="flex items-center gap-1.5 text-emerald-400 font-bold">
+                    <TrendingUp class="w-3.5 h-3.5" />
+                    <span>{{ p.detail.results[0].metric }}: {{ p.detail.results[0].after }}</span>
                   </div>
+                  <span v-if="p.detail.duration" class="text-zinc-400">
+                    {{ p.detail.duration }}
+                  </span>
+                </div>
+              </div>
 
-                  <RouterLink
-                    :to="'/' + currentProfile + '/projects/' + activeProject.id"
-                    @click.stop
-                    class="px-4 py-2 rounded-xl bg-white font-mono-tag text-xs font-extrabold uppercase tracking-wider flex items-center gap-1.5 shrink-0 shadow-md hover:scale-103 transition-all cursor-pointer"
-                    :class="currentProfile === 'raqwan' ? 'text-[#047857] hover:bg-emerald-50' : 'text-[#9E0402] hover:bg-[#FFF9F9]'"
+              <!-- Card Content Area -->
+              <div class="p-6 sm:p-8 space-y-4">
+                <!-- Title -->
+                <h3 
+                  @click="navigateToProject(p.id)"
+                  class="text-xl sm:text-2xl font-bold tracking-tight text-[#1C1313] dark:text-white group-hover:underline cursor-pointer transition-colors"
+                  :class="currentProfile === 'raqwan' ? 'group-hover:text-emerald-400' : 'group-hover:text-[#FB4617] dark:group-hover:text-[#FB4617]'"
+                >
+                  {{ p.title }}
+                </h3>
+
+                <!-- Description -->
+                <p class="text-xs sm:text-sm text-[#5C4848] dark:text-zinc-300 leading-relaxed line-clamp-3">
+                  {{ p.description }}
+                </p>
+
+                <!-- Tags Row -->
+                <div class="flex flex-wrap gap-1.5 pt-1">
+                  <span 
+                    v-for="tag in p.tags" 
+                    :key="tag" 
+                    class="px-2.5 py-1 text-[11px] font-bold font-mono-tag rounded-lg"
+                    :class="currentProfile === 'raqwan' 
+                      ? 'bg-emerald-50 dark:bg-[#047857]/20 text-emerald-800 dark:text-emerald-300 border border-emerald-200 dark:border-[#047857]/40' 
+                      : 'bg-orange-50 dark:bg-[#FB4617]/15 text-orange-900 dark:text-[#FB4617] border border-orange-200 dark:border-[#FB4617]/40'"
                   >
-                    <span>Read Study</span>
+                    {{ tag }}
+                  </span>
+                </div>
+
+                <!-- Footer Action Strip -->
+                <div class="pt-4 border-t border-[#EEDCDC] dark:border-white/10 flex items-center justify-between">
+                  <RouterLink
+                    :to="'/' + currentProfile + '/projects/' + p.id"
+                    class="text-xs font-bold font-mono-tag uppercase flex items-center gap-1.5 group-hover:translate-x-1 transition-transform"
+                    :class="currentProfile === 'raqwan' ? 'text-[#047857] dark:text-emerald-400' : 'text-[#FB4617] dark:text-[#FB4617]'"
+                  >
+                    <span>Read Full Case Study</span>
                     <ArrowRight class="w-3.5 h-3.5" />
                   </RouterLink>
+
+                  <span class="text-xs font-mono-tag text-[#5C4848] dark:text-zinc-400 font-semibold">
+                    Case Study ↗
+                  </span>
                 </div>
               </div>
 
             </div>
           </div>
+
+          <!-- GRID MODE -->
+          <div 
+            v-else 
+            class="grid grid-cols-1 sm:grid-cols-2 gap-6"
+          >
+            <ProjectCard 
+              v-for="project in filteredProjects" 
+              :key="project.id" 
+              :project="project" 
+            />
+          </div>
+
         </div>
 
-        <!-- VIEW 2: CLASSIC CARDS GRID -->
-        <div 
-          v-else 
-          key="grid"
-          class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8"
-        >
-          <ProjectCard 
-            v-for="project in filteredProjects" 
-            :key="project.id" 
-            :project="project" 
-          />
-        </div>
-
-      </transition>
+      </div>
 
     </div>
   </section>

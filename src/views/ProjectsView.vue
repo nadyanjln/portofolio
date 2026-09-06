@@ -102,7 +102,7 @@ watch(currentProfile, () => {
       <div class="space-y-3 max-w-3xl">
         <div 
           class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-white dark:bg-[#1A1C24] border text-xs font-mono-tag font-bold uppercase shadow-xs"
-          :class="currentProfile === 'raqwan' ? 'text-[#047857] dark:text-emerald-400 border-emerald-300 dark:border-[#047857]/40 bg-emerald-50 dark:bg-[#047857]/10' : 'text-[#9E0402] dark:text-[#ff4d4d] border-[#EEDCDC] dark:border-white/10'"
+          :class="currentProfile === 'raqwan' ? 'text-[#047857] dark:text-emerald-400 border-emerald-300 dark:border-[#047857]/40 bg-emerald-50 dark:bg-[#047857]/10' : 'text-[#FB4617] dark:text-[#FB4617] border-[#EEDCDC] dark:border-white/10'"
         >
           <Sparkles class="w-3.5 h-3.5" />
           <span>Case Studies Archive /2026/</span>
@@ -125,8 +125,8 @@ watch(currentProfile, () => {
           class="px-4 py-2 rounded-xl text-xs font-mono-tag font-bold uppercase flex items-center gap-1.5 transition-all cursor-pointer shrink-0"
           :class="[
             viewMode === 'showcase' 
-              ? (currentProfile === 'raqwan' ? 'bg-[#047857] text-white shadow-xs' : 'bg-[#9E0402] text-white shadow-xs')
-              : (currentProfile === 'raqwan' ? 'text-[#1C1313] dark:text-zinc-400 hover:text-[#047857] dark:hover:text-white' : 'text-[#1C1313] dark:text-zinc-400 hover:text-[#9E0402] dark:hover:text-[#ff4d4d]')
+              ? (currentProfile === 'raqwan' ? 'bg-[#047857] text-white shadow-xs' : 'bg-[#FB4617] text-white shadow-xs')
+              : (currentProfile === 'raqwan' ? 'text-[#1C1313] dark:text-zinc-400 hover:text-[#047857] dark:hover:text-white' : 'text-[#1C1313] dark:text-zinc-400 hover:text-[#FB4617] dark:hover:text-white')
           ]"
         >
           <Columns class="w-3.5 h-3.5 shrink-0" />
@@ -138,8 +138,8 @@ watch(currentProfile, () => {
           class="px-4 py-2 rounded-xl text-xs font-mono-tag font-bold uppercase flex items-center gap-1.5 transition-all cursor-pointer shrink-0"
           :class="[
             viewMode === 'grid' 
-              ? (currentProfile === 'raqwan' ? 'bg-[#047857] text-white shadow-xs' : 'bg-[#9E0402] text-white shadow-xs')
-              : (currentProfile === 'raqwan' ? 'text-[#1C1313] dark:text-zinc-400 hover:text-[#047857] dark:hover:text-white' : 'text-[#1C1313] dark:text-zinc-400 hover:text-[#9E0402] dark:hover:text-[#ff4d4d]')
+              ? (currentProfile === 'raqwan' ? 'bg-[#047857] text-white shadow-xs' : 'bg-[#FB4617] text-white shadow-xs')
+              : (currentProfile === 'raqwan' ? 'text-[#1C1313] dark:text-zinc-400 hover:text-[#047857] dark:hover:text-white' : 'text-[#1C1313] dark:text-zinc-400 hover:text-[#FB4617] dark:hover:text-white')
           ]"
         >
           <LayoutGrid class="w-3.5 h-3.5 shrink-0" />
@@ -158,14 +158,14 @@ watch(currentProfile, () => {
           type="text"
           placeholder="Cari case study, skill, atau kata kunci..."
           class="w-full pl-10 pr-4 py-2.5 rounded-xl bg-[#FFF9F9] dark:bg-[#0B0C0E] border border-[#EEDCDC] dark:border-white/10 text-xs sm:text-sm text-[#1C1313] dark:text-white placeholder:text-[#94A3B8] outline-none transition-all shadow-xs"
-          :class="currentProfile === 'raqwan' ? 'focus:border-[#047857] focus:ring-1 focus:ring-[#047857]' : 'focus:border-[#9E0402] focus:ring-1 focus:ring-[#9E0402]'"
+          :class="currentProfile === 'raqwan' ? 'focus:border-[#047857] focus:ring-1 focus:ring-[#047857]' : 'focus:border-[#FB4617] focus:ring-1 focus:ring-[#FB4617]'"
         />
       </div>
 
       <!-- Categories Filter Select Input -->
       <div class="relative w-full lg:w-72 shrink-0">
         <div class="absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none text-zinc-400">
-          <Filter class="w-4 h-4" :class="currentProfile === 'raqwan' ? 'text-emerald-500' : 'text-[#9E0402]'" />
+          <Filter class="w-4 h-4" :class="currentProfile === 'raqwan' ? 'text-emerald-500' : 'text-[#FB4617]'" />
         </div>
         <select
           v-model="selectedCategory"
@@ -173,7 +173,7 @@ watch(currentProfile, () => {
           class="w-full appearance-none pl-10 pr-10 py-2.5 rounded-xl bg-[#FFF9F9] dark:bg-[#0B0C0E] border text-xs sm:text-sm font-mono-tag font-bold tracking-wide outline-none cursor-pointer transition-all shadow-xs"
           :class="currentProfile === 'raqwan' 
             ? 'border-emerald-300/60 dark:border-white/10 text-zinc-900 dark:text-white focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 hover:border-emerald-400' 
-            : 'border-red-300/60 dark:border-white/10 text-zinc-900 dark:text-white focus:border-[#9E0402] focus:ring-1 focus:ring-[#9E0402] hover:border-red-400'"
+            : 'border-orange-300/60 dark:border-white/10 text-zinc-900 dark:text-white focus:border-[#FB4617] focus:ring-1 focus:ring-[#FB4617] hover:border-orange-400'"
         >
           <option 
             v-for="cat in categories" 
@@ -219,7 +219,7 @@ watch(currentProfile, () => {
                   activeIndex === idx
                     ? (currentProfile === 'raqwan'
                         ? 'bg-white dark:bg-[#14161D] border-[#047857] dark:border-emerald-500 shadow-xl shadow-[#047857]/15'
-                        : 'bg-white dark:bg-[#14161D] border-[#9E0402] dark:border-[#ff4d4d] shadow-xl shadow-[#9E0402]/15')
+                        : 'bg-white dark:bg-[#14161D] border-[#FB4617] dark:border-[#FB4617] shadow-xl shadow-[#FB4617]/15')
                     : 'bg-white/70 dark:bg-[#14161D]/50 border-[#EEDCDC] dark:border-white/10 hover:bg-white dark:hover:bg-[#14161D] hover:border-zinc-300 dark:hover:border-white/20'
                 ]"
               >
@@ -229,11 +229,11 @@ watch(currentProfile, () => {
                     <span 
                       v-if="activeIndex === idx"
                       class="w-2 h-2 rounded-full shrink-0 animate-pulse"
-                      :class="currentProfile === 'raqwan' ? 'bg-emerald-500' : 'bg-[#9E0402] dark:bg-[#ff4d4d]'"
+                      :class="currentProfile === 'raqwan' ? 'bg-emerald-500' : 'bg-[#FB4617] dark:bg-[#FB4617]'"
                     ></span>
                     <span 
                       class="text-xs font-mono-tag font-bold tracking-tight"
-                      :class="activeIndex === idx ? (currentProfile === 'raqwan' ? 'text-[#047857] dark:text-emerald-400' : 'text-[#9E0402] dark:text-[#ff4d4d]') : 'text-[#5C4848] dark:text-zinc-400'"
+                      :class="activeIndex === idx ? (currentProfile === 'raqwan' ? 'text-[#047857] dark:text-emerald-400' : 'text-[#FB4617] dark:text-[#FB4617]') : 'text-[#5C4848] dark:text-zinc-400'"
                     >
                       ({{ String(idx + 1).padStart(2, '0') }})
                     </span>
@@ -256,8 +256,8 @@ watch(currentProfile, () => {
                     class="text-base sm:text-lg font-bold leading-snug tracking-tight transition-colors"
                     :class="[
                       activeIndex === idx 
-                        ? (currentProfile === 'raqwan' ? 'text-[#047857] dark:text-emerald-400' : 'text-[#9E0402] dark:text-[#ff4d4d]') 
-                        : (currentProfile === 'raqwan' ? 'text-[#1C1313] dark:text-white group-hover:text-[#047857] dark:group-hover:text-emerald-400' : 'text-[#1C1313] dark:text-white group-hover:text-[#9E0402] dark:group-hover:text-[#ff4d4d]')
+                        ? (currentProfile === 'raqwan' ? 'text-[#047857] dark:text-emerald-400' : 'text-[#FB4617] dark:text-[#FB4617]') 
+                        : (currentProfile === 'raqwan' ? 'text-[#1C1313] dark:text-white group-hover:text-[#047857] dark:group-hover:text-emerald-400' : 'text-[#1C1313] dark:text-white group-hover:text-[#FB4617] dark:group-hover:text-[#FB4617]')
                     ]"
                   >
                     {{ p.title }}
@@ -288,7 +288,7 @@ watch(currentProfile, () => {
                   <RouterLink
                     :to="'/' + currentProfile + '/projects/' + p.id"
                     class="text-xs font-bold font-mono-tag uppercase flex items-center gap-1.5 hover:underline"
-                    :class="currentProfile === 'raqwan' ? 'text-[#047857] dark:text-emerald-400' : 'text-[#9E0402] dark:text-[#ff4d4d]'"
+                    :class="currentProfile === 'raqwan' ? 'text-[#047857] dark:text-emerald-400' : 'text-[#FB4617] dark:text-[#FB4617]'"
                   >
                     <span>Read Full Case Study</span>
                     <ArrowRight class="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
@@ -305,7 +305,7 @@ watch(currentProfile, () => {
 
             <div v-if="filteredProjects.length > 4" class="pt-1.5 text-center text-xs font-mono-tag text-[#5C4848] dark:text-zinc-400 flex items-center justify-center gap-1.5">
               <span>Scroll untuk melihat {{ filteredProjects.length - 4 }} proyek lainnya</span>
-              <span class="animate-bounce" :class="currentProfile === 'raqwan' ? 'text-[#047857] dark:text-emerald-400' : 'text-[#9E0402] dark:text-[#ff4d4d]'">↓</span>
+              <span class="animate-bounce" :class="currentProfile === 'raqwan' ? 'text-[#047857] dark:text-emerald-400' : 'text-[#FB4617] dark:text-[#FB4617]'">↓</span>
             </div>
           </div>
 
@@ -325,7 +325,7 @@ watch(currentProfile, () => {
                   opacity: isStageHovered ? 1 : 0,
                   background: currentProfile === 'raqwan'
                     ? `radial-gradient(circle at ${shineX}% ${shineY}%, rgba(255, 255, 255, 0.2) 0%, rgba(4, 120, 87, 0.12) 45%, transparent 70%)`
-                    : `radial-gradient(circle at ${shineX}% ${shineY}%, rgba(255, 255, 255, 0.2) 0%, rgba(158, 4, 2, 0.08) 45%, transparent 70%)`
+                    : `radial-gradient(circle at ${shineX}% ${shineY}%, rgba(255, 255, 255, 0.2) 0%, rgba(251, 70, 23, 0.12) 45%, transparent 70%)`
                 }"
               ></div>
 
@@ -335,6 +335,7 @@ watch(currentProfile, () => {
                   :alt="activeProject.title" 
                   class="absolute inset-0 w-full h-full object-cover group-hover:scale-104 transition-transform duration-700 ease-out"
                   loading="lazy"
+                  decoding="async"
                 />
                 <div class="absolute inset-0 bg-gradient-to-t from-black/75 via-black/20 to-black/30"></div>
 
@@ -346,7 +347,7 @@ watch(currentProfile, () => {
                   <span 
                     v-if="activeProject.detail?.results?.length" 
                     class="px-3.5 py-1 text-xs font-bold font-mono-tag uppercase rounded-xl text-white border border-white/20 backdrop-blur-md shadow-md flex items-center gap-1.5"
-                    :class="currentProfile === 'raqwan' ? 'bg-[#047857]' : 'bg-[#9E0402]'"
+                    :class="currentProfile === 'raqwan' ? 'bg-[#047857]' : 'bg-[#FB4617]'"
                   >
                     <TrendingUp class="w-3.5 h-3.5" />
                     <span>{{ activeProject.detail.results[0].metric }}: {{ activeProject.detail.results[0].after }}</span>
@@ -356,7 +357,7 @@ watch(currentProfile, () => {
                 <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 z-30">
                   <span 
                     class="px-7 py-3.5 rounded-full text-white font-mono-tag font-bold text-xs uppercase tracking-widest shadow-2xl flex items-center gap-2 transform group-hover:scale-105 transition-transform"
-                    :class="currentProfile === 'raqwan' ? 'bg-[#047857] hover:bg-[#065F46]' : 'bg-[#9E0402] hover:bg-[#B80604]'"
+                    :class="currentProfile === 'raqwan' ? 'bg-[#047857] hover:bg-[#065F46]' : 'bg-[#FB4617] hover:bg-[#E0370E]'"
                   >
                     <span>Explore Case Study</span>
                     <ArrowUpRight class="w-4 h-4" />
@@ -373,7 +374,7 @@ watch(currentProfile, () => {
                     :to="'/' + currentProfile + '/projects/' + activeProject.id"
                     @click.stop
                     class="px-4 py-2 rounded-xl bg-white font-mono-tag text-xs font-extrabold uppercase tracking-wider flex items-center gap-1.5 shrink-0 shadow-md hover:scale-103 transition-all cursor-pointer"
-                    :class="currentProfile === 'raqwan' ? 'text-[#047857] hover:bg-emerald-50' : 'text-[#9E0402] hover:bg-[#FFF9F9]'"
+                    :class="currentProfile === 'raqwan' ? 'text-[#047857] hover:bg-emerald-50' : 'text-[#FB4617] hover:bg-[#FFF9F9]'"
                   >
                     <span>Read Study</span>
                     <ArrowRight class="w-3.5 h-3.5" />
@@ -409,7 +410,7 @@ watch(currentProfile, () => {
       <button 
         @click="searchQuery = ''; selectedCategory = 'All'" 
         class="mt-2 px-4 py-2 text-xs font-mono-tag font-bold rounded-xl text-white cursor-pointer"
-        :class="currentProfile === 'raqwan' ? 'bg-[#047857]' : 'bg-[#9E0402]'"
+        :class="currentProfile === 'raqwan' ? 'bg-[#047857]' : 'bg-[#FB4617]'"
       >
         Reset Filter
       </button>

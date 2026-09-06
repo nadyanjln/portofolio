@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted, defineAsyncComponent } from 'vue'
 import { 
   Sparkles, 
   Layers, 
@@ -14,12 +14,13 @@ import {
   Play, 
   CheckCircle2, 
   Activity,
-  Terminal
+  Terminal,
+  RefreshCw
 } from 'lucide-vue-next'
 import { usePortfolioStore } from '@/composables/usePortfolioStore'
 import { useScrollReveal } from '@/composables/useAnimations'
 
-import NeuralNetworkVisualizer from '@/components/interactive/NeuralNetworkVisualizer.vue'
+const NeuralNetworkVisualizer = defineAsyncComponent(() => import('@/components/interactive/NeuralNetworkVisualizer.vue'))
 
 const { currentProfile } = usePortfolioStore()
 
@@ -387,7 +388,7 @@ onMounted(() => observeAll(sectionRef.value))
                 class="px-6 py-3 rounded-2xl bg-[#047857] hover:bg-[#065F46] text-white font-mono-tag text-xs font-bold uppercase tracking-wider flex items-center gap-2 transition-all cursor-pointer disabled:opacity-50 shadow-md shadow-[#047857]/30"
               >
                 <Play class="w-4 h-4 fill-white" />
-                <span>{{ agenticRunning ? 'Executing Agentic Pipeline...' : 'Run Agentic Simulation ⚡' }}</span>
+                <span>{{ agenticRunning ? 'Executing Agentic Pipeline...' : 'Run Agentic Simulation' }}</span>
               </button>
             </div>
 
