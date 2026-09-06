@@ -111,8 +111,8 @@ const handleMouseLeave = (target) => {
               : 'perspective(1000px) rotateX(0deg) rotateY(0deg) translateY(0px)'
           }"
         >
-          <!-- Crimson Glow Background -->
-          <div class="absolute -top-24 -right-24 w-60 h-60 bg-[#9E0402]/20 rounded-full blur-[80px] pointer-events-none group-hover:bg-[#9E0402]/35 transition-all"></div>
+          <!-- Crimson Glow Ambient (Contained with exact border radius) -->
+          <div class="absolute inset-0 rounded-[32px] pointer-events-none transition-opacity duration-500 bg-[radial-gradient(circle_at_top_right,rgba(158,4,2,0.30)_0%,transparent_60%)] group-hover:opacity-100 opacity-70"></div>
 
           <div class="space-y-6 relative z-10">
             <!-- Header Badge & Icon -->
@@ -168,8 +168,8 @@ const handleMouseLeave = (target) => {
               : 'perspective(1000px) rotateX(0deg) rotateY(0deg) translateY(0px)'
           }"
         >
-          <!-- Deep Dark Emerald Glow Background -->
-          <div class="absolute -top-24 -right-24 w-60 h-60 bg-[#047857]/25 rounded-full blur-[80px] pointer-events-none group-hover:bg-[#047857]/40 transition-all"></div>
+          <!-- Deep Dark Emerald Glow Ambient (Contained with exact border radius) -->
+          <div class="absolute inset-0 rounded-[32px] pointer-events-none transition-opacity duration-500 bg-[radial-gradient(circle_at_top_right,rgba(4,120,87,0.35)_0%,transparent_60%)] group-hover:opacity-100 opacity-70"></div>
 
           <div class="space-y-6 relative z-10">
             <!-- Header Badge & Icon -->
