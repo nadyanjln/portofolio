@@ -167,11 +167,40 @@ const scrollToWorks = () => {
             ? 'bg-gradient-to-b from-[#00F59B] via-[#059669] to-[#047857] text-white border-emerald-300/30'
             : 'bg-gradient-to-b from-[#FA6846] via-[#FB4617] to-[#DE3408] text-white border-orange-300/40'"
         >
-          <!-- Refined Executive Typography Watermark Across Top (Darker Contrast) -->
+          <!-- Batik Heritage Accent (Bottom-Right Corner Only — Elegant, Not Full-Cover) -->
+          <div class="absolute bottom-0 right-0 w-[55%] h-[55%] pointer-events-none select-none overflow-hidden opacity-[0.12]">
+            <!-- Raqwan: Motif Parang Diagonal -->
+            <svg v-if="currentProfile === 'raqwan'" class="w-full h-full" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <pattern id="batik-parang" width="48" height="48" patternUnits="userSpaceOnUse" patternTransform="rotate(-45)">
+                  <path d="M 6,24 C 10,12 18,12 22,24 C 26,36 34,36 38,24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" />
+                  <polygon points="24,14 27,20 24,26 21,20" fill="white" opacity="0.7" />
+                  <circle cx="10" cy="8" r="1.5" fill="white" opacity="0.5" />
+                  <circle cx="38" cy="40" r="1.5" fill="white" opacity="0.5" />
+                </pattern>
+              </defs>
+              <rect width="100%" height="100%" fill="url(#batik-parang)" />
+            </svg>
+
+            <!-- Nadya: Motif Kawung Geometris -->
+            <svg v-else class="w-full h-full" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <pattern id="batik-kawung" width="44" height="44" patternUnits="userSpaceOnUse">
+                  <ellipse cx="22" cy="11" rx="5" ry="9" fill="none" stroke="white" stroke-width="1.5" />
+                  <ellipse cx="22" cy="33" rx="5" ry="9" fill="none" stroke="white" stroke-width="1.5" />
+                  <ellipse cx="11" cy="22" rx="9" ry="5" fill="none" stroke="white" stroke-width="1.5" />
+                  <ellipse cx="33" cy="22" rx="9" ry="5" fill="none" stroke="white" stroke-width="1.5" />
+                  <circle cx="22" cy="22" r="2" fill="white" />
+                </pattern>
+              </defs>
+              <rect width="100%" height="100%" fill="url(#batik-kawung)" />
+            </svg>
+          </div>
+
+          <!-- Soft Executive Typography Watermark -->
           <div class="absolute top-3 sm:top-2 left-4 sm:left-6 select-none pointer-events-none overflow-hidden w-full pr-8">
             <span 
-              class="text-4xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl font-black tracking-tight leading-none block uppercase select-none transition-colors"
-              :class="currentProfile === 'raqwan' ? 'text-[#022c22]/65' : 'text-[#3d0b00]/65'"
+              class="text-4xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl font-black tracking-tight leading-none block uppercase select-none text-white/[0.22]"
             >
               {{ currentProfile === 'raqwan' ? 'Deep' : 'Design' }}
             </span>

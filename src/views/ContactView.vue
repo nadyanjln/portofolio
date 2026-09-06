@@ -471,8 +471,7 @@ const faqList = computed(() => {
               :href="whatsappUrl"
               target="_blank"
               rel="noopener noreferrer"
-              class="w-full py-3 px-4 rounded-2xl font-mono-tag font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-2 transition-all cursor-pointer shadow-sm text-white"
-              :class="currentProfile === 'raqwan' ? 'bg-[#047857] hover:bg-[#065F46]' : 'bg-[#1C1313] hover:bg-[#2E2020] dark:bg-white dark:text-[#1C1313] dark:hover:bg-zinc-200'"
+              class="w-full py-3 px-4 rounded-2xl font-mono-tag font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-2 transition-all cursor-pointer shadow-sm text-white bg-[#047857] hover:bg-[#065F46]"
             >
               <span>Mulai Chat di WhatsApp ↗</span>
             </a>
