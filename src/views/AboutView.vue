@@ -231,7 +231,7 @@ watch(currentProfile, () => {
             :class="currentProfile === 'raqwan' ? 'bg-[#047857] hover:bg-[#065F46] shadow-[#047857]/30' : 'bg-[#FB4617] hover:bg-[#E0370E] shadow-[#FB4617]/30'"
           >
             <MessageCircle class="w-4 h-4" />
-            <span>Chat Langsung WhatsApp ({{ directPhone }}) ↗</span>
+            <span>Chat Langsung WhatsApp ↗</span>
           </a>
 
           <a 

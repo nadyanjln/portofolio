@@ -424,15 +424,6 @@ const faqList = computed(() => {
               </span>
             </div>
 
-            <div class="p-3.5 rounded-2xl bg-[#FFF9F9] dark:bg-[#0B0C0E] border border-[#EEDCDC]/80 dark:border-white/5 flex items-center justify-between gap-2">
-              <span class="text-xs sm:text-sm font-mono font-medium text-emerald-600 dark:text-emerald-400">
-                {{ directPhone }}
-              </span>
-              <span class="text-[10px] font-mono-tag uppercase text-emerald-600 dark:text-emerald-400 font-bold">
-                Online
-              </span>
-            </div>
-
             <p class="text-xs text-[#5C4848] dark:text-zinc-400 leading-relaxed">
               Ingin diskusi cepat atau menjadwalkan panggilan pengantar? Hubungi langsung via WhatsApp dengan pesan pembuka siap pakai.
             </p>
@@ -444,7 +435,7 @@ const faqList = computed(() => {
               class="w-full py-3 px-4 rounded-2xl font-mono-tag font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-2 transition-all cursor-pointer shadow-sm text-white"
               :class="currentProfile === 'raqwan' ? 'bg-[#047857] hover:bg-[#065F46]' : 'bg-[#1C1313] hover:bg-[#2E2020] dark:bg-white dark:text-[#1C1313] dark:hover:bg-zinc-200'"
             >
-              <span>Mulai Chat di WhatsApp ({{ directPhone }}) ↗</span>
+              <span>Mulai Chat di WhatsApp ↗</span>
             </a>
           </div>
 
