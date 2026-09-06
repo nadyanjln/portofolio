@@ -565,26 +565,33 @@ onMounted(() => {
     <div class="rounded-2xl sm:rounded-3xl bg-[#090A0D] border border-white/10 overflow-hidden relative shadow-2xl">
       
       <!-- Top HUD Header Inside Canvas Card -->
-      <div class="px-5 py-3.5 border-b border-white/10 flex items-center justify-between text-xs font-mono-tag text-zinc-400 bg-white/[0.02]">
+      <div class="px-4 sm:px-5 py-3 border-b border-white/10 flex flex-wrap items-center justify-between gap-2 text-xs font-mono-tag text-zinc-400 bg-white/[0.02]">
         <div class="flex items-center gap-2">
           <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-          <span class="text-white font-bold">Interactive Deep Vision Graph</span>
-          <span class="text-zinc-500">• Hover node to inspect synaptic paths</span>
+          <span class="text-white font-bold text-xs sm:text-sm">Interactive Deep Vision Graph</span>
+          <span class="text-zinc-500 hidden md:inline">• Hover node to inspect synaptic paths</span>
         </div>
-        <div class="flex items-center gap-4 text-[11px]">
+        <div class="flex items-center gap-3 sm:gap-4 text-[11px]">
+          <!-- Mobile Scroll Indicator (No emojis) -->
+          <span class="sm:hidden text-[10px] text-emerald-400 font-mono-tag flex items-center gap-1 font-semibold">
+            <span>Scroll horizontal</span>
+            <span>&harr;</span>
+          </span>
           <span>Pass: <strong class="text-emerald-400">#{{ forwardPassCount }}</strong></span>
           <span>Target: <strong class="text-white">{{ currentPreset.dataset }}</strong></span>
         </div>
       </div>
 
-      <!-- The Real-time Interactive Graph Canvas -->
-      <div class="relative w-full h-[360px] sm:h-[400px]">
-        <canvas
-          ref="canvasRef"
-          class="w-full h-full block cursor-crosshair"
-          @mousemove="handleCanvasMouseMove"
-          @mouseleave="handleCanvasMouseLeave"
-        ></canvas>
+      <!-- The Real-time Interactive Graph Canvas (Horizontal Scrollable on Mobile) -->
+      <div class="overflow-x-auto custom-scroll max-w-full pb-1 overscroll-x-contain">
+        <div class="min-w-[760px] relative h-[360px] sm:h-[400px]">
+          <canvas
+            ref="canvasRef"
+            class="w-full h-full block cursor-crosshair min-w-[760px]"
+            @mousemove="handleCanvasMouseMove"
+            @mouseleave="handleCanvasMouseLeave"
+          ></canvas>
+        </div>
       </div>
 
     </div>

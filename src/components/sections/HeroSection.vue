@@ -167,10 +167,11 @@ const scrollToWorks = () => {
             ? 'bg-gradient-to-b from-[#00F59B] via-[#059669] to-[#047857] text-white border-emerald-300/30'
             : 'bg-gradient-to-b from-[#FA6846] via-[#FB4617] to-[#DE3408] text-white border-orange-300/40'"
         >
-          <!-- Refined Executive Typography Watermark Across Top -->
+          <!-- Refined Executive Typography Watermark Across Top (Darker Contrast) -->
           <div class="absolute top-3 sm:top-2 left-4 sm:left-6 select-none pointer-events-none overflow-hidden w-full pr-8">
             <span 
-              class="text-4xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl font-black tracking-tight leading-none block uppercase bg-gradient-to-b from-white/35 via-white/20 to-white/5 bg-clip-text text-transparent select-none"
+              class="text-4xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl font-black tracking-tight leading-none block uppercase select-none transition-colors"
+              :class="currentProfile === 'raqwan' ? 'text-[#022c22]/65' : 'text-[#3d0b00]/65'"
             >
               {{ currentProfile === 'raqwan' ? 'Deep' : 'Design' }}
             </span>

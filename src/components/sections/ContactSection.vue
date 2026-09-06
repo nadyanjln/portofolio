@@ -19,6 +19,7 @@ const isSubmitting = ref(false)
 const submitSuccess = ref(false)
 const submitError = ref('')
 const isMock = ref(false)
+const lastWaUrl = ref('')
 
 const handleSubmit = async () => {
   if (!form.name || !form.email || !form.message) {
@@ -29,27 +30,48 @@ const handleSubmit = async () => {
   submitError.value = ''
   isSubmitting.value = true
 
+  const recipientName = currentProfile.value === 'raqwan' ? 'Muhammad Raqwan' : 'Nadya Najelina'
+  const waText = `Halo ${recipientName},
+
+Saya ingin mendiskusikan proyek / kolaborasi melalui website portofolio Anda:
+
+*Nama:* ${form.name.trim()}
+*Email:* ${form.email.trim()}
+
+*Detail Proyek / Pesan:*
+${form.message.trim()}
+
+Terima kasih.`
+
+  const defaultPhone = currentProfile.value === 'raqwan' ? '+62 812-9828-7897' : '+62 821-1146-4583'
+  const rawPhone = portfolioInfo.value?.phone || defaultPhone
+  const cleanPhone = rawPhone.replace(/[^0-9]/g, '')
+  const waUrl = `https://wa.me/${cleanPhone}?text=${encodeURIComponent(waText)}`
+  lastWaUrl.value = waUrl
+
   try {
     // Record in local CMS Store
     addMessage({
-      name: form.name,
-      email: form.email,
-      message: form.message,
+      name: form.name.trim(),
+      email: form.email.trim(),
+      message: form.message.trim(),
       category: currentProfile.value === 'raqwan' ? 'AI Inquiry' : 'Inquiry Landing Page'
     }, currentProfile.value)
 
-    const res = await sendContactMessage({
-      name: form.name,
-      email: form.email,
-      message: form.message
-    })
+    try {
+      await sendContactMessage({
+        name: form.name.trim(),
+        email: form.email.trim(),
+        message: form.message.trim()
+      })
+    } catch {}
 
-    if (res.error) {
-      throw new Error(res.error.message || 'Gagal mengirim pesan')
+    // Open WhatsApp
+    if (typeof window !== 'undefined') {
+      window.open(waUrl, '_blank', 'noopener,noreferrer')
     }
 
     submitSuccess.value = true
-    isMock.value = Boolean(res.data?.mock)
     
     // Reset form
     form.name = ''
@@ -185,15 +207,27 @@ onMounted(() => observeAll(sectionRef.value))
               <!-- Success Alert -->
               <div 
                 v-if="submitSuccess" 
-                class="p-4 rounded-2xl bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800 text-emerald-800 dark:text-emerald-200 text-xs sm:text-sm font-mono-tag flex items-start gap-3"
+                class="p-4 rounded-2xl bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800 text-emerald-800 dark:text-emerald-200 text-xs sm:text-sm font-mono-tag space-y-2"
               >
-                <CheckCircle2 class="w-5 h-5 text-emerald-600 dark:text-emerald-400 shrink-0 mt-0.5" />
-                <div class="space-y-1">
-                  <p class="font-bold">Pesan Anda Berhasil Terkirim!</p>
-                  <p class="text-xs">
-                    {{ isMock ? 'Pesan dicatat di local state & disinkronkan ke CMS.' : 'Pesan tersimpan di Supabase Inbox.' }} 
-                    Saya akan merespons dalam waktu 1x24 jam.
-                  </p>
+                <div class="flex items-start gap-3">
+                  <CheckCircle2 class="w-5 h-5 text-emerald-600 dark:text-emerald-400 shrink-0 mt-0.5" />
+                  <div class="space-y-1">
+                    <p class="font-bold">Pesan Dialihkan ke WhatsApp!</p>
+                    <p class="text-xs">
+                      Pesan Anda telah disiapkan dan diteruskan ke WhatsApp, serta dicadangkan di sistem.
+                    </p>
+                  </div>
+                </div>
+
+                <div v-if="lastWaUrl" class="pt-1">
+                  <a
+                    :href="lastWaUrl"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="px-4 py-2 rounded-lg bg-[#047857] text-white text-xs font-bold hover:bg-[#065F46] inline-flex items-center gap-1.5"
+                  >
+                    <span>Buka WhatsApp ↗</span>
+                  </a>
                 </div>
               </div>
 
@@ -257,7 +291,7 @@ onMounted(() => observeAll(sectionRef.value))
                 class="w-full py-3.5 text-xs sm:text-sm font-mono-tag font-bold uppercase tracking-wider text-white rounded-xl transition-all duration-300 shadow-md flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
                 :class="currentProfile === 'raqwan' ? 'bg-[#047857] hover:bg-[#065F46] shadow-[#047857]/30' : 'bg-[#FB4617] hover:bg-[#E0370E] shadow-[#FB4617]/25'"
               >
-                <span>{{ isSubmitting ? 'Mengirim Pesan...' : 'Kirim Pesan Sekarang ↗' }}</span>
+                <span>{{ isSubmitting ? 'Menyiapkan WhatsApp...' : 'Kirim Pesan via WhatsApp ↗' }}</span>
               </button>
             </form>
           </div>

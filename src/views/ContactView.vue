@@ -147,6 +147,8 @@ const timelineOptions = [
   { id: 'fleksibel', label: 'Fleksibel / Diskusi Awal' }
 ]
 
+const lastWaUrl = ref('')
+
 const handleSubmit = async () => {
   if (!form.name.trim() || !form.email.trim() || !form.message.trim()) {
     submitError.value = 'Harap lengkapi Nama, Email, dan Pesan sebelum mengirim.'
@@ -159,21 +161,57 @@ const handleSubmit = async () => {
   const selectedCategoryObj = inquiryOptions.value.find(opt => opt.id === form.inquiryType)
   const categoryLabel = selectedCategoryObj ? selectedCategoryObj.label : 'General Inquiry'
 
+  const selectedTimelineObj = timelineOptions.find(opt => opt.id === form.timeline)
+  const timelineLabel = selectedTimelineObj ? selectedTimelineObj.label : form.timeline
+
+  const recipientName = currentProfile.value === 'raqwan' ? 'Muhammad Raqwan' : 'Nadya Najelina'
+
+  // Construct structured, professional WhatsApp text
+  const waMessage = `Halo ${recipientName},
+
+Saya ingin mendiskusikan peluang kolaborasi / pertanyaan melalui website portofolio Anda:
+
+*Topik / Kebutuhan:* ${categoryLabel}
+*Nama / Organisasi:* ${form.name.trim()}
+*Email Kontak:* ${form.email.trim()}
+*Target Linimasa:* ${timelineLabel}
+
+*Ringkasan Kebutuhan / Detail Proyek:*
+${form.message.trim()}
+
+Terima kasih.`
+
+  // Retrieve official profile WhatsApp phone number
+  const defaultPhone = currentProfile.value === 'raqwan' ? '+62 812-9828-7897' : '+62 821-1146-4583'
+  const rawPhone = portfolioInfo.value?.phone || defaultPhone
+  const cleanPhone = rawPhone.replace(/[^0-9]/g, '')
+  const waUrl = `https://wa.me/${cleanPhone}?text=${encodeURIComponent(waMessage)}`
+  lastWaUrl.value = waUrl
+
   try {
     // 1. Save to reactive CMS store (visible immediately in /admin inbox)
     addMessage({
-      name: form.name,
-      email: form.email,
-      category: `${categoryLabel} [Linimasa: ${form.timeline}]`,
-      message: form.message
+      name: form.name.trim(),
+      email: form.email.trim(),
+      category: `${categoryLabel} [Linimasa: ${timelineLabel}]`,
+      message: form.message.trim()
     }, currentProfile.value)
 
-    // 2. Persist to Supabase Cloud Database
-    await sendContactMessage({
-      name: form.name,
-      email: form.email,
-      message: `[Kategori: ${categoryLabel}] [Linimasa: ${form.timeline}]\n\n${form.message}`
-    })
+    // 2. Persist to Supabase Cloud Database as secure backup
+    try {
+      await sendContactMessage({
+        name: form.name.trim(),
+        email: form.email.trim(),
+        message: `[Kategori: ${categoryLabel}] [Linimasa: ${timelineLabel}]\n\n${form.message.trim()}`
+      })
+    } catch (dbErr) {
+      console.warn('Database backup warning:', dbErr)
+    }
+
+    // 3. Immediately open WhatsApp in new tab / app
+    if (typeof window !== 'undefined') {
+      window.open(waUrl, '_blank', 'noopener,noreferrer')
+    }
 
     submitSuccess.value = true
     form.name = ''
@@ -181,7 +219,7 @@ const handleSubmit = async () => {
     form.message = ''
   } catch (err) {
     console.error('Contact submission error:', err)
-    submitError.value = 'Terjadi kendala saat mengirim pesan. Silakan gunakan tautan email langsung di samping.'
+    submitError.value = 'Terjadi kendala saat memproses formulir. Silakan hubungi langsung via tombol WhatsApp di samping.'
   } finally {
     isSubmitting.value = false
   }
@@ -189,6 +227,7 @@ const handleSubmit = async () => {
 
 const resetFormSuccess = () => {
   submitSuccess.value = false
+  lastWaUrl.value = ''
 }
 
 // -------------------------------------------------------------
@@ -523,26 +562,40 @@ const faqList = computed(() => {
               class="py-12 px-6 text-center space-y-6 flex flex-col items-center justify-center min-h-[460px]"
             >
               <div 
-                class="w-16 h-16 rounded-full flex items-center justify-center text-white shadow-xl shadow-emerald-500/20 animate-bounce"
+                class="w-16 h-16 rounded-full flex items-center justify-center text-white shadow-xl shadow-emerald-500/20"
                 :class="currentProfile === 'raqwan' ? 'bg-[#047857]' : 'bg-emerald-500'"
               >
                 <CheckCircle2 class="w-8 h-8" />
               </div>
 
               <div class="space-y-2 max-w-md">
-                <h3 class="text-2xl font-bold text-[#1C1313] dark:text-white">Pesan Anda Berhasil Terkirim!</h3>
+                <h3 class="text-2xl font-bold text-[#1C1313] dark:text-white">Pesan Dialihkan ke WhatsApp!</h3>
                 <p class="text-sm text-[#5C4848] dark:text-zinc-400 leading-relaxed">
-                  Terima kasih telah menghubungi. Notifikasi telah tersimpan dan saya akan meninjau pesan Anda secepatnya.
+                  Data formulir Anda telah siap dan diteruskan ke WhatsApp resmi kami, serta dicadangkan secara aman di sistem.
                 </p>
               </div>
 
-              <button 
-                @click="resetFormSuccess"
-                type="button"
-                class="px-6 py-3 rounded-xl bg-zinc-100 dark:bg-white/10 hover:bg-zinc-200 dark:hover:bg-white/20 text-xs font-mono-tag font-bold uppercase tracking-wider text-[#1C1313] dark:text-white cursor-pointer transition-all"
-              >
-                Kirim Pesan Lainnya
-              </button>
+              <div class="flex flex-col sm:flex-row items-center justify-center gap-3 w-full max-w-sm pt-2">
+                <a 
+                  v-if="lastWaUrl"
+                  :href="lastWaUrl"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="w-full sm:w-auto px-6 py-3.5 rounded-xl text-white text-xs font-mono-tag font-bold uppercase tracking-wider transition-all shadow-md flex items-center justify-center gap-2"
+                  :class="currentProfile === 'raqwan' ? 'bg-[#047857] hover:bg-[#065F46] shadow-[#047857]/30' : 'bg-[#FB4617] hover:bg-[#E0370E] shadow-[#FB4617]/30'"
+                >
+                  <MessageCircle class="w-4 h-4" />
+                  <span>Buka WhatsApp Sekarang ↗</span>
+                </a>
+
+                <button 
+                  @click="resetFormSuccess"
+                  type="button"
+                  class="w-full sm:w-auto px-5 py-3.5 rounded-xl bg-zinc-100 dark:bg-white/10 hover:bg-zinc-200 dark:hover:bg-white/20 text-xs font-mono-tag font-bold uppercase tracking-wider text-[#1C1313] dark:text-white cursor-pointer transition-all"
+                >
+                  Kirim Pesan Lainnya
+                </button>
+              </div>
             </div>
 
             <!-- Active Form -->
@@ -663,12 +716,12 @@ const faqList = computed(() => {
               >
                 <Send v-if="!isSubmitting" class="w-4 h-4" />
                 <span v-else class="animate-spin w-4 h-4 border-2 border-white border-t-transparent rounded-full"></span>
-                <span>{{ isSubmitting ? 'Mengirimkan Pesan...' : 'KIRIMKAN PESAN SEKARANG ↗' }}</span>
+                <span>{{ isSubmitting ? 'Menyiapkan Pesan WhatsApp...' : 'KIRIM PESAN VIA WHATSAPP ↗' }}</span>
               </button>
 
               <div class="text-center">
                 <span class="text-[11px] font-mono-tag text-zinc-500 dark:text-zinc-500">
-                  Data Anda tersimpan secara aman & dienkripsi.
+                  Pesan langsung diteruskan ke WhatsApp resmi & dicadangkan secara aman.
                 </span>
               </div>
 

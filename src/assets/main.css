@@ -244,6 +244,7 @@ html[data-profile="raqwan"] ::selection,
 
 .custom-scroll::-webkit-scrollbar {
   width: 5px;
+  height: 5px;
 }
 
 .custom-scroll::-webkit-scrollbar-track {
