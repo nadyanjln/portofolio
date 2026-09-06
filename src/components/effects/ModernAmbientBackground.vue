@@ -57,8 +57,46 @@ onUnmounted(() => {
 
 <template>
   <div class="fixed inset-0 pointer-events-none z-0 overflow-hidden select-none transition-colors duration-700">
-    
+    <!-- ══════════════════════════════════════════════════════════
+         1. PROFESSIONAL STUDIO FRAME & RECRUITER METADATA
+         ══════════════════════════════════════════════════════════ -->
+    <div class="absolute inset-x-6 sm:inset-x-12 inset-y-6 sm:inset-y-8 border border-black/[0.04] dark:border-white/[0.04] pointer-events-none hidden md:block">
+      <!-- Top Left: Location & Timezone -->
+      <div class="absolute -top-2.5 -left-2.5 flex items-center gap-1.5 font-mono-tag text-[10px] text-zinc-400 dark:text-zinc-500">
+        <span class="text-[#FB4617] dark:text-[#FB4617]" v-if="currentProfile === 'nadya' && !isGateway">+</span>
+        <span class="text-emerald-500 dark:text-emerald-400" v-else>+</span>
+        <span class="tracking-widest font-semibold uppercase">JAKARTA, ID • UTC+7</span>
+      </div>
 
+      <!-- Top Right: HR / Recruiter Availability Status -->
+      <div class="absolute -top-2.5 -right-2.5 flex items-center gap-2 font-mono-tag text-[10px] text-zinc-400 dark:text-zinc-500">
+        <span class="relative flex h-2 w-2">
+          <span class="animate-ping absolute inline-flex h-full w-full rounded-full opacity-75" :class="currentProfile === 'nadya' && !isGateway ? 'bg-[#FB4617]' : 'bg-emerald-400'"></span>
+          <span class="relative inline-flex rounded-full h-2 w-2" :class="currentProfile === 'nadya' && !isGateway ? 'bg-[#FB4617]' : 'bg-emerald-500'"></span>
+        </span>
+        <span class="tracking-widest font-semibold uppercase text-zinc-700 dark:text-zinc-300">STATUS: OPEN TO WORK</span>
+        <span class="text-[#FB4617] dark:text-[#FB4617]" v-if="currentProfile === 'nadya' && !isGateway">+</span>
+        <span class="text-emerald-500 dark:text-emerald-400" v-else>+</span>
+      </div>
+
+      <!-- Bottom Left: Discipline Focus -->
+      <div class="absolute -bottom-2.5 -left-2.5 flex items-center gap-2 font-mono-tag text-[10px] text-zinc-400 dark:text-zinc-500">
+        <span class="text-[#FB4617] dark:text-[#FB4617]" v-if="currentProfile === 'nadya' && !isGateway">+</span>
+        <span class="text-emerald-500 dark:text-emerald-400" v-else>+</span>
+        <span class="tracking-widest font-semibold uppercase">
+          {{ isGateway ? 'PRODUCT DESIGN × AI ENGINEERING' : (currentProfile === 'raqwan' ? 'AI & MACHINE LEARNING' : 'PRODUCT & UI/UX DESIGN') }}
+        </span>
+      </div>
+
+      <!-- Bottom Right: Identity & Edition -->
+      <div class="absolute -bottom-2.5 -right-2.5 flex items-center gap-2 font-mono-tag text-[10px] text-zinc-400 dark:text-zinc-500">
+        <span class="tracking-widest font-semibold uppercase">
+          {{ isGateway ? 'PORTFOLIO // 2026' : (currentProfile === 'raqwan' ? 'M. RAQWAN KAUTHAR // 2026' : 'NADYA NAJELINA // 2026') }}
+        </span>
+        <span class="text-[#FB4617] dark:text-[#FB4617]" v-if="currentProfile === 'nadya' && !isGateway">+</span>
+        <span class="text-emerald-500 dark:text-emerald-400" v-else>+</span>
+      </div>
+    </div>
 
     <!-- ══════════════════════════════════════════════════════════
          2. RETINA MICRO-DOT MATRIX (Precision Masked)
