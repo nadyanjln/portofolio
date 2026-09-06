@@ -58,38 +58,7 @@ onUnmounted(() => {
 <template>
   <div class="fixed inset-0 pointer-events-none z-0 overflow-hidden select-none transition-colors duration-700">
     
-    <!-- ══════════════════════════════════════════════════════════
-         1. SWISS STUDIO ARCHITECTURAL PERIMETER & CROSSHAIRS
-         ══════════════════════════════════════════════════════════ -->
-    <div class="absolute inset-x-6 sm:inset-x-12 inset-y-6 sm:inset-y-8 border border-black/[0.04] dark:border-white/[0.04] pointer-events-none hidden md:block">
-      <!-- Top Left Crosshair & Coordinate -->
-      <div class="absolute -top-2.5 -left-2.5 flex items-center gap-2 font-mono-tag text-[10px] text-zinc-400 dark:text-zinc-600">
-        <span class="text-[#FB4617] dark:text-[#FB4617]" v-if="currentProfile === 'nadya'">+</span>
-        <span class="text-emerald-500 dark:text-emerald-400" v-else>+</span>
-        <span class="tracking-widest opacity-60">LOC: [26.04N, 80.12W]</span>
-      </div>
 
-      <!-- Top Right Crosshair & Status -->
-      <div class="absolute -top-2.5 -right-2.5 flex items-center gap-2 font-mono-tag text-[10px] text-zinc-400 dark:text-zinc-600">
-        <span class="tracking-widest opacity-60">MODE: PRODUCTION_ACTIVE</span>
-        <span class="text-[#FB4617] dark:text-[#FB4617]" v-if="currentProfile === 'nadya'">+</span>
-        <span class="text-emerald-500 dark:text-emerald-400" v-else>+</span>
-      </div>
-
-      <!-- Bottom Left Crosshair & Grid System -->
-      <div class="absolute -bottom-2.5 -left-2.5 flex items-center gap-2 font-mono-tag text-[10px] text-zinc-400 dark:text-zinc-600">
-        <span class="text-[#FB4617] dark:text-[#FB4617]" v-if="currentProfile === 'nadya'">+</span>
-        <span class="text-emerald-500 dark:text-emerald-400" v-else>+</span>
-        <span class="tracking-widest opacity-60">GRID: 36PX_ADAPTIVE</span>
-      </div>
-
-      <!-- Bottom Right Crosshair & Framework Version -->
-      <div class="absolute -bottom-2.5 -right-2.5 flex items-center gap-2 font-mono-tag text-[10px] text-zinc-400 dark:text-zinc-600">
-        <span class="tracking-widest opacity-60">FRAME: 2026 // STUDIO</span>
-        <span class="text-[#FB4617] dark:text-[#FB4617]" v-if="currentProfile === 'nadya'">+</span>
-        <span class="text-emerald-500 dark:text-emerald-400" v-else>+</span>
-      </div>
-    </div>
 
     <!-- ══════════════════════════════════════════════════════════
          2. RETINA MICRO-DOT MATRIX (Precision Masked)
