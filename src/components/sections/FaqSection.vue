@@ -44,46 +44,64 @@ onMounted(() => observeAll(sectionRef.value))
       <div class="space-y-3.5">
         <div
           v-for="(faq, idx) in faqs"
-          :key="idx"
+          :key="faq.id || idx"
           data-reveal="fade-up"
           :data-reveal-delay="idx + 1"
-          class="rounded-2xl border transition-all duration-300 overflow-hidden shadow-xs"
-          :class="[
-            activeIndex === idx
-              ? (currentProfile === 'raqwan' ? 'bg-white dark:bg-[#14161D] border-emerald-500/60' : 'bg-white dark:bg-[#14161D] border-[#FB4617]/50 dark:border-[#FB4617]/50')
-              : 'bg-white dark:bg-[#14161D] border-[#EEDCDC] dark:border-white/10 hover:border-white/20'
-          ]"
+          class="w-full"
         >
-          <!-- Accordion Trigger Button -->
-          <button
-            @click="toggleFaq(idx)"
-            class="w-full px-6 py-4 sm:py-5 flex items-center justify-between gap-4 text-left cursor-pointer transition-colors"
-          >
-            <span 
-              class="text-sm sm:text-base font-bold text-[#1C1313] dark:text-white" 
-              :class="activeIndex === idx ? (currentProfile === 'raqwan' ? 'text-[#047857] dark:text-emerald-400' : 'text-[#FB4617] dark:text-[#FB4617]') : ''"
-            >
-              {{ faq.question }}
-            </span>
-            <div
-              class="w-8 h-8 rounded-full flex items-center justify-center shrink-0 transition-transform duration-300"
-              :class="[
-                activeIndex === idx
-                  ? (currentProfile === 'raqwan' ? 'bg-emerald-100 dark:bg-emerald-500/20 text-[#047857] dark:text-emerald-400 rotate-180' : 'bg-[#FB4617]/10 text-[#FB4617] dark:text-[#FB4617] rotate-180')
-                  : 'bg-[#FFF9F9] dark:bg-white/5 text-[#5C4848] dark:text-zinc-400'
-              ]"
-            >
-              <Minus v-if="activeIndex === idx" class="w-4 h-4" />
-              <Plus v-else class="w-4 h-4" />
-            </div>
-          </button>
-
-          <!-- Accordion Content Body -->
           <div
-            v-show="activeIndex === idx"
-            class="px-6 pb-5 pt-1 text-xs sm:text-sm text-[#5C4848] dark:text-zinc-300 leading-relaxed border-t border-[#EEDCDC] dark:border-white/5 bg-[#FFF9F9]/50 dark:bg-[#0B0C0E]/50"
+            class="rounded-2xl border transition-all duration-300 overflow-hidden shadow-xs"
+            :class="[
+              activeIndex === idx
+                ? (currentProfile === 'raqwan' 
+                    ? 'bg-white dark:bg-[#14161D] border-emerald-500/60 ring-1 ring-emerald-500/20 shadow-md' 
+                    : 'bg-white dark:bg-[#14161D] border-[#FB4617]/50 dark:border-[#FB4617]/50 ring-1 ring-[#FB4617]/20 shadow-md')
+                : 'bg-white dark:bg-[#14161D] border-[#EEDCDC] dark:border-white/10 hover:border-black/20 dark:hover:border-white/20'
+            ]"
           >
-            {{ faq.answer }}
+            <!-- Accordion Trigger Button -->
+            <button
+              type="button"
+              @click="toggleFaq(idx)"
+              :aria-expanded="activeIndex === idx"
+              class="w-full px-5 sm:px-6 py-4 sm:py-5 flex items-center justify-between gap-4 text-left cursor-pointer transition-colors select-none group"
+            >
+              <span 
+                class="text-sm sm:text-base font-bold transition-colors leading-snug" 
+                :class="[
+                  activeIndex === idx 
+                    ? (currentProfile === 'raqwan' ? 'text-[#047857] dark:text-emerald-400' : 'text-[#FB4617] dark:text-[#FB4617]') 
+                    : 'text-[#1C1313] dark:text-white group-hover:text-black dark:group-hover:text-zinc-100'
+                ]"
+              >
+                {{ faq.question }}
+              </span>
+              <div
+                class="w-8 h-8 rounded-full flex items-center justify-center shrink-0 transition-transform duration-300"
+                :class="[
+                  activeIndex === idx
+                    ? (currentProfile === 'raqwan' ? 'bg-emerald-100 dark:bg-emerald-500/20 text-[#047857] dark:text-emerald-400 rotate-180' : 'bg-[#FB4617]/10 text-[#FB4617] dark:text-[#FB4617] rotate-180')
+                    : 'bg-[#FFF9F9] dark:bg-white/5 text-[#5C4848] dark:text-zinc-400 group-hover:bg-[#EEDCDC]/50 dark:group-hover:bg-white/10'
+                ]"
+              >
+                <Minus v-if="activeIndex === idx" class="w-4 h-4" />
+                <Plus v-else class="w-4 h-4" />
+              </div>
+            </button>
+
+            <!-- Accordion Content Body (Silky Smooth Dropdown & Collapse) -->
+            <div
+              class="grid transition-all duration-300 ease-in-out"
+              :class="activeIndex === idx ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'"
+            >
+              <div class="overflow-hidden">
+                <div
+                  class="px-5 sm:px-6 pb-5 pt-2 text-xs sm:text-sm text-[#5C4848] dark:text-zinc-300 leading-relaxed border-t border-[#EEDCDC] dark:border-white/5 bg-[#FFF9F9]/50 dark:bg-[#0B0C0E]/50"
+                >
+                  {{ faq.answer }}
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>

@@ -167,17 +167,17 @@ const scrollToWorks = () => {
             ? 'bg-gradient-to-b from-[#00F59B] via-[#059669] to-[#047857] text-white border-emerald-300/30'
             : 'bg-gradient-to-b from-[#FA6846] via-[#FB4617] to-[#DE3408] text-white border-orange-300/40'"
         >
-          <!-- Giant Cropped Typography Across Top (Screenshot 2: "Design") -->
-          <div class="absolute -top-6 -left-2 select-none pointer-events-none opacity-90 overflow-hidden w-full">
+          <!-- Refined Executive Typography Watermark Across Top -->
+          <div class="absolute top-3 sm:top-2 left-4 sm:left-6 select-none pointer-events-none overflow-hidden w-full pr-8">
             <span 
-              class="text-7xl sm:text-8xl md:text-9xl font-black tracking-tighter leading-none text-white/95 block uppercase"
+              class="text-4xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl font-black tracking-tight leading-none block uppercase bg-gradient-to-b from-white/35 via-white/20 to-white/5 bg-clip-text text-transparent select-none"
             >
               {{ currentProfile === 'raqwan' ? 'Deep' : 'Design' }}
             </span>
           </div>
 
           <!-- Top Category Header -->
-          <div class="relative z-10 pt-20 sm:pt-24 pb-4">
+          <div class="relative z-10 pt-14 sm:pt-20 pb-4">
             <span class="font-mono-tag text-xs font-bold uppercase tracking-widest text-white/80 block mb-1">
               Featured Direction /26
             </span>
